@@ -11,12 +11,13 @@ Source1:        %{name}.8
 BuildArch:      noarch
 
 Requires:       ethtool
-Requires:       iproute2
+Requires:       lldpd
 %if 0%{?rhel}
-# lldpd is available via EPEL on Rocky Linux
-Requires:       lldpd
+# Rocky Linux: iproute (provides /sbin/ip); lldpd via EPEL
+Requires:       iproute
 %else
-Requires:       lldpd
+# openSUSE: package is named iproute2
+Requires:       iproute2
 %endif
 
 %description
