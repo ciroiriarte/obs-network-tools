@@ -44,7 +44,7 @@ jobs:
       - name: Skip if version unchanged
         if: steps.get_version.outputs.upstream_version == steps.get_version.outputs.current_version
         run: |
-          echo "Version is already ${steps.get_version.outputs.current_version}. Nothing to do."
+          echo "Version is already ${{ steps.get_version.outputs.current_version }}. Nothing to do."
 
       - name: Update _service version
         if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
