@@ -8,5 +8,52 @@ override_dh_auto_build:
 override_dh_auto_install:
 	install -D -m 0755 nic-xray.sh \
 		debian/nic-xray/usr/bin/nic-xray
-	install -D -m 0644 nic-xray.8 \
-		debian/nic-xray/usr/share/man/man8/nic-xray.8
+	# Install man page (written inline since extra OBS source files are
+	# not accessible inside the Debian dpkg-buildpackage environment)
+	install -d debian/nic-xray/usr/share/man/man8
+	printf '%s\n' \
+	  '.TH NIC-XRAY 8 "2026-02-27" "1.4" "System Administration Commands"' \
+	  '.SH NAME' \
+	  'nic-xray \- network interface diagnostic tool' \
+	  '.SH SYNOPSIS' \
+	  '.B nic-xray' \
+	  '[\fIOPTIONS\fR]' \
+	  '.SH DESCRIPTION' \
+	  '.B nic-xray' \
+	  'lists all physical network interfaces on the system with PCI slot,' \
+	  'firmware version, MAC address, MTU, link status, speed/duplex,' \
+	  'bond/LAG membership, and LLDP peer information. Must be run as root.' \
+	  '.SH OPTIONS' \
+	  '.TP' \
+	  '.B \-\-lacp' \
+	  'Show LACP Aggregator ID and Partner MAC per interface.' \
+	  '.TP' \
+	  '.B \-\-vlan' \
+	  'Show VLAN tagging information obtained via LLDP.' \
+	  '.TP' \
+	  '.B \-\-bmac' \
+	  'Show bridge MAC address.' \
+	  '.TP' \
+	  '.BI \-s\fR[\fISEP\fR]\fB,\ \-\-separator\fR[=\fISEP\fR]' \
+	  'Show column separators (default: \fB\(or\fR); optionally use custom SEP.' \
+	  '.TP' \
+	  '.B \-\-group\-bond' \
+	  'Sort output rows by bond group, then by interface name.' \
+	  '.TP' \
+	  '.BI \-\-output \ TYPE' \
+	  'Output format: \fBtable\fR (default), \fBcsv\fR, or \fBjson\fR.' \
+	  '.TP' \
+	  '.BR \-v ,\  \-\-version' \
+	  'Print version and exit.' \
+	  '.TP' \
+	  '.BR \-h ,\  \-\-help' \
+	  'Print usage summary and exit.' \
+	  '.SH REQUIREMENTS' \
+	  'Must be run as root. Requires: \fBethtool\fR(8), \fBlldpctl\fR(8), \fBip\fR(8).' \
+	  '.SH AUTHORS' \
+	  'Ciro Iriarte <ciro.iriarte@millicom.com>' \
+	  '.SH SEE ALSO' \
+	  '.BR ethtool (8),' \
+	  '.BR ip (8),' \
+	  '.BR lldpd (8)' \
+	  > debian/nic-xray/usr/share/man/man8/nic-xray.8
