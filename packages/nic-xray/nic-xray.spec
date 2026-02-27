@@ -1,7 +1,7 @@
 Name:           nic-xray
 Version:        0
 Release:        1%{?dist}
-Summary:        Network interface diagnostic tool
+Summary:        Ethernet physical connectivity diagnostic tool
 
 License:        GPL-3.0-only
 URL:            https://github.com/ciroiriarte/misc-scripts

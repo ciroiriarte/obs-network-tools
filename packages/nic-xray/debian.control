@@ -9,7 +9,7 @@ Homepage: https://github.com/ciroiriarte/misc-scripts
 Package: nic-xray
 Architecture: all
 Depends: ${misc:Depends}, ethtool, lldpd, iproute2
-Description: Network interface diagnostic tool
+Description: Ethernet physical connectivity diagnostic tool
  Displays detailed information about physical network interfaces including
  PCI slot, firmware versions, MAC, MTU, link status, speed/duplex,
  bond/LAG membership, and LLDP peer information.
