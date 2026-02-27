@@ -1,0 +1,11 @@
+nic-xray (1.3-1) unstable; urgency=medium
+
+  * Update to 1.3 (sync with SCRIPT_VERSION in nic-xray.sh)
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Thu, 27 Feb 2026 00:00:00 +0000
+
+nic-xray (1.0-1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Wed, 26 Feb 2026 00:00:00 +0000
