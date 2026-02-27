@@ -4,11 +4,12 @@
 * We want to facilitate installation via regular tooling (apt/dnf/zypper)
 
 # Product
-* The output of your work is to build an autonomous packaging pipeline in OBS (OBS should automatically rebuild & publish packages once new versions are released)
+* The output of your work is to build an autonomous packaging pipeline in OBS (OBS should automatically rebuild & publish packages once new versions are released). OBS should pull from public GIT repositories when a URL is provided.
 * If required, bash scripts can be prepared as byproduct to assist the main aim
 * Supported architecture
   - x86_64: mandatory
   - arm64: optional, to be built if available for the linux distro at OBS.
+  - some packaging systems like RPM have a "noarch" option for packages not built with binaries (python/bash software). Take that into account.
 
 # Packager
 * Name: Ciro Iriarte
