@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export CARGO_HOME = $(CURDIR)/debian/.cargo
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	# Configure cargo to use vendored dependencies
+	mkdir -p .cargo
+	printf '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "vendor"\n' > .cargo/config.toml
+	cargo build --release --offline --frozen
+
+override_dh_auto_install:
+	install -D -m 0755 target/release/ttl \
+		debian/ttl/usr/bin/ttl
+
+override_dh_auto_test:
+	# skip tests during package build
+
+override_dh_fixperms-arch:
+	dh_fixperms
+	# Grant raw socket capability
+	if command -v setcap >/dev/null 2>&1; then \
+		setcap cap_net_raw+ep debian/ttl/usr/bin/ttl || true; \
+	fi

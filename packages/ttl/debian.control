@@ -1,0 +1,20 @@
+Source: ttl
+Section: net
+Priority: optional
+Maintainer: Ciro Iriarte <ciro.iriarte+software@gmail.com>
+Build-Depends: debhelper-compat (= 13), cargo, rustc (>= 1.88)
+Standards-Version: 4.6.2
+Homepage: https://github.com/lance0/ttl
+
+Package: ttl
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin
+Description: Network diagnostic tool — traceroute/mtr-style TUI with hop stats
+ Network diagnostic tool that goes beyond traceroute: MTU discovery, NAT
+ detection, route flap alerts, IX identification, and more.
+ .
+ Provides a real-time TUI with hop statistics, multi-target tracing,
+ Paris/Dublin traceroute for ECMP path enumeration, ASN/GeoIP enrichment,
+ and scriptable JSON/CSV/text output.
+ .
+ Requires cap_net_raw capability (or root) for raw socket access.

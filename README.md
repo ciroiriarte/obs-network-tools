@@ -48,15 +48,15 @@ Replace `openSUSE_Leap_15.6` with your distribution alias from the table above.
 ### Ubuntu (apt)
 
 ```bash
-echo "deb https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/xUbuntu_24.04/ ./" \
+echo "deb https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/Ubuntu_24.04/ ./" \
   | sudo tee /etc/apt/sources.list.d/obs-network-tools.list
-curl -fsSL "https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/xUbuntu_24.04/Release.key" \
+curl -fsSL "https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/Ubuntu_24.04/Release.key" \
   | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/obs-network-tools.gpg
 sudo apt update
 sudo apt install nic-xray
 ```
 
-Replace `xUbuntu_24.04` with `xUbuntu_22.04` for Ubuntu 22.04 LTS.
+Replace `Ubuntu_24.04` with `Ubuntu_22.04` for Ubuntu 22.04 LTS.
 
 ### Rocky Linux (dnf)
 

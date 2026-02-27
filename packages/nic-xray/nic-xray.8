@@ -1,0 +1,115 @@
+.TH NIC-XRAY 8 "2026-02-27" "1.4" "System Administration Commands"
+.SH NAME
+nic-xray \- network interface diagnostic tool
+.SH SYNOPSIS
+.B nic-xray
+[\fIOPTIONS\fR]
+.SH DESCRIPTION
+.B nic-xray
+lists all physical network interfaces on the system, displaying detailed
+information in a color-coded table. Information shown includes PCI slot,
+firmware version, MAC address, MTU, link status, negotiated speed/duplex,
+bond/LAG membership, and LLDP peer information.
+.PP
+The tool was originally created for deploying OpenStack nodes but works on
+any Linux system. It must be run as root.
+.SH OPTIONS
+.TP
+.B \-\-lacp
+Show LACP Aggregator ID and Partner MAC per interface.
+.TP
+.B \-\-vlan
+Show VLAN tagging information obtained via LLDP.
+.TP
+.B \-\-bmac
+Show bridge MAC address.
+.TP
+.BI \-s\fR[\fISEP\fR]\fB,\ \-\-separator\fR[=\fISEP\fR]
+Show column separators in table output (default: \fB│\fR). Applies to CSV
+output as well. Optionally specify a custom separator character \fISEP\fR.
+.TP
+.B \-\-group\-bond
+Sort output rows by bond group, then by interface name within each group.
+.TP
+.BI \-\-output \ TYPE
+Select output format. Supported types:
+.RS
+.TP
+.B table
+Human-readable tabular output (default).
+.TP
+.B csv
+Comma-separated values suitable for spreadsheet import.
+.TP
+.B json
+JSON output suitable for scripting and automation.
+.RE
+.TP
+.BR \-v ,\  \-\-version
+Print the version number and exit.
+.TP
+.BR \-h ,\  \-\-help
+Print a usage summary and exit.
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+A required command is missing, or the script was invoked without root privileges,
+or an invalid option was specified.
+.SH REQUIREMENTS
+.B nic-xray
+must be run as root. The following commands must be available:
+.BR ethtool (8),
+.BR lldpctl (8)
+(provided by
+.IR lldpd ),
+.BR ip (8),
+.BR readlink (1),
+.BR awk (1),
+.BR grep (1),
+.BR cat (1).
+.SH EXAMPLES
+Show all interfaces with default table output:
+.PP
+.RS
+.nf
+sudo nic-xray
+.fi
+.RE
+.PP
+Show LACP and VLAN information:
+.PP
+.RS
+.nf
+sudo nic-xray --lacp --vlan
+.fi
+.RE
+.PP
+Export interface data as JSON:
+.PP
+.RS
+.nf
+sudo nic-xray --output json
+.fi
+.RE
+.PP
+Group output by bond membership:
+.PP
+.RS
+.nf
+sudo nic-xray --group-bond
+.fi
+.RE
+.SH FILES
+.I /usr/bin/nic-xray
+.SH AUTHORS
+Ciro Iriarte <ciro.iriarte@millicom.com>
+.SH LICENSE
+GNU General Public License version 3 or later.
+.SH SEE ALSO
+.BR ethtool (8),
+.BR ip (8),
+.BR lldpd (8),
+.BR lldpctl (8)

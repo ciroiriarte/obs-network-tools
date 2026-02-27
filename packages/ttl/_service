@@ -1,0 +1,9 @@
+<services>
+  <!-- cargo_vendor must be run manually: osc service manualrun cargo_vendor -->
+  <!-- After running, commit ttl-*.tar.gz and vendor.tar.zst to OBS -->
+  <service name="cargo_vendor" mode="manual">
+    <param name="srctar">ttl-*.tar.gz</param>
+    <param name="compression">zst</param>
+    <param name="update">true</param>
+  </service>
+</services>
