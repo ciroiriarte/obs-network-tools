@@ -1,0 +1,19 @@
+Source: xfr
+Section: net
+Priority: optional
+Maintainer: Ciro Iriarte <ciro.iriarte+software@gmail.com>
+Build-Depends: debhelper-compat (= 13), cargo, rustc (>= 1.88)
+Standards-Version: 4.6.2
+Homepage: https://github.com/lance0/xfr
+
+Package: xfr
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Modern network bandwidth testing tool with TUI
+ Drop-in replacement for iperf3 with a live terminal user interface.
+ .
+ Supports TCP, UDP, and QUIC protocols with multi-client server, parallel
+ streams, bidirectional testing, and scriptable JSON/CSV/text output.
+ .
+ Features HMAC-SHA256 PSK authentication, IP ACL support, mDNS server
+ discovery, and optional Prometheus metrics export.

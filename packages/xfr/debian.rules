@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export CARGO_HOME = $(CURDIR)/debian/.cargo
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	mkdir -p .cargo
+	printf '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "vendor"\n' > .cargo/config.toml
+	cargo build --release --offline --frozen
+
+override_dh_auto_install:
+	install -D -m 0755 target/release/xfr \
+		debian/xfr/usr/bin/xfr
+	install -D -m 0644 docs/xfr.1 \
+		debian/xfr/usr/share/man/man1/xfr.1
+
+override_dh_auto_test:
+	# skip tests during package build

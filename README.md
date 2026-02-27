@@ -16,25 +16,26 @@ This repository contains OBS (Open Build Service) package definitions for variou
 |-----------|--------------------------------------------------|-------------------------------------------------|
 | nic-xray  | Network interface diagnostic tool                | https://github.com/ciroiriarte/misc-scripts     |
 | ttl       | Traceroute/mtr-style TUI (requires Rust ≥ 1.88) | https://github.com/lance0/ttl                  |
+| xfr       | Network bandwidth testing TUI (requires Rust ≥ 1.88) | https://github.com/lance0/xfr             |
 
 ---
 
 ## Distributions Covered
 
-| Distribution           | Repository alias        | Arch            | nic-xray | ttl |
-|------------------------|-------------------------|-----------------|----------|-----|
-| openSUSE Leap 15.6     | openSUSE_Leap_15.6      | x86_64, aarch64 | ✓        | ✗ ¹ |
-| openSUSE Leap 16.0     | openSUSE_Leap_16.0      | x86_64, aarch64 | ✓        | ✓   |
-| openSUSE Tumbleweed    | openSUSE_Tumbleweed     | x86_64, aarch64 | ✓        | ✓   |
-| openSUSE Slowroll      | openSUSE_Slowroll       | x86_64, aarch64 | ✓        | ✓   |
-| Rocky Linux 9          | Rocky_9                 | x86_64, aarch64 | ✓        | ✓   |
-| Rocky Linux 10         | Rocky_10                | x86_64, aarch64 | ✓        | ✓   |
-| Ubuntu 22.04 LTS       | Ubuntu_22.04            | x86_64, aarch64 | ✓        | ✗ ¹ |
-| Ubuntu 24.04 LTS       | Ubuntu_24.04            | x86_64, aarch64 | ✓        | ✗ ¹ |
+| Distribution           | Repository alias        | Arch            | nic-xray | ttl | xfr |
+|------------------------|-------------------------|-----------------|----------|-----|-----|
+| openSUSE Leap 15.6     | openSUSE_Leap_15.6      | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
+| openSUSE Leap 16.0     | openSUSE_Leap_16.0      | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| openSUSE Tumbleweed    | openSUSE_Tumbleweed     | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| openSUSE Slowroll      | openSUSE_Slowroll       | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| Rocky Linux 9          | Rocky_9                 | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| Rocky Linux 10         | Rocky_10                | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| Ubuntu 22.04 LTS       | Ubuntu_22.04            | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
+| Ubuntu 24.04 LTS       | Ubuntu_24.04            | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
 
-¹ `ttl` requires Rust ≥ 1.88, which is not yet available in this distribution's
-  standard repositories. Builds will automatically succeed once the distribution
-  ships a compatible Rust version.
+¹ Requires Rust ≥ 1.88, which is not yet available in this distribution's standard
+  repositories. Builds will automatically succeed once the distribution ships a
+  compatible Rust version.
 
 ---
 
@@ -116,17 +117,27 @@ obs-network-tools/
     │   ├── debian.control     # Debian/Ubuntu package metadata
     │   ├── debian.changelog   # Debian/Ubuntu changelog
     │   └── debian.rules       # Debian build rules
-    └── ttl/
+    ├── ttl/
+    │   ├── _service           # cargo_vendor (manual mode)
+    │   ├── ttl-0.19.0.tar.gz  # Source tarball (committed)
+    │   ├── vendor.tar.zst     # Vendored Rust dependencies
+    │   ├── ttl.spec           # RPM spec (openSUSE + Rocky Linux)
+    │   ├── ttl.changes        # openSUSE changelog
+    │   ├── ttl.dsc            # Debian source package descriptor
+    │   ├── debian.control     # Debian/Ubuntu package metadata
+    │   ├── debian.changelog   # Debian/Ubuntu changelog
+    │   ├── debian.rules       # Debian build rules
+    │   └── debian.postinst    # Post-install: setcap cap_net_raw+ep
+    └── xfr/
         ├── _service           # cargo_vendor (manual mode)
-        ├── ttl-0.19.0.tar.gz  # Source tarball (committed)
+        ├── xfr-0.8.0.tar.gz   # Source tarball (committed)
         ├── vendor.tar.zst     # Vendored Rust dependencies
-        ├── ttl.spec           # RPM spec (openSUSE + Rocky Linux)
-        ├── ttl.changes        # openSUSE changelog
-        ├── ttl.dsc            # Debian source package descriptor
+        ├── xfr.spec           # RPM spec (openSUSE + Rocky Linux)
+        ├── xfr.changes        # openSUSE changelog
+        ├── xfr.dsc            # Debian source package descriptor
         ├── debian.control     # Debian/Ubuntu package metadata
         ├── debian.changelog   # Debian/Ubuntu changelog
-        ├── debian.rules       # Debian build rules
-        └── debian.postinst    # Post-install: setcap cap_net_raw+ep
+        └── debian.rules       # Debian build rules
 ```
 
 ---
