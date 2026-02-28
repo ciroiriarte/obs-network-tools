@@ -1,3 +1,10 @@
+nic-xray (2.2-1) unstable; urgency=medium
+
+  * Update to 2.2
+  * Fix man page section: moved to section 8 (man/man8/nic-xray.8)
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Fri, 28 Feb 2026 00:00:00 +0000
+
 nic-xray (2.1-1) unstable; urgency=medium
 
   * Update to 2.1

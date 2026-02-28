@@ -32,13 +32,13 @@ bond/LAG membership, and LLDP peer information.
 
 %install
 install -Dm0755 nic-xray.sh %{buildroot}%{_bindir}/nic-xray
-install -Dm0644 man/man1/nic-xray.1 %{buildroot}%{_mandir}/man1/nic-xray.1
+install -Dm0644 man/man8/nic-xray.8 %{buildroot}%{_mandir}/man8/nic-xray.8
 
 %files
 %license LICENSE
 %doc README.md
 %{_bindir}/nic-xray
-%{_mandir}/man1/nic-xray.1%{ext_man}
+%{_mandir}/man8/nic-xray.8%{ext_man}
 
 %changelog
 * Thu Feb 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.1-1

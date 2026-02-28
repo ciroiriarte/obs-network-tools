@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 28 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.2-1
+
+- Update to 2.2
+- Fix man page section: moved to section 8 (man/man8/nic-xray.8)
+
+-------------------------------------------------------------------
 Fri Feb 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.1-1
 
 - Update to 2.1
