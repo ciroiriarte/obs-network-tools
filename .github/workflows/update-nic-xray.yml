@@ -19,25 +19,26 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch upstream nic-xray.sh and extract version
+      - name: Fetch latest upstream release and extract version
         id: get_version
         run: |
-          SCRIPT_CONTENT=$(curl -fsSL \
-            "https://raw.githubusercontent.com/ciroiriarte/misc-scripts/main/nic-xray.sh")
+          LATEST_JSON=$(curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/ciroiriarte/nic-xray/releases/latest")
 
-          # Prefer SCRIPT_VERSION, fall back to VERSION
-          NEW_VERSION=$(echo "${SCRIPT_CONTENT}" | grep -E '^SCRIPT_VERSION=' | head -1 | cut -d'"' -f2)
-          if [[ -z "${NEW_VERSION}" ]]; then
-            NEW_VERSION=$(echo "${SCRIPT_CONTENT}" | grep -E '^VERSION=' | head -1 | cut -d'"' -f2)
-          fi
+          TAG_NAME=$(echo "${LATEST_JSON}" | python3 -c \
+            "import sys, json; print(json.load(sys.stdin)['tag_name'])")
+          # Strip leading 'v' from tag (v2.1 -> 2.1)
+          NEW_VERSION="${TAG_NAME#v}"
 
           if [[ -z "${NEW_VERSION}" ]]; then
-            echo "ERROR: Could not find SCRIPT_VERSION or VERSION in nic-xray.sh" >&2
+            echo "ERROR: Could not determine latest version from GitHub releases" >&2
             exit 1
           fi
 
-          CURRENT_VERSION=$(grep '<param name="version">' packages/nic-xray/_service \
-            | head -1 | sed 's/.*<param name="version">\(.*\)<\/param>/\1/')
+          # Read current packaged version from top of changes file
+          CURRENT_VERSION=$(grep -E ' - [0-9]' packages/nic-xray/nic-xray.changes \
+            | head -1 | sed 's/.*- \([0-9][^ ]*\)-[0-9]*/\1/')
 
           echo "upstream_version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
           echo "current_version=${CURRENT_VERSION}" >> "$GITHUB_OUTPUT"
@@ -48,13 +49,15 @@ jobs:
         run: |
           echo "Version is already ${{ steps.get_version.outputs.current_version }}. Nothing to do."
 
-      - name: Update _service version
+      - name: Update _service version and revision
         if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
           CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
         run: |
           sed -i "s|<param name=\"version\">${CURRENT_VERSION}</param>|<param name=\"version\">${NEW_VERSION}</param>|" \
+            packages/nic-xray/_service
+          sed -i "s|<param name=\"revision\">v${CURRENT_VERSION}</param>|<param name=\"revision\">v${NEW_VERSION}</param>|" \
             packages/nic-xray/_service
 
       - name: Update nic-xray.changes
@@ -65,12 +68,12 @@ jobs:
           DATE_RPM=$(date -u "+%a %b %d %Y")
           TMPFILE=$(mktemp)
           cat > "${TMPFILE}" <<EOF
-          -------------------------------------------------------------------
-          ${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1
+-------------------------------------------------------------------
+${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1
 
-          - Update to ${NEW_VERSION} (sync with SCRIPT_VERSION in nic-xray.sh)
+- Update to ${NEW_VERSION}
 
-          EOF
+EOF
           cat packages/nic-xray/nic-xray.changes >> "${TMPFILE}"
           mv "${TMPFILE}" packages/nic-xray/nic-xray.changes
 
@@ -82,13 +85,13 @@ jobs:
           DATE_DEB=$(date -u "+%a, %d %b %Y %H:%M:%S +0000")
           TMPFILE=$(mktemp)
           cat > "${TMPFILE}" <<EOF
-          nic-xray (${NEW_VERSION}-1) unstable; urgency=medium
+nic-xray (${NEW_VERSION}-1) unstable; urgency=medium
 
-            * Update to ${NEW_VERSION} (sync with SCRIPT_VERSION in nic-xray.sh)
+  * Update to ${NEW_VERSION}
 
-           -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  ${DATE_DEB}
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  ${DATE_DEB}
 
-          EOF
+EOF
           cat packages/nic-xray/debian.changelog >> "${TMPFILE}"
           mv "${TMPFILE}" packages/nic-xray/debian.changelog
 
@@ -117,16 +120,16 @@ jobs:
         run: |
           mkdir -p ~/.config/osc
           cat > ~/.config/osc/oscrc <<EOF
-          [general]
-          apiurl = https://api.opensuse.org
+[general]
+apiurl = https://api.opensuse.org
 
-          [https://api.opensuse.org]
-          user = ciriarte
-          pass = ${OBS_PASSWORD}
-          EOF
+[https://api.opensuse.org]
+user = ciriarte
+pass = ${OBS_PASSWORD}
+EOF
           chmod 600 ~/.config/osc/oscrc
 
-      - name: Push updated package to OBS
+      - name: Push updated changelogs to OBS
         if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}

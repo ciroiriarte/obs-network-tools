@@ -1,7 +1,10 @@
 -------------------------------------------------------------------
 Fri Feb 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.1-1
 
-- Update to 2.1 (sync with SCRIPT_VERSION in nic-xray.sh)
+- Update to 2.1
+- Refactor: nic-xray moved to its own repository (github.com/ciroiriarte/nic-xray)
+- Man page now sourced from upstream (man/man1/nic-xray.1, section 1)
+- Switch to tag-based version tracking via GitHub releases API
 
 -------------------------------------------------------------------
 Thu Feb 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 1.4-1

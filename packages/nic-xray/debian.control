@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Ciro Iriarte <ciro.iriarte+software@gmail.com>
 Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.6.2
-Homepage: https://github.com/ciroiriarte/misc-scripts
+Homepage: https://github.com/ciroiriarte/nic-xray
 
 Package: nic-xray
 Architecture: all

@@ -1,6 +1,9 @@
 nic-xray (2.1-1) unstable; urgency=medium
 
-  * Update to 2.1 (sync with SCRIPT_VERSION in nic-xray.sh)
+  * Update to 2.1
+  * Refactor: nic-xray moved to its own repository (github.com/ciroiriarte/nic-xray)
+  * Man page now sourced from upstream (man/man1/nic-xray.1, section 1)
+  * Switch to tag-based version tracking via GitHub releases API
 
  -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Fri, 27 Feb 2026 00:00:00 +0000
 
