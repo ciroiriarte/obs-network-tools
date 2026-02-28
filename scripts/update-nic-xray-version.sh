@@ -1,9 +1,11 @@
 #!/bin/bash
 # update-nic-xray-version.sh
 #
-# Reads SCRIPT_VERSION (falling back to VERSION) from nic-xray.sh in the
-# upstream repo and updates packages/nic-xray/_service with the new version.
-# Run this whenever nic-xray.sh is updated upstream, then push to OBS.
+# Reads the latest release tag from github.com/ciroiriarte/nic-xray and
+# updates packages/nic-xray/_service, nic-xray.changes, and debian.changelog.
+#
+# The GitHub Actions workflow (.github/workflows/update-nic-xray.yml) runs
+# this logic daily. Use this script to trigger a manual update instead.
 #
 # Usage:
 #   ./scripts/update-nic-xray-version.sh [--push]
@@ -14,27 +16,27 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SERVICE_FILE="${REPO_ROOT}/packages/nic-xray/_service"
-SCRIPT_URL="https://raw.githubusercontent.com/ciroiriarte/misc-scripts/main/nic-xray.sh"
 OBS_PKG_DIR="/tmp/home:ciriarte:network-tools/nic-xray"
 
-echo "Fetching nic-xray.sh from upstream..."
-SCRIPT_CONTENT=$(curl -fsSL "${SCRIPT_URL}")
+echo "Fetching latest release from github.com/ciroiriarte/nic-xray..."
+LATEST_JSON=$(curl -fsSL \
+    -H "Accept: application/vnd.github+json" \
+    "https://api.github.com/repos/ciroiriarte/nic-xray/releases/latest")
 
-# Prefer SCRIPT_VERSION, fall back to VERSION
-NEW_VERSION=$(echo "${SCRIPT_CONTENT}" | grep -E '^SCRIPT_VERSION=' | head -1 | cut -d'"' -f2)
-if [[ -z "${NEW_VERSION}" ]]; then
-    NEW_VERSION=$(echo "${SCRIPT_CONTENT}" | grep -E '^VERSION=' | head -1 | cut -d'"' -f2)
-fi
+TAG_NAME=$(echo "${LATEST_JSON}" | python3 -c \
+    "import sys, json; print(json.load(sys.stdin)['tag_name'])")
+NEW_VERSION="${TAG_NAME#v}"
 
 if [[ -z "${NEW_VERSION}" ]]; then
-    echo "ERROR: Could not find SCRIPT_VERSION or VERSION in nic-xray.sh" >&2
+    echo "ERROR: Could not determine latest version from GitHub releases" >&2
     exit 1
 fi
 
-echo "Detected script version: ${NEW_VERSION}"
+echo "Latest upstream release: ${TAG_NAME} (version ${NEW_VERSION})"
 
 # Read current version from _service
-CURRENT_VERSION=$(grep '<param name="version">' "${SERVICE_FILE}" | head -1 | sed 's/.*<param name="version">\(.*\)<\/param>/\1/')
+CURRENT_VERSION=$(grep '<param name="version">' "${SERVICE_FILE}" | head -1 \
+    | sed 's/.*<param name="version">\(.*\)<\/param>/\1/')
 echo "Current package version: ${CURRENT_VERSION}"
 
 if [[ "${NEW_VERSION}" == "${CURRENT_VERSION}" ]]; then
@@ -42,10 +44,11 @@ if [[ "${NEW_VERSION}" == "${CURRENT_VERSION}" ]]; then
     exit 0
 fi
 
-echo "Updating _service: ${CURRENT_VERSION} -> ${NEW_VERSION}"
-sed -i "s|<param name=\"version\">${CURRENT_VERSION}</param>|<param name=\"version\">${NEW_VERSION}</param>|" "${SERVICE_FILE}"
+echo "Updating: ${CURRENT_VERSION} -> ${NEW_VERSION}"
 
-# Update changelogs
+sed -i "s|<param name=\"version\">${CURRENT_VERSION}</param>|<param name=\"version\">${NEW_VERSION}</param>|" "${SERVICE_FILE}"
+sed -i "s|<param name=\"revision\">v${CURRENT_VERSION}</param>|<param name=\"revision\">v${NEW_VERSION}</param>|" "${SERVICE_FILE}"
+
 DATE_RPM=$(date -u "+%a %b %d %Y")
 DATE_DEB=$(date -u "+%a, %d %b %Y %H:%M:%S +0000")
 
@@ -55,7 +58,7 @@ cat > "${TMPFILE}" <<EOF
 -------------------------------------------------------------------
 ${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1
 
-- Update to ${NEW_VERSION} (sync with SCRIPT_VERSION in nic-xray.sh)
+- Update to ${NEW_VERSION}
 
 EOF
 cat "${CHANGES_FILE}" >> "${TMPFILE}"
@@ -66,7 +69,7 @@ TMPFILE=$(mktemp)
 cat > "${TMPFILE}" <<EOF
 nic-xray (${NEW_VERSION}-1) unstable; urgency=medium
 
-  * Update to ${NEW_VERSION} (sync with SCRIPT_VERSION in nic-xray.sh)
+  * Update to ${NEW_VERSION}
 
  -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  ${DATE_DEB}
 
@@ -74,10 +77,7 @@ EOF
 cat "${DEB_CHANGELOG}" >> "${TMPFILE}"
 mv "${TMPFILE}" "${DEB_CHANGELOG}"
 
-echo "Updated:"
-echo "  ${SERVICE_FILE}"
-echo "  ${CHANGES_FILE}"
-echo "  ${DEB_CHANGELOG}"
+echo "Updated: _service, nic-xray.changes, debian.changelog"
 
 if [[ "${1:-}" == "--push" ]]; then
     echo ""
@@ -86,17 +86,17 @@ if [[ "${1:-}" == "--push" ]]; then
         echo "OBS checkout not found at ${OBS_PKG_DIR}. Run: osc co home:ciriarte:network-tools" >&2
         exit 1
     fi
-    cp "${REPO_ROOT}/packages/nic-xray/_service" "${OBS_PKG_DIR}/"
-    cp "${REPO_ROOT}/packages/nic-xray/nic-xray.changes" "${OBS_PKG_DIR}/"
-    cp "${REPO_ROOT}/packages/nic-xray/debian.changelog" "${OBS_PKG_DIR}/"
+    cp "${REPO_ROOT}/packages/nic-xray/_service" \
+       "${REPO_ROOT}/packages/nic-xray/nic-xray.changes" \
+       "${REPO_ROOT}/packages/nic-xray/debian.changelog" \
+       "${OBS_PKG_DIR}/"
     cd "${OBS_PKG_DIR}"
     osc commit -m "Update nic-xray to ${NEW_VERSION}"
-    echo "Pushed revision to OBS."
+    echo "Pushed to OBS."
 fi
 
 echo ""
-echo "Next steps:"
-echo "  1. Review the changes"
-echo "  2. Run with --push to commit to OBS, or manually:"
-echo "     cp packages/nic-xray/* ${OBS_PKG_DIR}/"
-echo "     cd ${OBS_PKG_DIR} && osc commit -m 'Update nic-xray to ${NEW_VERSION}'"
+echo "Next steps (if not using --push):"
+echo "  cp packages/nic-xray/_service packages/nic-xray/*.changes packages/nic-xray/debian.changelog \\"
+echo "     ${OBS_PKG_DIR}/"
+echo "  cd ${OBS_PKG_DIR} && osc commit -m 'Update nic-xray to ${NEW_VERSION}'"

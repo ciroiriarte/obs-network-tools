@@ -12,26 +12,26 @@ This repository contains OBS (Open Build Service) package definitions for variou
 
 ## Packages
 
-| Package   | Description                                      | Upstream                                        |
-|-----------|--------------------------------------------------|-------------------------------------------------|
-| nic-xray  | Network interface diagnostic tool                | https://github.com/ciroiriarte/misc-scripts     |
-| ttl       | Traceroute/mtr-style TUI (requires Rust ≥ 1.88) | https://github.com/lance0/ttl                  |
-| xfr       | Network bandwidth testing TUI (requires Rust ≥ 1.88) | https://github.com/lance0/xfr             |
+| Package  | Description                                           | Upstream                                    |
+|----------|-------------------------------------------------------|---------------------------------------------|
+| nic-xray | Ethernet physical connectivity diagnostic tool        | https://github.com/ciroiriarte/nic-xray     |
+| ttl      | Traceroute/mtr-style TUI (requires Rust ≥ 1.88)      | https://github.com/lance0/ttl               |
+| xfr      | Network bandwidth testing TUI (requires Rust ≥ 1.88) | https://github.com/lance0/xfr               |
 
 ---
 
 ## Distributions Covered
 
-| Distribution           | Repository alias        | Arch            | nic-xray | ttl | xfr |
-|------------------------|-------------------------|-----------------|----------|-----|-----|
-| openSUSE Leap 15.6     | openSUSE_Leap_15.6      | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
-| openSUSE Leap 16.0     | openSUSE_Leap_16.0      | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| openSUSE Tumbleweed    | openSUSE_Tumbleweed     | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| openSUSE Slowroll      | openSUSE_Slowroll       | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| Rocky Linux 9          | Rocky_9                 | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| Rocky Linux 10         | Rocky_10                | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| Ubuntu 22.04 LTS       | Ubuntu_22.04            | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
-| Ubuntu 24.04 LTS       | Ubuntu_24.04            | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
+| Distribution        | Repository alias    | Arch            | nic-xray | ttl | xfr |
+|---------------------|---------------------|-----------------|----------|-----|-----|
+| openSUSE Tumbleweed | openSUSE_Tumbleweed | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| openSUSE Slowroll   | openSUSE_Slowroll   | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| openSUSE Leap 16.0  | openSUSE_Leap_16.0  | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| openSUSE Leap 15.6  | openSUSE_Leap_15.6  | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
+| Rocky Linux 9       | Rocky_9             | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| Rocky Linux 10      | Rocky_10            | x86_64, aarch64 | ✓        | ✓   | ✓   |
+| Ubuntu 22.04 LTS    | Ubuntu_22.04        | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
+| Ubuntu 24.04 LTS    | Ubuntu_24.04        | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
 
 ¹ Requires Rust ≥ 1.88, which is not yet available in this distribution's standard
   repositories. Builds will automatically succeed once the distribution ships a
@@ -44,12 +44,12 @@ This repository contains OBS (Open Build Service) package definitions for variou
 ### openSUSE (zypper)
 
 ```bash
-zypper addrepo https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/openSUSE_Leap_16.0/ obs-network-tools
+zypper addrepo https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/openSUSE_Tumbleweed/ obs-network-tools
 zypper refresh
-zypper install nic-xray
+zypper install nic-xray ttl xfr
 ```
 
-Replace `openSUSE_Leap_16.0` with your distribution alias from the table above.
+Replace `openSUSE_Tumbleweed` with your distribution alias from the table above.
 
 ### Ubuntu (apt)
 
@@ -64,17 +64,19 @@ sudo apt install nic-xray
 
 Replace `Ubuntu_24.04` with `Ubuntu_22.04` for Ubuntu 22.04 LTS.
 
+> **Note:** `ttl` and `xfr` are not available on Ubuntu (Rust ≥ 1.88 not yet in distro repos).
+
 ### Rocky Linux (dnf)
 
 ```bash
 dnf config-manager --add-repo \
   https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/Rocky_9/home:ciriarte:network-tools.repo
-dnf install nic-xray
+dnf install nic-xray ttl xfr
 ```
 
 Replace `Rocky_9` with `Rocky_10` for Rocky Linux 10.
 
-> **Note for Rocky Linux:** `lldpd` is available via EPEL. Enable it first:
+> **Note for Rocky Linux:** `lldpd` is available via EPEL. Enable it before installing `nic-xray`:
 > ```bash
 > dnf install epel-release
 > ```
@@ -103,24 +105,25 @@ osc config https://api.opensuse.org
 
 ```
 obs-network-tools/
-├── CLAUDE.md                  # Project instructions
-├── README.md                  # This file
+├── CLAUDE.md                       # Project instructions for Claude Code
+├── README.md                       # This file
+├── .github/workflows/
+│   └── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push to OBS
 ├── scripts/
-│   └── update-nic-xray-version.sh  # Manual version bump helper
+│   └── update-nic-xray-version.sh  # Manual alternative to the workflow above
 └── packages/
     ├── nic-xray/
-    │   ├── _service           # OBS service: auto-fetch from GitHub tags
+    │   ├── _service           # tar_scm: fetch pinned tag from github.com/ciroiriarte/nic-xray
     │   ├── nic-xray.spec      # RPM spec (openSUSE + Rocky Linux)
     │   ├── nic-xray.changes   # openSUSE changelog
-    │   ├── nic-xray.8         # Man page (troff)
     │   ├── nic-xray.dsc       # Debian source package descriptor
     │   ├── debian.control     # Debian/Ubuntu package metadata
     │   ├── debian.changelog   # Debian/Ubuntu changelog
     │   └── debian.rules       # Debian build rules
     ├── ttl/
-    │   ├── _service           # cargo_vendor (manual mode)
+    │   ├── _service           # cargo_vendor (manual mode, documents vendoring requirement)
     │   ├── ttl-0.19.0.tar.gz  # Source tarball (committed)
-    │   ├── vendor.tar.zst     # Vendored Rust dependencies
+    │   ├── vendor.tar.zst     # Vendored Rust dependencies (includes .cargo/config.toml)
     │   ├── ttl.spec           # RPM spec (openSUSE + Rocky Linux)
     │   ├── ttl.changes        # openSUSE changelog
     │   ├── ttl.dsc            # Debian source package descriptor
@@ -129,9 +132,9 @@ obs-network-tools/
     │   ├── debian.rules       # Debian build rules
     │   └── debian.postinst    # Post-install: setcap cap_net_raw+ep
     └── xfr/
-        ├── _service           # cargo_vendor (manual mode)
+        ├── _service           # cargo_vendor (manual mode, documents vendoring requirement)
         ├── xfr-0.8.0.tar.gz   # Source tarball (committed)
-        ├── vendor.tar.zst     # Vendored Rust dependencies
+        ├── vendor.tar.zst     # Vendored Rust dependencies (includes .cargo/config.toml)
         ├── xfr.spec           # RPM spec (openSUSE + Rocky Linux)
         ├── xfr.changes        # openSUSE changelog
         ├── xfr.dsc            # Debian source package descriptor
@@ -144,10 +147,9 @@ obs-network-tools/
 
 ## OBS Project Setup (one-time)
 
-Create the OBS project and configure repositories. This can be done via the OBS web interface or via `osc`:
+Create the OBS project and configure repositories via `osc`:
 
 ```bash
-# Edit project metadata
 osc meta prj -e home:ciriarte:network-tools
 ```
 
@@ -169,14 +171,13 @@ Use the following project metadata XML:
     <arch>aarch64</arch>
   </repository>
   <repository name="openSUSE_Leap_16.0">
-    <!-- devel:languages:rust provides Rust >= 1.88 for packages that need it -->
+    <!-- devel:languages:rust provides Rust >= 1.88 for ttl and xfr -->
     <path project="devel:languages:rust" repository="16.0"/>
     <path project="openSUSE:Leap:16.0" repository="standard"/>
     <arch>x86_64</arch>
     <arch>aarch64</arch>
   </repository>
   <repository name="openSUSE_Leap_15.6">
-    <!-- devel:languages:rust provides Rust >= 1.88 for packages that need it -->
     <path project="devel:languages:rust" repository="15.6"/>
     <path project="openSUSE:Leap:15.6" repository="standard"/>
     <arch>x86_64</arch>
@@ -209,49 +210,47 @@ Use the following project metadata XML:
 
 ## Deploying Package Changes to OBS
 
-### nic-xray (first-time setup)
+### First-time setup (any package)
 
 ```bash
 osc co home:ciriarte:network-tools
-mkdir -p home:ciriarte:network-tools/nic-xray
-cp packages/nic-xray/* home:ciriarte:network-tools/nic-xray/
-cd home:ciriarte:network-tools/nic-xray
+mkdir -p home:ciriarte:network-tools/<package>
+cp packages/<package>/* home:ciriarte:network-tools/<package>/
+cd home:ciriarte:network-tools/<package>
 osc add *
 osc commit -m "Initial package"
-```
-
-### ttl (first-time setup)
-
-`ttl` is a Rust binary. The vendor tarball (`vendor.tar.zst`) must be pre-built
-and committed alongside the source tarball. To regenerate:
-
-```bash
-# Install Rust if needed: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-git clone --branch v0.19.0 https://github.com/lance0/ttl ttl-src
-cd ttl-src && cargo vendor
-mkdir -p .cargo
-printf '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "vendor"\n' > .cargo/config.toml
-cd ..
-tar -czf ttl-0.19.0.tar.gz --exclude='.git' --exclude='vendor' --transform='s|^ttl-src|ttl-0.19.0|' ttl-src/
-tar -I "zstd" -cf vendor.tar.zst -C ttl-src .cargo/config.toml vendor/
-cp ttl-0.19.0.tar.gz vendor.tar.zst packages/ttl/
-
-osc co home:ciriarte:network-tools
-mkdir -p home:ciriarte:network-tools/ttl
-cp packages/ttl/* home:ciriarte:network-tools/ttl/
-cd home:ciriarte:network-tools/ttl
-osc add *
-osc commit -m "Initial package: ttl 0.19.0"
 ```
 
 ### Updating an existing package
 
 ```bash
-cd home:ciriarte:network-tools/nic-xray
+cd home:ciriarte:network-tools/<package>
 osc up
-cp /path/to/obs-network-tools/packages/nic-xray/* .
+cp /path/to/obs-network-tools/packages/<package>/* .
 osc commit -m "Update to version X.Y"
 ```
+
+### ttl and xfr version bumps (Rust packages)
+
+Rust packages require pre-vendored dependencies. To update to a new upstream release:
+
+```bash
+# Example: updating ttl to v0.20.0
+git clone --branch v0.20.0 https://github.com/lance0/ttl ttl-src
+cd ttl-src && cargo vendor
+mkdir -p .cargo
+printf '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "vendor"\n' \
+  > .cargo/config.toml
+cd ..
+tar -czf ttl-0.20.0.tar.gz --exclude='.git' --exclude='vendor' \
+  --transform='s|^ttl-src|ttl-0.20.0|' ttl-src/
+tar -I "zstd" -cf vendor.tar.zst -C ttl-src .cargo/config.toml vendor/
+cp ttl-0.20.0.tar.gz vendor.tar.zst packages/ttl/
+# Then update ttl.spec (Version, %changelog), ttl.changes, debian.changelog
+# and commit to git + OBS
+```
+
+The same pattern applies to `xfr` (substitute `xfr` and `github.com/lance0/xfr`).
 
 ---
 
@@ -259,48 +258,45 @@ osc commit -m "Update to version X.Y"
 
 ### nic-xray (fully autonomous)
 
-Version tracking uses two layers:
-
-**OBS source service (`_service`)**: When a commit is made to the OBS package, OBS automatically:
-1. **Fetches source** — `tar_scm` clones `main` from the upstream repo at the version pinned in `_service`.
-2. **Packages the source** — `recompress` produces a `.tar.gz` source archive.
+**OBS source service (`_service`)**: On every OBS commit, OBS automatically:
+1. **Fetches source** — `tar_scm` clones the pinned tag (`revision`) from `github.com/ciroiriarte/nic-xray`.
+2. **Packages the source** — `recompress` produces a `.tar.gz` archive.
 3. **Injects the version** — `set_version` propagates the version into the spec and `.dsc` files.
-4. **Rebuilds and publishes** — Packages are built for all configured distributions and published automatically.
+4. **Rebuilds and publishes** — Packages are built for all configured distributions.
 
-**GitHub Actions workflow** (`.github/workflows/update-nic-xray.yml`) runs daily:
-1. Fetches `nic-xray.sh` from `ciroiriarte/misc-scripts` on `main`.
-2. Reads `SCRIPT_VERSION` (falling back to `VERSION`) from the script.
-3. If the version changed, updates `_service`, `nic-xray.changes`, and `debian.changelog`.
-4. Commits the changes to this repo and pushes the updated package to OBS.
+**GitHub Actions workflow** (`.github/workflows/update-nic-xray.yml`) runs daily at 06:00 UTC:
+1. Queries the GitHub releases API for the latest tag on `ciroiriarte/nic-xray`.
+2. Compares with the current version in `nic-xray.changes`.
+3. If changed: updates `_service` (`version` and `revision`), `nic-xray.changes`, and `debian.changelog`.
+4. Commits to this repo and pushes the updated files to OBS, triggering a rebuild.
 
-When `nic-xray.sh` gets a new `SCRIPT_VERSION`, the pipeline triggers automatically with no manual steps required.
+When a new tag is pushed to `github.com/ciroiriarte/nic-xray`, the pipeline picks it up within 24 hours with no manual steps required.
 
-### ttl (semi-manual updates)
+### ttl and xfr (semi-manual updates)
 
-`ttl` uses a pre-committed source tarball + vendor tarball pattern (Rust offline builds):
+Rust packages use pre-committed source + vendor tarballs (OBS build workers have no internet access):
 
-1. A new upstream release is tagged at https://github.com/lance0/ttl
-2. Maintainer runs: re-download source, re-run `cargo vendor`, update `vendor.tar.zst`
-3. Commit updated `ttl-X.Y.Z.tar.gz`, `vendor.tar.zst`, spec, changelogs to OBS
-4. OBS rebuilds and publishes automatically
+1. New upstream release is tagged on GitHub.
+2. Maintainer re-downloads source, re-runs `cargo vendor`, updates `vendor.tar.zst`.
+3. Commits updated tarballs, spec, and changelogs to this repo and OBS.
+4. OBS rebuilds and publishes automatically.
 
-The `_service` file documents that `cargo_vendor` must be re-run manually on version bumps.
+The `_service` file in each Rust package documents the vendoring requirement but does not run any server-side logic.
 
 ### Required GitHub secret
+
 Add `OBS_PASSWORD` to this repository's secrets (Settings → Secrets → Actions):
 
-| Secret         | Value                        |
-|----------------|------------------------------|
+| Secret         | Value                               |
+|----------------|-------------------------------------|
 | `OBS_PASSWORD` | OBS account password for `ciriarte` |
 
-### Manual version update
-To update the version manually instead of waiting for the daily schedule:
+### Manual version update for nic-xray
+
+To update immediately instead of waiting for the daily schedule:
 
 ```bash
-# Update locally
-./scripts/update-nic-xray-version.sh
-
-# Or update and push to OBS in one step
+# Update locally and push to OBS
 ./scripts/update-nic-xray-version.sh --push
 ```
 
@@ -313,8 +309,10 @@ Or trigger the GitHub Actions workflow manually from the Actions tab.
 After pushing to OBS, verify the builds:
 
 ```bash
-# Check build results for all distros
+# Check build results
 osc results home:ciriarte:network-tools nic-xray
+osc results home:ciriarte:network-tools ttl
+osc results home:ciriarte:network-tools xfr
 
 # Watch live build log (example: Tumbleweed x86_64)
 osc buildlog home:ciriarte:network-tools nic-xray openSUSE_Tumbleweed x86_64
@@ -329,7 +327,8 @@ rpm -qi nic-xray
 # Deb (Ubuntu)
 dpkg -s nic-xray
 
-# Functional test
-nic-xray --help
+# Functional tests
 sudo nic-xray
+ttl --help
+xfr --help
 ```
