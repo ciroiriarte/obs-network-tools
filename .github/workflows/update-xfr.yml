@@ -1,0 +1,222 @@
+name: Update xfr package version
+
+on:
+  schedule:
+    # Check for upstream version changes daily at 06:30 UTC
+    - cron: '30 6 * * *'
+  workflow_dispatch:
+    # Allow manual trigger
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout obs-network-tools
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch latest upstream release and extract version
+        id: get_version
+        run: |
+          # Try releases API first; fall back to tags if no releases exist
+          LATEST_JSON=$(curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/lance0/xfr/releases/latest" 2>/dev/null || echo "{}")
+
+          TAG_NAME=$(echo "${LATEST_JSON}" | python3 -c \
+            "import sys, json; d=json.load(sys.stdin); print(d.get('tag_name',''))" 2>/dev/null || echo "")
+
+          # Fall back to tags API if no release found
+          if [[ -z "${TAG_NAME}" ]]; then
+            TAGS_JSON=$(curl -fsSL \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/lance0/xfr/tags")
+            TAG_NAME=$(echo "${TAGS_JSON}" | python3 -c \
+              "import sys, json; tags=json.load(sys.stdin); print(tags[0]['name'] if tags else '')")
+          fi
+
+          # Strip leading 'v' from tag (v0.9.0 -> 0.9.0)
+          NEW_VERSION="${TAG_NAME#v}"
+
+          if [[ -z "${NEW_VERSION}" ]]; then
+            echo "ERROR: Could not determine latest version from GitHub" >&2
+            exit 1
+          fi
+
+          # Read current packaged version from top of changes file
+          CURRENT_VERSION=$(grep -E ' - [0-9]' packages/xfr/xfr.changes \
+            | head -1 | sed 's/.*- \([0-9][^ ]*\)-[0-9]*/\1/')
+
+          echo "upstream_version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "current_version=${CURRENT_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Upstream: ${NEW_VERSION} | Packaged: ${CURRENT_VERSION}"
+
+      - name: Skip if version unchanged
+        if: steps.get_version.outputs.upstream_version == steps.get_version.outputs.current_version
+        run: |
+          echo "Version is already ${{ steps.get_version.outputs.current_version }}. Nothing to do."
+
+      - name: Install Rust toolchain and zstd
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+            | sh -s -- -y --default-toolchain stable
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          sudo apt-get install -y zstd
+
+      - name: Clone upstream source and vendor dependencies
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+        run: |
+          git clone --branch "v${NEW_VERSION}" --depth 1 \
+            https://github.com/lance0/xfr xfr-src
+
+          cd xfr-src
+          # Source the updated PATH so cargo is available
+          source "$HOME/.cargo/env"
+          cargo vendor
+
+          mkdir -p .cargo
+          printf '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "vendor"\n' \
+            > .cargo/config.toml
+          cd ..
+
+          # Source tarball (without .git and vendor dir)
+          tar -czf "xfr-${NEW_VERSION}.tar.gz" \
+            --exclude='.git' \
+            --exclude='vendor' \
+            --transform="s|^xfr-src|xfr-${NEW_VERSION}|" \
+            xfr-src/
+
+          # Vendor tarball (includes .cargo/config.toml for offline builds)
+          tar -I "zstd" -cf vendor.tar.zst \
+            -C xfr-src \
+            .cargo/config.toml \
+            vendor/
+
+      - name: Update package files
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+          CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
+        run: |
+          mv "xfr-${NEW_VERSION}.tar.gz" packages/xfr/
+          mv vendor.tar.zst packages/xfr/
+          rm -f "packages/xfr/xfr-${CURRENT_VERSION}.tar.gz"
+
+          # Update spec Version: field
+          sed -i "s|^Version:.*|Version:        ${NEW_VERSION}|" packages/xfr/xfr.spec
+
+          # Prepend new entry to spec %changelog
+          DATE_RPM=$(date -u "+%a %b %d %Y")
+          python3 <<PYEOF
+          import os
+          with open('packages/xfr/xfr.spec', 'r') as f:
+              content = f.read()
+          entry = "* ${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1\n- Update to ${NEW_VERSION}\n\n"
+          content = content.replace('%changelog\n', '%changelog\n' + entry, 1)
+          with open('packages/xfr/xfr.spec', 'w') as f:
+              f.write(content)
+          PYEOF
+
+          # Update .dsc Version: and tarball filename
+          sed -i "s|^Version:.*|Version: ${NEW_VERSION}|" packages/xfr/xfr.dsc
+          sed -i "s|xfr_${CURRENT_VERSION}\.orig\.tar\.gz|xfr_${NEW_VERSION}.orig.tar.gz|" packages/xfr/xfr.dsc
+
+      - name: Update xfr.changes
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+        run: |
+          DATE_RPM=$(date -u "+%a %b %d %Y")
+          TMPFILE=$(mktemp)
+          cat > "${TMPFILE}" <<EOF
+-------------------------------------------------------------------
+${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1
+
+- Update to ${NEW_VERSION}
+
+EOF
+          cat packages/xfr/xfr.changes >> "${TMPFILE}"
+          mv "${TMPFILE}" packages/xfr/xfr.changes
+
+      - name: Update debian.changelog
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+        run: |
+          DATE_DEB=$(date -u "+%a, %d %b %Y %H:%M:%S +0000")
+          TMPFILE=$(mktemp)
+          cat > "${TMPFILE}" <<EOF
+xfr (${NEW_VERSION}-1) unstable; urgency=medium
+
+  * Update to ${NEW_VERSION}
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  ${DATE_DEB}
+
+EOF
+          cat packages/xfr/debian.changelog >> "${TMPFILE}"
+          mv "${TMPFILE}" packages/xfr/debian.changelog
+
+      - name: Commit changes to obs-network-tools
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+          CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git rm "packages/xfr/xfr-${CURRENT_VERSION}.tar.gz"
+          git add packages/xfr/xfr-${NEW_VERSION}.tar.gz \
+                  packages/xfr/vendor.tar.zst \
+                  packages/xfr/xfr.spec \
+                  packages/xfr/xfr.dsc \
+                  packages/xfr/xfr.changes \
+                  packages/xfr/debian.changelog
+          git commit -m "xfr: update to ${NEW_VERSION}"
+          git push
+
+      - name: Install osc
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        run: |
+          sudo apt-get install -y osc
+
+      - name: Configure osc credentials
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          OBS_PASSWORD: ${{ secrets.OBS_PASSWORD }}
+        run: |
+          mkdir -p ~/.config/osc
+          cat > ~/.config/osc/oscrc <<EOF
+[general]
+apiurl = https://api.opensuse.org
+
+[https://api.opensuse.org]
+user = ciriarte
+pass = ${OBS_PASSWORD}
+EOF
+          chmod 600 ~/.config/osc/oscrc
+
+      - name: Push updated package to OBS
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+          CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
+        run: |
+          osc co home:ciriarte:network-tools xfr
+          cp packages/xfr/xfr-${NEW_VERSION}.tar.gz \
+             packages/xfr/vendor.tar.zst \
+             packages/xfr/xfr.spec \
+             packages/xfr/xfr.dsc \
+             packages/xfr/xfr.changes \
+             packages/xfr/debian.changelog \
+             home:ciriarte:network-tools/xfr/
+          rm -f home:ciriarte:network-tools/xfr/xfr-${CURRENT_VERSION}.tar.gz
+          cd home:ciriarte:network-tools/xfr
+          osc addremove
+          osc commit -m "Update xfr to ${NEW_VERSION}"

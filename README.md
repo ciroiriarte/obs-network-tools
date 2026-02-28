@@ -108,9 +108,11 @@ obs-network-tools/
 ├── CLAUDE.md                       # Project instructions for Claude Code
 ├── README.md                       # This file
 ├── .github/workflows/
-│   └── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push to OBS
+│   ├── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push to OBS
+│   ├── update-ttl.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
+│   └── update-xfr.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
 ├── scripts/
-│   └── update-nic-xray-version.sh  # Manual alternative to the workflow above
+│   └── update-nic-xray-version.sh  # Manual alternative to the nic-xray workflow above
 └── packages/
     ├── nic-xray/
     │   ├── _service           # tar_scm: fetch pinned tag from github.com/ciroiriarte/nic-xray
@@ -232,7 +234,11 @@ osc commit -m "Update to version X.Y"
 
 ### ttl and xfr version bumps (Rust packages)
 
-Rust packages require pre-vendored dependencies. To update to a new upstream release:
+Version updates are handled automatically by the GitHub Actions workflows. To trigger
+an update immediately without waiting for the daily schedule, run the workflow manually
+from the Actions tab in GitHub.
+
+For a fully manual update (e.g., on a machine without GitHub Actions), the steps are:
 
 ```bash
 # Example: updating ttl to v0.20.0
@@ -246,7 +252,7 @@ tar -czf ttl-0.20.0.tar.gz --exclude='.git' --exclude='vendor' \
   --transform='s|^ttl-src|ttl-0.20.0|' ttl-src/
 tar -I "zstd" -cf vendor.tar.zst -C ttl-src .cargo/config.toml vendor/
 cp ttl-0.20.0.tar.gz vendor.tar.zst packages/ttl/
-# Then update ttl.spec (Version, %changelog), ttl.changes, debian.changelog
+# Then update ttl.spec (Version, %changelog), ttl.dsc, ttl.changes, debian.changelog
 # and commit to git + OBS
 ```
 
@@ -272,20 +278,28 @@ The same pattern applies to `xfr` (substitute `xfr` and `github.com/lance0/xfr`)
 
 When a new tag is pushed to `github.com/ciroiriarte/nic-xray`, the pipeline picks it up within 24 hours with no manual steps required.
 
-### ttl and xfr (semi-manual updates)
+### ttl and xfr (fully autonomous)
 
-Rust packages use pre-committed source + vendor tarballs (OBS build workers have no internet access):
+Rust packages require pre-committed source and vendor tarballs because OBS build workers
+have no internet access. The GitHub Actions workflows handle this automatically:
 
-1. New upstream release is tagged on GitHub.
-2. Maintainer re-downloads source, re-runs `cargo vendor`, updates `vendor.tar.zst`.
-3. Commits updated tarballs, spec, and changelogs to this repo and OBS.
-4. OBS rebuilds and publishes automatically.
+**GitHub Actions workflows** (`.github/workflows/update-ttl.yml` / `update-xfr.yml`) run daily:
+1. Query the GitHub releases/tags API for the latest version on `lance0/ttl` or `lance0/xfr`.
+2. Compare with the current version in `ttl.changes` / `xfr.changes`.
+3. If changed: install Rust, clone at the new tag, run `cargo vendor`.
+4. Build the source tarball (`ttl-X.Y.Z.tar.gz`) and vendor archive (`vendor.tar.zst`).
+5. Update spec `Version:`, `%changelog`, `.dsc`, `.changes`, and `debian.changelog`.
+6. Commit all changes to this repo and push updated files to OBS, triggering a rebuild.
 
-The `_service` file in each Rust package documents the vendoring requirement but does not run any server-side logic.
+When a new tag is pushed to `github.com/lance0/ttl` or `github.com/lance0/xfr`, the pipeline
+picks it up within 24 hours with no manual steps required.
 
-### Required GitHub secret
+The `_service` file in each Rust package documents the vendoring requirement; it runs no
+server-side OBS logic but is required for the build scheduler to dispatch jobs correctly.
 
-Add `OBS_PASSWORD` to this repository's secrets (Settings → Secrets → Actions):
+### Required GitHub secrets
+
+Add these secrets to this repository (Settings → Secrets → Actions):
 
 | Secret         | Value                               |
 |----------------|-------------------------------------|
@@ -300,7 +314,7 @@ To update immediately instead of waiting for the daily schedule:
 ./scripts/update-nic-xray-version.sh --push
 ```
 
-Or trigger the GitHub Actions workflow manually from the Actions tab.
+For ttl or xfr, trigger the corresponding GitHub Actions workflow manually from the Actions tab.
 
 ---
 
