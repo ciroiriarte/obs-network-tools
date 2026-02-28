@@ -112,50 +112,72 @@ jobs:
           # Update spec Version: field
           sed -i "s|^Version:.*|Version:        ${NEW_VERSION}|" packages/xfr/xfr.spec
 
-          # Prepend new entry to spec %changelog
+          # Update .dsc Version: and tarball filename
+          sed -i "s|^Version:.*|Version: ${NEW_VERSION}|" packages/xfr/xfr.dsc
+          sed -i "s|xfr_${CURRENT_VERSION}\.orig\.tar\.gz|xfr_${NEW_VERSION}.orig.tar.gz|" packages/xfr/xfr.dsc
+
+      - name: Update changelogs
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+          CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
+        run: |
+          # Fetch commit messages between the two versions
+          curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/lance0/xfr/compare/v${CURRENT_VERSION}...v${NEW_VERSION}" \
+            -o /tmp/compare.json 2>/dev/null || echo '{"commits":[]}' > /tmp/compare.json
+
           DATE_RPM=$(date -u "+%a %b %d %Y")
+          DATE_DEB=$(date -u "+%a, %d %b %Y %H:%M:%S +0000")
+
+          RPM_ENTRIES=$(python3 -c "
+          import json
+          data = json.load(open('/tmp/compare.json'))
+          commits = data.get('commits', [])
+          lines = ['- ' + c['commit']['message'].split('\n')[0].strip() for c in commits]
+          print('\n'.join(lines) if lines else '- Update to ${NEW_VERSION}')
+          ")
+
+          DEB_ENTRIES=$(python3 -c "
+          import json
+          data = json.load(open('/tmp/compare.json'))
+          commits = data.get('commits', [])
+          lines = ['  * ' + c['commit']['message'].split('\n')[0].strip() for c in commits]
+          print('\n'.join(lines) if lines else '  * Update to ${NEW_VERSION}')
+          ")
+
+          # Update spec %changelog
           python3 <<PYEOF
-          import os
+          import json
+          data = json.load(open('/tmp/compare.json'))
+          commits = data.get('commits', [])
+          lines = ['- ' + c['commit']['message'].split('\n')[0].strip() for c in commits]
+          rpm_entries = '\n'.join(lines) if lines else '- Update to ${NEW_VERSION}'
+          entry = '* ${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1\n' + rpm_entries + '\n\n'
           with open('packages/xfr/xfr.spec', 'r') as f:
               content = f.read()
-          entry = "* ${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1\n- Update to ${NEW_VERSION}\n\n"
           content = content.replace('%changelog\n', '%changelog\n' + entry, 1)
           with open('packages/xfr/xfr.spec', 'w') as f:
               f.write(content)
           PYEOF
 
-          # Update .dsc Version: and tarball filename
-          sed -i "s|^Version:.*|Version: ${NEW_VERSION}|" packages/xfr/xfr.dsc
-          sed -i "s|xfr_${CURRENT_VERSION}\.orig\.tar\.gz|xfr_${NEW_VERSION}.orig.tar.gz|" packages/xfr/xfr.dsc
-
-      - name: Update xfr.changes
-        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
-        env:
-          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
-        run: |
-          DATE_RPM=$(date -u "+%a %b %d %Y")
           TMPFILE=$(mktemp)
           {
             echo "-------------------------------------------------------------------"
             echo "${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1"
             echo ""
-            echo "- Update to ${NEW_VERSION}"
+            echo "${RPM_ENTRIES}"
             echo ""
             cat packages/xfr/xfr.changes
           } > "${TMPFILE}"
           mv "${TMPFILE}" packages/xfr/xfr.changes
 
-      - name: Update debian.changelog
-        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
-        env:
-          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
-        run: |
-          DATE_DEB=$(date -u "+%a, %d %b %Y %H:%M:%S +0000")
           TMPFILE=$(mktemp)
           {
             echo "xfr (${NEW_VERSION}-1) unstable; urgency=medium"
             echo ""
-            echo "  * Update to ${NEW_VERSION}"
+            echo "${DEB_ENTRIES}"
             echo ""
             echo " -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  ${DATE_DEB}"
             echo ""
