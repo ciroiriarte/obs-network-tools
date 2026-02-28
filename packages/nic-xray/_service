@@ -2,8 +2,8 @@
   <service name="tar_scm">
     <param name="scm">git</param>
     <param name="url">https://github.com/ciroiriarte/nic-xray</param>
-    <param name="version">2.2.1</param>
-    <param name="revision">v2.2.1</param>
+    <param name="version">2.3.0</param>
+    <param name="revision">v2.3.0</param>
     <param name="filename">nic-xray</param>
   </service>
   <service name="set_version">
