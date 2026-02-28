@@ -1,45 +1,44 @@
 # obs-network-tools
 
-Autonomous OBS packaging pipeline for network tools not commonly packaged by Linux distributions.
+[![update-nic-xray](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-nic-xray.yml/badge.svg)](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-nic-xray.yml)
+[![update-ttl](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-ttl.yml/badge.svg)](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-ttl.yml)
+[![update-xfr](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-xfr.yml/badge.svg)](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-xfr.yml)
 
-## Project Purpose
+Autonomous [OBS](https://build.opensuse.org/project/show/home:ciriarte:network-tools) packaging pipeline for network diagnostic and benchmarking tools not commonly packaged by Linux distributions. Packages are built and published automatically when upstream releases a new version — install them with your native package manager (`zypper`, `apt`, `dnf`).
 
-This repository contains OBS (Open Build Service) package definitions for various network diagnostic and benchmarking tools. Packages are built automatically when upstream releases a new version (via GitHub tags), and published to distribution repositories for easy installation via native package managers.
+## Table of Contents
 
-**OBS Project:** https://build.opensuse.org/project/show/home:ciriarte:network-tools
-
----
+- [Packages](#packages)
+- [Supported Distributions](#supported-distributions)
+- [Installation](#installation)
+- [How Auto-Update Works](#how-auto-update-works)
+- [Maintainer Guide](#maintainer-guide)
+- [Repository Structure](#repository-structure)
 
 ## Packages
 
-| Package  | Description                                           | Upstream                                    |
-|----------|-------------------------------------------------------|---------------------------------------------|
-| nic-xray | Ethernet physical connectivity diagnostic tool        | https://github.com/ciroiriarte/nic-xray     |
-| ttl      | Traceroute/mtr-style TUI (requires Rust ≥ 1.88)      | https://github.com/lance0/ttl               |
-| xfr      | Network bandwidth testing TUI (requires Rust ≥ 1.88) | https://github.com/lance0/xfr               |
+| Package | Description | Upstream |
+|---------|-------------|----------|
+| **nic-xray** | Ethernet physical connectivity diagnostic tool | [ciroiriarte/nic-xray](https://github.com/ciroiriarte/nic-xray) |
+| **ttl** | Traceroute/mtr-style TUI (requires Rust >= 1.88) | [lance0/ttl](https://github.com/lance0/ttl) |
+| **xfr** | Network bandwidth testing TUI (requires Rust >= 1.88) | [lance0/xfr](https://github.com/lance0/xfr) |
 
----
+## Supported Distributions
 
-## Distributions Covered
+| Distribution | Repository Alias | Arch | nic-xray | ttl | xfr |
+|---|---|---|:---:|:---:|:---:|
+| openSUSE Tumbleweed | `openSUSE_Tumbleweed` | x86_64, aarch64 | ✓ | ✓ | ✓ |
+| openSUSE Slowroll | `openSUSE_Slowroll` | x86_64, aarch64 | ✓ | ✓ | ✓ |
+| openSUSE Leap 16.0 | `openSUSE_Leap_16.0` | x86_64, aarch64 | ✓ | ✓ | ✓ |
+| openSUSE Leap 15.6 | `openSUSE_Leap_15.6` | x86_64, aarch64 | ✓ | — | — |
+| Rocky Linux 9 | `Rocky_9` | x86_64, aarch64 | ✓ | ✓ | ✓ |
+| Rocky Linux 10 | `Rocky_10` | x86_64, aarch64 | ✓ | ✓ | ✓ |
+| Ubuntu 22.04 LTS | `Ubuntu_22.04` | x86_64, aarch64 | ✓ | — | — |
+| Ubuntu 24.04 LTS | `Ubuntu_24.04` | x86_64, aarch64 | ✓ | — | — |
 
-| Distribution        | Repository alias    | Arch            | nic-xray | ttl | xfr |
-|---------------------|---------------------|-----------------|----------|-----|-----|
-| openSUSE Tumbleweed | openSUSE_Tumbleweed | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| openSUSE Slowroll   | openSUSE_Slowroll   | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| openSUSE Leap 16.0  | openSUSE_Leap_16.0  | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| openSUSE Leap 15.6  | openSUSE_Leap_15.6  | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
-| Rocky Linux 9       | Rocky_9             | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| Rocky Linux 10      | Rocky_10            | x86_64, aarch64 | ✓        | ✓   | ✓   |
-| Ubuntu 22.04 LTS    | Ubuntu_22.04        | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
-| Ubuntu 24.04 LTS    | Ubuntu_24.04        | x86_64, aarch64 | ✓        | ✗ ¹ | ✗ ¹ |
+> **Note:** `ttl` and `xfr` require Rust >= 1.88, which is not yet available in Leap 15.6 or Ubuntu repos. Builds will automatically succeed once a compatible Rust version ships.
 
-¹ Requires Rust ≥ 1.88, which is not yet available in this distribution's standard
-  repositories. Builds will automatically succeed once the distribution ships a
-  compatible Rust version.
-
----
-
-## Installing Packages
+## Installation
 
 ### openSUSE (zypper)
 
@@ -49,7 +48,7 @@ zypper refresh
 zypper install nic-xray ttl xfr
 ```
 
-Replace `openSUSE_Tumbleweed` with your distribution alias from the table above.
+Replace `openSUSE_Tumbleweed` with your [repository alias](#supported-distributions).
 
 ### Ubuntu (apt)
 
@@ -64,8 +63,6 @@ sudo apt install nic-xray
 
 Replace `Ubuntu_24.04` with `Ubuntu_22.04` for Ubuntu 22.04 LTS.
 
-> **Note:** `ttl` and `xfr` are not available on Ubuntu (Rust ≥ 1.88 not yet in distro repos).
-
 ### Rocky Linux (dnf)
 
 ```bash
@@ -76,14 +73,38 @@ dnf install nic-xray ttl xfr
 
 Replace `Rocky_9` with `Rocky_10` for Rocky Linux 10.
 
-> **Note for Rocky Linux:** `lldpd` is available via EPEL. Enable it before installing `nic-xray`:
+> **Note:** `nic-xray` depends on `lldpd`, available via EPEL:
 > ```bash
 > dnf install epel-release
 > ```
 
----
+## How Auto-Update Works
 
-## Prerequisites (for maintainers)
+All three packages are fully autonomous — when upstream pushes a new tag, the pipeline picks it up within 24 hours with no manual steps.
+
+### nic-xray
+
+The GitHub Actions [workflow](.github/workflows/update-nic-xray.yml) runs daily and:
+
+1. Queries the GitHub API for the latest tag on [ciroiriarte/nic-xray](https://github.com/ciroiriarte/nic-xray).
+2. Compares with the current version in `nic-xray.changes`.
+3. If changed: updates `_service`, changelogs, commits to this repo, and pushes to OBS.
+
+OBS then runs its source services (`tar_scm` + `set_version` + `recompress`) to fetch, package, and build.
+
+### ttl and xfr
+
+Rust packages require pre-committed source and vendor tarballs because OBS build workers have no internet access. The GitHub Actions workflows ([ttl](.github/workflows/update-ttl.yml), [xfr](.github/workflows/update-xfr.yml)) run daily and:
+
+1. Query the GitHub API for the latest tag on [lance0/ttl](https://github.com/lance0/ttl) or [lance0/xfr](https://github.com/lance0/xfr).
+2. If changed: install Rust, clone at the new tag, run `cargo vendor`.
+3. Build the source tarball and vendor archive (`vendor.tar.zst`).
+4. Update spec, changelogs, commit to this repo, and push to OBS.
+
+## Maintainer Guide
+
+<details>
+<summary><strong>Prerequisites</strong></summary>
 
 Install and configure the `osc` CLI client:
 
@@ -99,57 +120,23 @@ osc config https://api.opensuse.org
 # Enter your OBS username and password when prompted
 ```
 
----
+</details>
 
-## Repository Structure
+<details>
+<summary><strong>Required GitHub secrets</strong></summary>
 
-```
-obs-network-tools/
-├── CLAUDE.md                       # Project instructions for Claude Code
-├── README.md                       # This file
-├── .github/workflows/
-│   ├── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push to OBS
-│   ├── update-ttl.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
-│   └── update-xfr.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
-├── scripts/
-│   └── update-nic-xray-version.sh  # Manual alternative to the nic-xray workflow above
-└── packages/
-    ├── nic-xray/
-    │   ├── _service           # tar_scm: fetch pinned tag from github.com/ciroiriarte/nic-xray
-    │   ├── nic-xray.spec      # RPM spec (openSUSE + Rocky Linux)
-    │   ├── nic-xray.changes   # openSUSE changelog
-    │   ├── nic-xray.dsc       # Debian source package descriptor
-    │   ├── debian.control     # Debian/Ubuntu package metadata
-    │   ├── debian.changelog   # Debian/Ubuntu changelog
-    │   └── debian.rules       # Debian build rules
-    ├── ttl/
-    │   ├── _service           # cargo_vendor (manual mode, documents vendoring requirement)
-    │   ├── ttl-0.19.0.tar.gz  # Source tarball (committed)
-    │   ├── vendor.tar.zst     # Vendored Rust dependencies (includes .cargo/config.toml)
-    │   ├── ttl.spec           # RPM spec (openSUSE + Rocky Linux)
-    │   ├── ttl.changes        # openSUSE changelog
-    │   ├── ttl.dsc            # Debian source package descriptor
-    │   ├── debian.control     # Debian/Ubuntu package metadata
-    │   ├── debian.changelog   # Debian/Ubuntu changelog
-    │   ├── debian.rules       # Debian build rules
-    │   └── debian.postinst    # Post-install: setcap cap_net_raw+ep
-    └── xfr/
-        ├── _service           # cargo_vendor (manual mode, documents vendoring requirement)
-        ├── xfr-0.8.0.tar.gz   # Source tarball (committed)
-        ├── vendor.tar.zst     # Vendored Rust dependencies (includes .cargo/config.toml)
-        ├── xfr.spec           # RPM spec (openSUSE + Rocky Linux)
-        ├── xfr.changes        # openSUSE changelog
-        ├── xfr.dsc            # Debian source package descriptor
-        ├── debian.control     # Debian/Ubuntu package metadata
-        ├── debian.changelog   # Debian/Ubuntu changelog
-        └── debian.rules       # Debian build rules
-```
+Add these secrets to the repository (Settings > Secrets > Actions):
 
----
+| Secret | Value |
+|--------|-------|
+| `OBS_PASSWORD` | OBS account password for `ciriarte` |
 
-## OBS Project Setup (one-time)
+</details>
 
-Create the OBS project and configure repositories via `osc`:
+<details>
+<summary><strong>OBS project setup (one-time)</strong></summary>
+
+Create the OBS project and configure repositories:
 
 ```bash
 osc meta prj -e home:ciriarte:network-tools
@@ -208,11 +195,12 @@ Use the following project metadata XML:
 </project>
 ```
 
----
+</details>
 
-## Deploying Package Changes to OBS
+<details>
+<summary><strong>Deploying package changes to OBS</strong></summary>
 
-### First-time setup (any package)
+**First-time setup (any package):**
 
 ```bash
 osc co home:ciriarte:network-tools
@@ -223,7 +211,7 @@ osc add *
 osc commit -m "Initial package"
 ```
 
-### Updating an existing package
+**Updating an existing package:**
 
 ```bash
 cd home:ciriarte:network-tools/<package>
@@ -232,13 +220,20 @@ cp /path/to/obs-network-tools/packages/<package>/* .
 osc commit -m "Update to version X.Y"
 ```
 
-### ttl and xfr version bumps (Rust packages)
+</details>
 
-Version updates are handled automatically by the GitHub Actions workflows. To trigger
-an update immediately without waiting for the daily schedule, run the workflow manually
-from the Actions tab in GitHub.
+<details>
+<summary><strong>Manual version updates</strong></summary>
 
-For a fully manual update (e.g., on a machine without GitHub Actions), the steps are:
+Version updates are normally handled automatically by GitHub Actions. To trigger an update immediately, run the workflow manually from the Actions tab.
+
+**nic-xray** (local alternative):
+
+```bash
+./scripts/update-nic-xray-version.sh --push
+```
+
+**ttl / xfr** (fully manual, e.g. without GitHub Actions):
 
 ```bash
 # Example: updating ttl to v0.20.0
@@ -258,67 +253,10 @@ cp ttl-0.20.0.tar.gz vendor.tar.zst packages/ttl/
 
 The same pattern applies to `xfr` (substitute `xfr` and `github.com/lance0/xfr`).
 
----
+</details>
 
-## How Auto-Rebuild Works
-
-### nic-xray (fully autonomous)
-
-**OBS source service (`_service`)**: On every OBS commit, OBS automatically:
-1. **Fetches source** — `tar_scm` clones the pinned tag (`revision`) from `github.com/ciroiriarte/nic-xray`.
-2. **Packages the source** — `recompress` produces a `.tar.gz` archive.
-3. **Injects the version** — `set_version` propagates the version into the spec and `.dsc` files.
-4. **Rebuilds and publishes** — Packages are built for all configured distributions.
-
-**GitHub Actions workflow** (`.github/workflows/update-nic-xray.yml`) runs daily at 06:00 UTC:
-1. Queries the GitHub releases API for the latest tag on `ciroiriarte/nic-xray`.
-2. Compares with the current version in `nic-xray.changes`.
-3. If changed: updates `_service` (`version` and `revision`), `nic-xray.changes`, and `debian.changelog`.
-4. Commits to this repo and pushes the updated files to OBS, triggering a rebuild.
-
-When a new tag is pushed to `github.com/ciroiriarte/nic-xray`, the pipeline picks it up within 24 hours with no manual steps required.
-
-### ttl and xfr (fully autonomous)
-
-Rust packages require pre-committed source and vendor tarballs because OBS build workers
-have no internet access. The GitHub Actions workflows handle this automatically:
-
-**GitHub Actions workflows** (`.github/workflows/update-ttl.yml` / `update-xfr.yml`) run daily:
-1. Query the GitHub releases/tags API for the latest version on `lance0/ttl` or `lance0/xfr`.
-2. Compare with the current version in `ttl.changes` / `xfr.changes`.
-3. If changed: install Rust, clone at the new tag, run `cargo vendor`.
-4. Build the source tarball (`ttl-X.Y.Z.tar.gz`) and vendor archive (`vendor.tar.zst`).
-5. Update spec `Version:`, `%changelog`, `.dsc`, `.changes`, and `debian.changelog`.
-6. Commit all changes to this repo and push updated files to OBS, triggering a rebuild.
-
-When a new tag is pushed to `github.com/lance0/ttl` or `github.com/lance0/xfr`, the pipeline
-picks it up within 24 hours with no manual steps required.
-
-The `_service` file in each Rust package documents the vendoring requirement; it runs no
-server-side OBS logic but is required for the build scheduler to dispatch jobs correctly.
-
-### Required GitHub secrets
-
-Add these secrets to this repository (Settings → Secrets → Actions):
-
-| Secret         | Value                               |
-|----------------|-------------------------------------|
-| `OBS_PASSWORD` | OBS account password for `ciriarte` |
-
-### Manual version update for nic-xray
-
-To update immediately instead of waiting for the daily schedule:
-
-```bash
-# Update locally and push to OBS
-./scripts/update-nic-xray-version.sh --push
-```
-
-For ttl or xfr, trigger the corresponding GitHub Actions workflow manually from the Actions tab.
-
----
-
-## Verification
+<details>
+<summary><strong>Verification</strong></summary>
 
 After pushing to OBS, verify the builds:
 
@@ -346,3 +284,58 @@ sudo nic-xray
 ttl --help
 xfr --help
 ```
+
+</details>
+
+## Repository Structure
+
+<details>
+<summary>Click to expand</summary>
+
+```
+obs-network-tools/
+├── CLAUDE.md                       # Project instructions for Claude Code
+├── README.md                       # This file
+├── .github/workflows/
+│   ├── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push to OBS
+│   ├── update-ttl.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
+│   └── update-xfr.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
+├── scripts/
+│   └── update-nic-xray-version.sh  # Manual alternative to the nic-xray workflow above
+└── packages/
+    ├── nic-xray/
+    │   ├── _service           # tar_scm: fetch pinned tag from github.com/ciroiriarte/nic-xray
+    │   ├── nic-xray.spec      # RPM spec (openSUSE + Rocky Linux)
+    │   ├── nic-xray.changes   # openSUSE changelog
+    │   ├── nic-xray.dsc       # Debian source package descriptor
+    │   ├── debian.control     # Debian/Ubuntu package metadata
+    │   ├── debian.changelog   # Debian/Ubuntu changelog
+    │   └── debian.rules       # Debian build rules
+    ├── ttl/
+    │   ├── _service           # cargo_vendor (manual mode, documents vendoring requirement)
+    │   ├── ttl-0.19.0.tar.gz  # Source tarball (committed)
+    │   ├── vendor.tar.zst     # Vendored Rust dependencies (includes .cargo/config.toml)
+    │   ├── ttl.spec           # RPM spec (openSUSE + Rocky Linux)
+    │   ├── ttl.changes        # openSUSE changelog
+    │   ├── ttl.dsc            # Debian source package descriptor
+    │   ├── debian.control     # Debian/Ubuntu package metadata
+    │   ├── debian.changelog   # Debian/Ubuntu changelog
+    │   ├── debian.rules       # Debian build rules
+    │   └── debian.postinst    # Post-install: setcap cap_net_raw+ep
+    └── xfr/
+        ├── _service           # cargo_vendor (manual mode, documents vendoring requirement)
+        ├── xfr-0.8.0.tar.gz   # Source tarball (committed)
+        ├── vendor.tar.zst     # Vendored Rust dependencies (includes .cargo/config.toml)
+        ├── xfr.spec           # RPM spec (openSUSE + Rocky Linux)
+        ├── xfr.changes        # openSUSE changelog
+        ├── xfr.dsc            # Debian source package descriptor
+        ├── debian.control     # Debian/Ubuntu package metadata
+        ├── debian.changelog   # Debian/Ubuntu changelog
+        └── debian.rules       # Debian build rules
+```
+
+</details>
+
+## License
+
+This packaging pipeline is maintained by [Ciro Iriarte](mailto:ciro.iriarte+software@gmail.com). The packaged software is distributed under its respective upstream licenses.
