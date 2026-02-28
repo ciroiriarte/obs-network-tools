@@ -18,6 +18,8 @@ Requires:       iproute
 # openSUSE: package is named iproute2
 Requires:       iproute2
 %endif
+# Optional: graph generation feature
+Recommends:     graphviz
 
 %description
 Displays detailed information about physical network interfaces including
