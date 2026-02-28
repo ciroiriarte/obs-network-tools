@@ -4,12 +4,15 @@ Release:        1%{?dist}
 Summary:        Network diagnostic tool — traceroute/mtr-style TUI with hop stats
 License:        MIT OR Apache-2.0
 URL:            https://github.com/lance0/ttl
+#Git-Clone:     https://github.com/lance0/ttl.git
 Source0:        ttl-%{version}.tar.gz
 Source1:        vendor.tar.zst
 
 %if 0%{?suse_version}
 BuildRequires:  cargo-packaging
 BuildRequires:  rust >= 1.88
+Requires(post): permissions
+Recommends:     bash-completion
 ExclusiveArch:  %{rust_arches}
 %else
 BuildRequires:  cargo
@@ -38,8 +41,24 @@ cargo build --release --offline --locked
 %endif
 
 %install
+%if 0%{?suse_version}
+%{cargo_install}
+%else
 install -Dm0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}
+%endif
 
+%if 0%{?suse_version}
+%check
+%{cargo_test}
+%endif
+
+%if 0%{?suse_version}
+%verifyscript
+%verify_permissions -e %{_bindir}/%{name}
+
+%post
+%set_permissions %{_bindir}/%{name}
+%else
 %post
 # Grant raw socket capability so the tool can run without sudo
 if command -v setcap >/dev/null 2>&1; then
@@ -50,11 +69,16 @@ fi
 if [ $1 -eq 0 ] && command -v setcap >/dev/null 2>&1; then
     setcap -r %{_bindir}/%{name} 2>/dev/null || true
 fi
+%endif
 
 %files
 %doc README.md CHANGELOG.md
 %license LICENSE-MIT LICENSE-APACHE
+%if 0%{?suse_version}
+%verify(not mode caps) %attr(0755,root,root) %caps(cap_net_raw,cap_net_admin=ep) %{_bindir}/%{name}
+%else
 %{_bindir}/%{name}
+%endif
 
 %changelog
 * Thu Feb 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.19.0-1
