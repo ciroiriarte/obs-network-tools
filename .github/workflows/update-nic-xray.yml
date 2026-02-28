@@ -67,14 +67,14 @@ jobs:
         run: |
           DATE_RPM=$(date -u "+%a %b %d %Y")
           TMPFILE=$(mktemp)
-          cat > "${TMPFILE}" <<EOF
--------------------------------------------------------------------
-${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1
-
-- Update to ${NEW_VERSION}
-
-EOF
-          cat packages/nic-xray/nic-xray.changes >> "${TMPFILE}"
+          {
+            echo "-------------------------------------------------------------------"
+            echo "${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1"
+            echo ""
+            echo "- Update to ${NEW_VERSION}"
+            echo ""
+            cat packages/nic-xray/nic-xray.changes
+          } > "${TMPFILE}"
           mv "${TMPFILE}" packages/nic-xray/nic-xray.changes
 
       - name: Update debian.changelog
@@ -84,15 +84,15 @@ EOF
         run: |
           DATE_DEB=$(date -u "+%a, %d %b %Y %H:%M:%S +0000")
           TMPFILE=$(mktemp)
-          cat > "${TMPFILE}" <<EOF
-nic-xray (${NEW_VERSION}-1) unstable; urgency=medium
-
-  * Update to ${NEW_VERSION}
-
- -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  ${DATE_DEB}
-
-EOF
-          cat packages/nic-xray/debian.changelog >> "${TMPFILE}"
+          {
+            echo "nic-xray (${NEW_VERSION}-1) unstable; urgency=medium"
+            echo ""
+            echo "  * Update to ${NEW_VERSION}"
+            echo ""
+            echo " -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  ${DATE_DEB}"
+            echo ""
+            cat packages/nic-xray/debian.changelog
+          } > "${TMPFILE}"
           mv "${TMPFILE}" packages/nic-xray/debian.changelog
 
       - name: Commit changes to obs-network-tools
@@ -119,14 +119,14 @@ EOF
           OBS_PASSWORD: ${{ secrets.OBS_PASSWORD }}
         run: |
           mkdir -p ~/.config/osc
-          cat > ~/.config/osc/oscrc <<EOF
-[general]
-apiurl = https://api.opensuse.org
-
-[https://api.opensuse.org]
-user = ciriarte
-pass = ${OBS_PASSWORD}
-EOF
+          {
+            echo "[general]"
+            echo "apiurl = https://api.opensuse.org"
+            echo ""
+            echo "[https://api.opensuse.org]"
+            echo "user = ciriarte"
+            echo "pass = ${OBS_PASSWORD}"
+          } > ~/.config/osc/oscrc
           chmod 600 ~/.config/osc/oscrc
 
       - name: Push updated changelogs to OBS
