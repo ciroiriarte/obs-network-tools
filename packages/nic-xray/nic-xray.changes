@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Sun Mar 01 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.4.1-1
+
+- Embed topology PNG in README
+- Bump version to 2.3.1
+- Fix LACP validation and add bond-level consistency checks
+- Add watermark to DOT topology diagram
+- Bump version to 2.4.1
+
+-------------------------------------------------------------------
 Sat Feb 28 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.3.0-1
 
 - Improve DOT diagram and add obfuscated sample outputs

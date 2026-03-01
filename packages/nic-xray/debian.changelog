@@ -1,3 +1,13 @@
+nic-xray (2.4.1-1) unstable; urgency=medium
+
+  * Embed topology PNG in README
+  * Bump version to 2.3.1
+  * Fix LACP validation and add bond-level consistency checks
+  * Add watermark to DOT topology diagram
+  * Bump version to 2.4.1
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Sun, 01 Mar 2026 06:51:50 +0000
+
 nic-xray (2.3.0-1) unstable; urgency=medium
 
   * Improve DOT diagram and add obfuscated sample outputs
