@@ -1,3 +1,12 @@
+nic-xray (2.5.0-1) unstable; urgency=medium
+
+  * Update to 2.5.0
+  * Add real-time traffic metrics (-m/--metrics flag)
+  * Detect bond traffic imbalance (flag members < 70% of max in red)
+  * Color DOT direction arrows (green Rx, blue Tx)
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Sat, 01 Mar 2026 00:00:00 +0000
+
 nic-xray (2.4.1-1) unstable; urgency=medium
 
   * Embed topology PNG in README
