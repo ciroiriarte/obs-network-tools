@@ -1,3 +1,13 @@
+nic-xray (2.9.0-1) unstable; urgency=medium
+
+  * Add --watch mode for continuous refresh during recabling (v2.8.0)
+  * Add hardware/software descriptions to DOT diagram nodes (#3)
+  * Add serial numbers to DOT diagram nodes
+  * Add generation timestamp to DOT diagram
+  * Bump version to 2.9.0
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Wed, 04 Mar 2026 06:52:36 +0000
+
 nic-xray (2.7.0-1) unstable; urgency=medium
 
   * Add SFP/QSFP optical transceiver diagnostics (--optics)
