@@ -1,0 +1,11 @@
+switch-xray (1.0.1-1) unstable; urgency=medium
+
+  * Fix SNMP text value parsing and status colors
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Sun, 01 Mar 2026 00:00:00 +0000
+
+switch-xray (1.0-1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Thu, 27 Feb 2026 00:00:00 +0000

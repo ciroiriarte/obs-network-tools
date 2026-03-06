@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+override_dh_auto_build:
+	# nothing to build
+
+override_dh_auto_install:
+	install -D -m 0755 switch-xray.sh \
+		debian/switch-xray/usr/bin/switch-xray
+	install -D -m 0644 man/man8/switch-xray.8 \
+		debian/switch-xray/usr/share/man/man8/switch-xray.8
+	install -D -m 0644 switch-xray.conf.example \
+		debian/switch-xray/usr/share/doc/switch-xray/switch-xray.conf.example

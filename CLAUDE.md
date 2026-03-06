@@ -28,9 +28,9 @@
 
 ## Software
 * nic-xray
-  - Single script, part of https://github.com/ciroiriarte/misc-scripts (shared github repo with other misc scripts)
-  - Discard unrelated scripts
-  - Remove documentation not related to this script
+  - NIC cabling documentation script available at https://github.com/ciriarte/nic-xray
+* switch-xray
+  - Switch cabling documentation script available at https://github.com/ciriarte/switch-xray
 * ttl
   Network diagnostic tool available at https://github.com/lance0/ttl (its own github repo)
 * xfr

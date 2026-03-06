@@ -1,0 +1,162 @@
+name: Update switch-xray package version
+
+on:
+  schedule:
+    # Check for upstream version changes daily at 06:45 UTC
+    - cron: '45 6 * * *'
+  workflow_dispatch:
+    # Allow manual trigger
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout obs-network-tools
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch latest upstream release and extract version
+        id: get_version
+        run: |
+          LATEST_JSON=$(curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/ciroiriarte/switch-xray/releases/latest")
+
+          TAG_NAME=$(echo "${LATEST_JSON}" | python3 -c \
+            "import sys, json; print(json.load(sys.stdin)['tag_name'])")
+          # Strip leading 'v' from tag (v1.0.1 -> 1.0.1)
+          NEW_VERSION="${TAG_NAME#v}"
+
+          if [[ -z "${NEW_VERSION}" ]]; then
+            echo "ERROR: Could not determine latest version from GitHub releases" >&2
+            exit 1
+          fi
+
+          # Read current packaged version from top of changes file
+          CURRENT_VERSION=$(grep -E ' - [0-9]' packages/switch-xray/switch-xray.changes \
+            | head -1 | sed 's/.*- \([0-9][^ ]*\)-[0-9]*/\1/')
+
+          echo "upstream_version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "current_version=${CURRENT_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Upstream: ${NEW_VERSION} | Packaged: ${CURRENT_VERSION}"
+
+      - name: Skip if version unchanged
+        if: steps.get_version.outputs.upstream_version == steps.get_version.outputs.current_version
+        run: |
+          echo "Version is already ${{ steps.get_version.outputs.current_version }}. Nothing to do."
+
+      - name: Update _service version and revision
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+          CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
+        run: |
+          sed -i "s|<param name=\"version\">${CURRENT_VERSION}</param>|<param name=\"version\">${NEW_VERSION}</param>|" \
+            packages/switch-xray/_service
+          sed -i "s|<param name=\"revision\">v${CURRENT_VERSION}</param>|<param name=\"revision\">v${NEW_VERSION}</param>|" \
+            packages/switch-xray/_service
+
+      - name: Update changelogs
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+          CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
+        run: |
+          # Fetch commit messages between the two versions
+          curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/ciroiriarte/switch-xray/compare/v${CURRENT_VERSION}...v${NEW_VERSION}" \
+            -o /tmp/compare.json 2>/dev/null || echo '{"commits":[]}' > /tmp/compare.json
+
+          DATE_RPM=$(date -u "+%a %b %d %Y")
+          DATE_DEB=$(date -u "+%a, %d %b %Y %H:%M:%S +0000")
+
+          RPM_ENTRIES=$(python3 -c "
+          import json
+          data = json.load(open('/tmp/compare.json'))
+          commits = data.get('commits', [])
+          lines = ['- ' + c['commit']['message'].split('\n')[0].strip() for c in commits]
+          print('\n'.join(lines) if lines else '- Update to ${NEW_VERSION}')
+          ")
+
+          DEB_ENTRIES=$(python3 -c "
+          import json
+          data = json.load(open('/tmp/compare.json'))
+          commits = data.get('commits', [])
+          lines = ['  * ' + c['commit']['message'].split('\n')[0].strip() for c in commits]
+          print('\n'.join(lines) if lines else '  * Update to ${NEW_VERSION}')
+          ")
+
+          TMPFILE=$(mktemp)
+          {
+            echo "-------------------------------------------------------------------"
+            echo "${DATE_RPM} Ciro Iriarte <ciro.iriarte+software@gmail.com> - ${NEW_VERSION}-1"
+            echo ""
+            echo "${RPM_ENTRIES}"
+            echo ""
+            cat packages/switch-xray/switch-xray.changes
+          } > "${TMPFILE}"
+          mv "${TMPFILE}" packages/switch-xray/switch-xray.changes
+
+          TMPFILE=$(mktemp)
+          {
+            echo "switch-xray (${NEW_VERSION}-1) unstable; urgency=medium"
+            echo ""
+            echo "${DEB_ENTRIES}"
+            echo ""
+            echo " -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  ${DATE_DEB}"
+            echo ""
+            cat packages/switch-xray/debian.changelog
+          } > "${TMPFILE}"
+          mv "${TMPFILE}" packages/switch-xray/debian.changelog
+
+      - name: Commit changes to obs-network-tools
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add packages/switch-xray/_service \
+                  packages/switch-xray/switch-xray.changes \
+                  packages/switch-xray/debian.changelog
+          git commit -m "switch-xray: update to ${NEW_VERSION}"
+          git push
+
+      - name: Install osc
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        run: |
+          sudo apt-get install -y osc
+
+      - name: Configure osc credentials
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          OBS_PASSWORD: ${{ secrets.OBS_PASSWORD }}
+        run: |
+          mkdir -p ~/.config/osc
+          {
+            echo "[general]"
+            echo "apiurl = https://api.opensuse.org"
+            echo ""
+            echo "[https://api.opensuse.org]"
+            echo "user = ciriarte"
+            echo "pass = ${OBS_PASSWORD}"
+          } > ~/.config/osc/oscrc
+          chmod 600 ~/.config/osc/oscrc
+
+      - name: Push updated changelogs to OBS
+        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+        run: |
+          osc co home:ciriarte:network-tools switch-xray
+          cp packages/switch-xray/_service \
+             packages/switch-xray/switch-xray.changes \
+             packages/switch-xray/debian.changelog \
+             home:ciriarte:network-tools/switch-xray/
+          cd home:ciriarte:network-tools/switch-xray
+          osc commit -m "Update switch-xray to ${NEW_VERSION}"

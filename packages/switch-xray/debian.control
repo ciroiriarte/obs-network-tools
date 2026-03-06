@@ -1,0 +1,16 @@
+Source: switch-xray
+Section: net
+Priority: optional
+Maintainer: Ciro Iriarte <ciro.iriarte+software@gmail.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Homepage: https://github.com/ciroiriarte/switch-xray
+
+Package: switch-xray
+Architecture: all
+Depends: ${misc:Depends}, snmp
+Recommends: graphviz
+Description: Switch port diagnostics and documentation via SNMP
+ Queries network switches via SNMP to display port status, neighbor
+ information, VLAN assignments, and optionally generate topology diagrams.
+ Supports automatic switch discovery and documentation workflows.

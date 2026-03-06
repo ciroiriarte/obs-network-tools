@@ -1,6 +1,7 @@
 # obs-network-tools
 
 [![update-nic-xray](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-nic-xray.yml/badge.svg)](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-nic-xray.yml)
+[![update-switch-xray](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-switch-xray.yml/badge.svg)](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-switch-xray.yml)
 [![update-ttl](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-ttl.yml/badge.svg)](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-ttl.yml)
 [![update-xfr](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-xfr.yml/badge.svg)](https://github.com/ciroiriarte/obs-network-tools/actions/workflows/update-xfr.yml)
 
@@ -20,21 +21,22 @@ Autonomous [OBS](https://build.opensuse.org/project/show/home:ciriarte:network-t
 | Package | Description | Upstream |
 |---------|-------------|----------|
 | **nic-xray** | Ethernet physical connectivity diagnostic tool | [ciroiriarte/nic-xray](https://github.com/ciroiriarte/nic-xray) |
+| **switch-xray** | Switch port diagnostics and documentation via SNMP | [ciroiriarte/switch-xray](https://github.com/ciroiriarte/switch-xray) |
 | **ttl** | Traceroute/mtr-style TUI (requires Rust >= 1.88) | [lance0/ttl](https://github.com/lance0/ttl) |
 | **xfr** | Network bandwidth testing TUI (requires Rust >= 1.88) | [lance0/xfr](https://github.com/lance0/xfr) |
 
 ## Supported Distributions
 
-| Distribution | Repository Alias | Arch | nic-xray | ttl | xfr |
-|---|---|---|:---:|:---:|:---:|
-| openSUSE Tumbleweed | `openSUSE_Tumbleweed` | x86_64, aarch64 | ✓ | ✓ | ✓ |
-| openSUSE Slowroll | `openSUSE_Slowroll` | x86_64 | ✓ | ✓ | ✓ |
-| openSUSE Leap 16.0 | `openSUSE_Leap_16.0` | x86_64, aarch64 | ✓ | ✓ | ✓ |
-| openSUSE Leap 15.6 | `openSUSE_Leap_15.6` | x86_64, aarch64 | ✓ | — | — |
-| Rocky Linux 9 | `Rocky_9` | x86_64, aarch64 | ✓ | ✓ | ✓ |
-| Rocky Linux 10 | `Rocky_10` | x86_64, aarch64 | ✓ | ✓ | ✓ |
-| Ubuntu 22.04 LTS | `Ubuntu_22.04` | x86_64, aarch64 | ✓ | — | — |
-| Ubuntu 24.04 LTS | `Ubuntu_24.04` | x86_64, aarch64 | ✓ | — | — |
+| Distribution | Repository Alias | Arch | nic-xray | switch-xray | ttl | xfr |
+|---|---|---|:---:|:---:|:---:|:---:|
+| openSUSE Tumbleweed | `openSUSE_Tumbleweed` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
+| openSUSE Slowroll | `openSUSE_Slowroll` | x86_64 | ✓ | ✓ | ✓ | ✓ |
+| openSUSE Leap 16.0 | `openSUSE_Leap_16.0` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
+| openSUSE Leap 15.6 | `openSUSE_Leap_15.6` | x86_64, aarch64 | ✓ | ✓ | — | — |
+| Rocky Linux 9 | `Rocky_9` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
+| Rocky Linux 10 | `Rocky_10` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
+| Ubuntu 22.04 LTS | `Ubuntu_22.04` | x86_64, aarch64 | ✓ | ✓ | — | — |
+| Ubuntu 24.04 LTS | `Ubuntu_24.04` | x86_64, aarch64 | ✓ | ✓ | — | — |
 
 > **Note:** `ttl` and `xfr` require Rust >= 1.88, which is not yet available in Leap 15.6 or Ubuntu repos. Builds will automatically succeed once a compatible Rust version ships.
 
@@ -45,7 +47,7 @@ Autonomous [OBS](https://build.opensuse.org/project/show/home:ciriarte:network-t
 ```bash
 zypper addrepo https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/openSUSE_Tumbleweed/ obs-network-tools
 zypper refresh
-zypper install nic-xray ttl xfr
+zypper install nic-xray switch-xray ttl xfr
 ```
 
 Replace `openSUSE_Tumbleweed` with your [repository alias](#supported-distributions).
@@ -58,7 +60,7 @@ echo "deb https://download.opensuse.org/repositories/home:/ciriarte:/network-too
 curl -fsSL "https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/Ubuntu_24.04/Release.key" \
   | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/obs-network-tools.gpg
 sudo apt update
-sudo apt install nic-xray
+sudo apt install nic-xray switch-xray
 ```
 
 Replace `Ubuntu_24.04` with `Ubuntu_22.04` for Ubuntu 22.04 LTS.
@@ -68,7 +70,7 @@ Replace `Ubuntu_24.04` with `Ubuntu_22.04` for Ubuntu 22.04 LTS.
 ```bash
 dnf config-manager --add-repo \
   https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/Rocky_9/home:ciriarte:network-tools.repo
-dnf install nic-xray ttl xfr
+dnf install nic-xray switch-xray ttl xfr
 ```
 
 Replace `Rocky_9` with `Rocky_10` for Rocky Linux 10.
@@ -82,13 +84,13 @@ Replace `Rocky_9` with `Rocky_10` for Rocky Linux 10.
 
 All three packages are fully autonomous — when upstream pushes a new tag, the pipeline picks it up within 24 hours with no manual steps.
 
-### nic-xray
+### nic-xray and switch-xray
 
-The GitHub Actions [workflow](.github/workflows/update-nic-xray.yml) runs daily and:
+The GitHub Actions workflows ([nic-xray](.github/workflows/update-nic-xray.yml), [switch-xray](.github/workflows/update-switch-xray.yml)) run daily and:
 
-1. Queries the GitHub API for the latest tag on [ciroiriarte/nic-xray](https://github.com/ciroiriarte/nic-xray).
-2. Compares with the current version in `nic-xray.changes`.
-3. If changed: updates `_service`, changelogs, commits to this repo, and pushes to OBS.
+1. Query the GitHub API for the latest release tag on the upstream repo.
+2. Compare with the current version in the package `.changes` file.
+3. If changed: update `_service`, changelogs, commit to this repo, and push to OBS.
 
 OBS then runs its source services (`tar_scm` + `set_version` + `recompress`) to fetch, package, and build.
 
@@ -263,6 +265,7 @@ After pushing to OBS, verify the builds:
 ```bash
 # Check build results
 osc results home:ciriarte:network-tools nic-xray
+osc results home:ciriarte:network-tools switch-xray
 osc results home:ciriarte:network-tools ttl
 osc results home:ciriarte:network-tools xfr
 
@@ -281,6 +284,7 @@ dpkg -s nic-xray
 
 # Functional tests
 sudo nic-xray
+sudo switch-xray --help
 ttl --help
 xfr --help
 ```
@@ -298,6 +302,7 @@ obs-network-tools/
 ├── README.md                       # This file
 ├── .github/workflows/
 │   ├── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push to OBS
+│   ├── update-switch-xray.yml      # Daily: detect new tag, update changelogs, push to OBS
 │   ├── update-ttl.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
 │   └── update-xfr.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
 ├── scripts/
@@ -308,6 +313,14 @@ obs-network-tools/
     │   ├── nic-xray.spec      # RPM spec (openSUSE + Rocky Linux)
     │   ├── nic-xray.changes   # openSUSE changelog
     │   ├── nic-xray.dsc       # Debian source package descriptor
+    │   ├── debian.control     # Debian/Ubuntu package metadata
+    │   ├── debian.changelog   # Debian/Ubuntu changelog
+    │   └── debian.rules       # Debian build rules
+    ├── switch-xray/
+    │   ├── _service           # tar_scm: fetch pinned tag from github.com/ciroiriarte/switch-xray
+    │   ├── switch-xray.spec   # RPM spec (openSUSE + Rocky Linux)
+    │   ├── switch-xray.changes # openSUSE changelog
+    │   ├── switch-xray.dsc    # Debian source package descriptor
     │   ├── debian.control     # Debian/Ubuntu package metadata
     │   ├── debian.changelog   # Debian/Ubuntu changelog
     │   └── debian.rules       # Debian build rules
