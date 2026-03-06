@@ -1,4 +1,38 @@
 -------------------------------------------------------------------
+Fri Mar 06 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.1-1
+
+- Add graceful shutdown send errors to roadmap polish items
+- Add eget, AUR, and Terminal Trove to README
+- Add pkgsrc to See Also section
+- Add MPTCP support (--mptcp flag, Linux 5.6+)
+- Fix review findings for MPTCP
+- Update docs for MPTCP support
+- Server auto-MPTCP: always try MPTCP listeners, silent fallback to TCP
+- Fix MPTCP label, per-stream retransmit reporting, and teardown race
+- Fix MPTCP fallback detection after error wrapping, document API break
+- Add MPTCP to README headline
+- Suppress expected teardown errors: peer-close near deadline, cancel
+- Add ConnectionAborted to teardown classifier, suppression counters
+- Fix stale docs: MPTCP usage section, comparison accuracy, resolved items
+- Add MPTCP network namespace CI test
+- Bump actions/download-artifact from 7 to 8
+- Bump actions/upload-artifact from 6 to 7
+- Fix JoinHandle panic (#24) and final TCP_INFO reporting (#26)
+- Add sender-side TCP_INFO assertions to MPTCP CI test
+- Clarify TCP Info labels, fix high stream count limit (#25, #26)
+- Use kernel SO_MAX_PACING_RATE for TCP pacing on Linux (#30)
+- Fix low-bitrate pacing and harden SO_MAX_PACING_RATE tests
+- MPTCP support, kernel TCP pacing, teardown fixes (#24, #25, #26, #30)
+- Merge pull request #27 from lance0/dependabot/github_actions/actions/download-artifact-8
+- Merge pull request #28 from lance0/dependabot/github_actions/actions/upload-artifact-7
+- Update dependencies (semver-compatible)
+- Clarify kernel pacing MPTCP limitation and global bitrate behavior
+- Bump version to v0.9.0
+- Release v0.9.0
+- Harden teardown for high stream counts, fix pacing rate width (#25, #32)
+- Bump version to v0.9.1
+
+-------------------------------------------------------------------
 Thu Feb 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.8.0-1
 
 - Initial package release
