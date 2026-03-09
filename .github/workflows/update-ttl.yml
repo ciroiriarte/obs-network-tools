@@ -201,6 +201,7 @@ jobs:
                   packages/ttl/ttl.changes \
                   packages/ttl/debian.changelog
           git commit -m "ttl: update to ${NEW_VERSION}"
+          git pull --rebase
           git push
 
       - name: Install osc

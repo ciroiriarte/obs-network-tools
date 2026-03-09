@@ -127,6 +127,7 @@ jobs:
                   packages/nic-xray/nic-xray.changes \
                   packages/nic-xray/debian.changelog
           git commit -m "nic-xray: update to ${NEW_VERSION}"
+          git pull --rebase
           git push
 
       - name: Install osc

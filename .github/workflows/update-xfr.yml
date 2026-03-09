@@ -201,6 +201,7 @@ jobs:
                   packages/xfr/xfr.changes \
                   packages/xfr/debian.changelog
           git commit -m "xfr: update to ${NEW_VERSION}"
+          git pull --rebase
           git push
 
       - name: Install osc

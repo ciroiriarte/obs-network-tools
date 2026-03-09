@@ -127,6 +127,7 @@ jobs:
                   packages/switch-xray/switch-xray.changes \
                   packages/switch-xray/debian.changelog
           git commit -m "switch-xray: update to ${NEW_VERSION}"
+          git pull --rebase
           git push
 
       - name: Install osc
