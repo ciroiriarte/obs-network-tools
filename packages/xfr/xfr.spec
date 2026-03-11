@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.2
+Version:        0.9.3
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,11 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Wed Mar 11 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.3-1
+- Fix QUIC dual-stack, add server --bind, server random payloads (#38, #39, #34)
+- Fix server random payload on single-port TCP reverse (#34)
+- Bump version to v0.9.3
+
 * Sat Mar 07 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.2-1
 - Collapse v0.9.0 into v0.9.1 changelog (v0.9.0 was never released)
 - Limit single-port handshake fanout, adapt server read timeout per peer (#32)
