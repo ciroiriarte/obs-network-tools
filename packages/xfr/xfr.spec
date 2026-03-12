@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.3
+Version:        0.9.4
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,12 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Thu Mar 12 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.4-1
+- Add --no-mdns flag to disable mDNS service registration (#41)
+- Show delta retransmits in plain text interval reports (#36)
+- Fix retransmit delta baseline during omit/quiet intervals, add no_mdns config support
+- Bump version to v0.9.4
+
 * Wed Mar 11 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.3-1
 - Fix QUIC dual-stack, add server --bind, server random payloads (#38, #39, #34)
 - Fix server random payload on single-port TCP reverse (#34)

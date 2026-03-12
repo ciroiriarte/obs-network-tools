@@ -1,3 +1,12 @@
+xfr (0.9.4-1) unstable; urgency=medium
+
+  * Add --no-mdns flag to disable mDNS service registration (#41)
+  * Show delta retransmits in plain text interval reports (#36)
+  * Fix retransmit delta baseline during omit/quiet intervals, add no_mdns config support
+  * Bump version to v0.9.4
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Thu, 12 Mar 2026 07:27:36 +0000
+
 xfr (0.9.3-1) unstable; urgency=medium
 
   * Fix QUIC dual-stack, add server --bind, server random payloads (#38, #39, #34)
