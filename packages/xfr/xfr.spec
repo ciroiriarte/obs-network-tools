@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.4
+Version:        0.9.5
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,17 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Wed Mar 18 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.5-1
+- Document full config reference and Windows config path (#43)
+- Add config omit_secs and help grouping to roadmap (#43)
+- Added a flake for both package and devshell.
+- Use version from the toml file in nix flake
+- Merge pull request #46 from deephack1982/master
+- Add Nix installation instructions to README
+- Add TCP --cport support for data-stream source port pinning (#44)
+- Merge pull request #47 from lance0/tcp-cport-data-streams
+- Bump version to v0.9.5
+
 * Thu Mar 12 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.4-1
 - Add --no-mdns flag to disable mDNS service registration (#41)
 - Show delta retransmits in plain text interval reports (#36)
