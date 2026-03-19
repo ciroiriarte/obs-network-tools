@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.5
+Version:        0.9.6
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,16 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Thu Mar 19 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.6-1
+- Expand roadmap with market research findings
+- Add --dscp flag and omit_secs config support
+- Update docs for --dscp, --cport TCP, and omit_secs config
+- Show per-interval jitter in TUI stream bars and plain text output (#48)
+- Fix UDP plain text: suppress rtx for UDP, aggregate jitter across streams
+- Add interval output tests for TCP/UDP split, clarify --dscp help text
+- Merge pull request #49 from lance0/quick-wins
+- Bump version to v0.9.6
+
 * Wed Mar 18 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.5-1
 - Document full config reference and Windows config path (#43)
 - Add config omit_secs and help grouping to roadmap (#43)
