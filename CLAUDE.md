@@ -24,6 +24,7 @@
 ## Distributions
 * openSUSE: Last 2 Leap releases, Tumbleweed, Slowroll
 * Rocky Linux: Last 2 releases
+* Debian: Latest stable release
 * Ubuntu: Last 2 LTS releases
 
 ## Software
@@ -41,7 +42,7 @@
 * Must cover distributions in scope
 * Must include all the information & structure expected by native packages
 * zypper repos for openSUSE
-* apt repos for Ubuntu
+* apt repos for Debian and Ubuntu
 * yum/dnf repos for Rocky Linux
 * Packages must include documentation
 * Packages must handle dependencies

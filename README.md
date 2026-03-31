@@ -35,10 +35,11 @@ Autonomous [OBS](https://build.opensuse.org/project/show/home:ciriarte:network-t
 | openSUSE Leap 15.6 | `openSUSE_Leap_15.6` | x86_64, aarch64 | ✓ | ✓ | — | — |
 | Rocky Linux 9 | `Rocky_9` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
 | Rocky Linux 10 | `Rocky_10` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
+| Debian 13 | `Debian_13` | x86_64, aarch64 | ✓ | ✓ | — | — |
 | Ubuntu 22.04 LTS | `Ubuntu_22.04` | x86_64, aarch64 | ✓ | ✓ | — | — |
 | Ubuntu 24.04 LTS | `Ubuntu_24.04` | x86_64, aarch64 | ✓ | ✓ | — | — |
 
-> **Note:** `ttl` and `xfr` require Rust >= 1.88, which is not yet available in Leap 15.6 or Ubuntu repos. Builds will automatically succeed once a compatible Rust version ships.
+> **Note:** `ttl` and `xfr` require Rust >= 1.88, which is not yet available in Leap 15.6, Debian 13 or Ubuntu repos. Builds will automatically succeed once a compatible Rust version ships.
 
 ## Installation
 
@@ -52,18 +53,18 @@ zypper install nic-xray switch-xray ttl xfr
 
 Replace `openSUSE_Tumbleweed` with your [repository alias](#supported-distributions).
 
-### Ubuntu (apt)
+### Debian / Ubuntu (apt)
 
 ```bash
-echo "deb https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/Ubuntu_24.04/ ./" \
+echo "deb https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/Debian_13/ ./" \
   | sudo tee /etc/apt/sources.list.d/obs-network-tools.list
-curl -fsSL "https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/Ubuntu_24.04/Release.key" \
+curl -fsSL "https://download.opensuse.org/repositories/home:/ciriarte:/network-tools/Debian_13/Release.key" \
   | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/obs-network-tools.gpg
 sudo apt update
 sudo apt install nic-xray switch-xray
 ```
 
-Replace `Ubuntu_24.04` with `Ubuntu_22.04` for Ubuntu 22.04 LTS.
+Replace `Debian_13` with your [repository alias](#supported-distributions) (`Ubuntu_24.04`, `Ubuntu_22.04`, etc.).
 
 ### Rocky Linux (dnf)
 
@@ -171,6 +172,11 @@ Use the following project metadata XML:
   <repository name="openSUSE_Leap_15.6">
     <path project="devel:languages:rust" repository="15.6"/>
     <path project="openSUSE:Leap:15.6" repository="standard"/>
+    <arch>x86_64</arch>
+    <arch>aarch64</arch>
+  </repository>
+  <repository name="Debian_13">
+    <path project="Debian:13" repository="standard"/>
     <arch>x86_64</arch>
     <arch>aarch64</arch>
   </repository>
@@ -337,7 +343,7 @@ obs-network-tools/
     │   └── debian.postinst    # Post-install: setcap cap_net_raw+ep
     └── xfr/
         ├── _service           # cargo_vendor (manual mode, documents vendoring requirement)
-        ├── xfr-0.8.0.tar.gz   # Source tarball (committed)
+        ├── xfr-0.9.6.tar.gz   # Source tarball (committed)
         ├── vendor.tar.zst     # Vendored Rust dependencies (includes .cargo/config.toml)
         ├── xfr.spec           # RPM spec (openSUSE + Rocky Linux)
         ├── xfr.changes        # openSUSE changelog
