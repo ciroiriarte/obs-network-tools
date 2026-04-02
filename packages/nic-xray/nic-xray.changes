@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Apr 02 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.10.1-1
+
+- Add LLDP port description column and Cisco ACI support
+- Add physical topology support (--physical/-p)
+- Add bash completion for nic-xray.sh
+- Add HPE switch SysDescr parsing and TLV documentation
+- feat: switch bandwidth display from bytes/s to bits/s
+- docs: add package-based installation instructions for supported distros
+
+-------------------------------------------------------------------
 Wed Mar 04 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.9.0-1
 
 - Add --watch mode for continuous refresh during recabling (v2.8.0)

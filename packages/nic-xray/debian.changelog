@@ -1,3 +1,14 @@
+nic-xray (2.10.1-1) unstable; urgency=medium
+
+  * Add LLDP port description column and Cisco ACI support
+  * Add physical topology support (--physical/-p)
+  * Add bash completion for nic-xray.sh
+  * Add HPE switch SysDescr parsing and TLV documentation
+  * feat: switch bandwidth display from bytes/s to bits/s
+  * docs: add package-based installation instructions for supported distros
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Thu, 02 Apr 2026 07:16:58 +0000
+
 nic-xray (2.9.0-1) unstable; urgency=medium
 
   * Add --watch mode for continuous refresh during recabling (v2.8.0)
