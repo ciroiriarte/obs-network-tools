@@ -35,14 +35,24 @@ bond/LAG membership, and LLDP peer information.
 %install
 install -Dm0755 nic-xray.sh %{buildroot}%{_bindir}/nic-xray
 install -Dm0644 man/man8/nic-xray.8 %{buildroot}%{_mandir}/man8/nic-xray.8
+install -Dm0644 completions/nic-xray.bash %{buildroot}%{_datadir}/bash-completion/completions/nic-xray
 
 %files
 %license LICENSE
 %doc README.md
 %{_bindir}/nic-xray
 %{_mandir}/man8/nic-xray.8%{ext_man}
+%{_datadir}/bash-completion/completions/nic-xray
 
 %changelog
+* Sat Apr 11 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.10.2-1
+- Add physical topology flag (--physical/-p): NUMA, PCI slot, NIC vendor/model
+- Add LLDP port description column
+- Add Cisco ACI support via vendor TLVs
+- Add bash completion (completions/nic-xray.bash)
+- Display bandwidth metrics in bits/s (bps/Kbps/Mbps/Gbps)
+- Document Juniper LLDP VLAN TLV limits and Apstra REST API workflow
+
 * Thu Feb 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.1-1
 - Refactor: nic-xray moved to own repository (github.com/ciroiriarte/nic-xray)
 - Man page now sourced from upstream (man/man1/nic-xray.1, section 1)

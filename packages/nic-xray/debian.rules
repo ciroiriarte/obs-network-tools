@@ -10,3 +10,5 @@ override_dh_auto_install:
 		debian/nic-xray/usr/bin/nic-xray
 	install -D -m 0644 man/man8/nic-xray.8 \
 		debian/nic-xray/usr/share/man/man8/nic-xray.8
+	install -D -m 0644 completions/nic-xray.bash \
+		debian/nic-xray/usr/share/bash-completion/completions/nic-xray
