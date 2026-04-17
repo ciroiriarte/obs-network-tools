@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.6
+Version:        0.9.7
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,18 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Fri Apr 17 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.7-1
+- Update rustls-webpki 0.103.9 → 0.103.10 (RUSTSEC-2026-0049)
+- Bump softprops/action-gh-release from 2 to 3
+- Update rustls-webpki 0.103.10 → 0.103.12 (RUSTSEC-2026-0098, RUSTSEC-2026-0099)
+- Display summary on early exit (Ctrl+C), propagate DSCP to server
+- Merge pull request #52 from lance0/dependabot/github_actions/softprops/action-gh-release-3
+- Fix formatting
+- Fix clippy manual_checked_ops lint (Rust 1.95)
+- Fix clippy collapsible_match_arms lint (Rust 1.95)
+- Merge pull request #53 from lance0/early-exit-summary
+- Bump version to v0.9.7
+
 * Thu Mar 19 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.6-1
 - Expand roadmap with market research findings
 - Add --dscp flag and omit_secs config support
