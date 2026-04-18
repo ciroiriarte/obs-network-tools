@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Sat Apr 18 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.8-1
+
+- Remove drain-on-cancel from TCP receive path (#55)
+- Update docs for #54 teardown fix and #35 early exit summary
+- Add issue #56 (split bidir send/recv reporting) to roadmap
+- Split send/recv reporting in bidir tests (#57)
+- Bump version to v0.9.8
+
+-------------------------------------------------------------------
 Fri Apr 17 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.7-1
 
 - Update rustls-webpki 0.103.9 → 0.103.10 (RUSTSEC-2026-0049)
