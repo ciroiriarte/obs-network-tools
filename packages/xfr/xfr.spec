@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.8
+Version:        0.9.9
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,27 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Tue Apr 21 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.9-1
+- Smooth TUI jitter reading over a 10-second rolling window (#48)
+- CHANGELOG entry for #48 jitter smoothing
+- Show authoritative final jitter on completed screen
+- Add targeted tests for jitter display state transition
+- CHANGELOG: document running vs completed jitter labels
+- Add max jitter and packet size to UDP summary
+- Test max jitter tracking and cross-stream aggregation
+- Merge pull request #58 from lance0/jitter-rolling-window
+- Accept bare integers as seconds for duration arguments
+- Default to kernel TCP autotuning, propagate -w to server
+- Reject zero-duration rate-limit window
+- Merge pull request #65 from lance0/parse-duration-bare-seconds
+- Validate window size before setsockopt; refresh socket-buffer docs
+- Merge pull request #66 from lance0/autotune-by-default
+- Log server receive errors once (issue #54)
+- Sync docs with tonight's fixes
+- Address final pre-release review findings
+- Documentation polish before v0.9.9
+- Bump version to v0.9.9
+
 * Sat Apr 18 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.8-1
 - Remove drain-on-cancel from TCP receive path (#55)
 - Update docs for #54 teardown fix and #35 early exit summary
