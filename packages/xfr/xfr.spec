@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.9
+Version:        0.9.10
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,25 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Thu Apr 23 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.10-1
+- Race send-loop write against cancel and deadline
+- Address Copilot review: cleaner cancel handling, sleep_until, regression tests
+- Merge pull request #59 from lance0/send-loop-write-race
+- Force MP_FASTCLOSE on MPTCP teardown via connect(AF_UNSPEC)
+- Address PR #67 review: receive-path suppression + cleanup
+- Detect MPTCP via MPTCP_INFO fallback for pre-6.10 kernels
+- Merge pull request #67 from lance0/mptcp-close-investigation
+- Revert "Merge pull request #67 from lance0/mptcp-close-investigation"
+- Merge pull request #68 from matttbe/mptcp-reset
+- TUI: keep elapsed time live through data gaps; show server version
+- Address adversarial review findings
+- Bump rustls-webpki 0.103.12 → 0.103.13 for RUSTSEC-2026-0104
+- TUI jitter line shows latest + smoothed together (#48 follow-up)
+- Stop writing elapsed from on_progress
+- Sanitize server-advertised version before rendering
+- Merge pull request #69 from lance0/tui-live-tick
+- Bump version to v0.9.10
+
 * Tue Apr 21 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.9-1
 - Smooth TUI jitter reading over a 10-second rolling window (#48)
 - CHANGELOG entry for #48 jitter smoothing
