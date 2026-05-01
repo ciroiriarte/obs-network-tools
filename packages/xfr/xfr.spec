@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.10
+Version:        0.9.11
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,14 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Fri May 01 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.11-1
+- TUI: live UDP loss + sparkline severity tint + jitter relabel (#70, #72)
+- Address review on UDP TUI clarity (#70, #72)
+- Align final UDP loss accounting with the live path (#70, #72)
+- Match em-dash placeholder in comments to the rendered double-hyphen
+- Merge pull request #73 from lance0/udp-tui-clarity
+- Bump version to v0.9.11
+
 * Thu Apr 23 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.10-1
 - Race send-loop write against cancel and deadline
 - Address Copilot review: cleaner cancel handling, sleep_until, regression tests
