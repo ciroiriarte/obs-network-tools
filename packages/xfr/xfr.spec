@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.11
+Version:        0.9.12
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,22 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Sun May 03 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.12-1
+- Add TUI render fuzzing to the testing roadmap
+- Add pre-commit hooks for fmt/clippy/test
+- Merge pull request #74 from lance0/pre-commit-hooks
+- Bump the rust-dependencies group with 15 updates
+- Adapt to hmac 0.13 / rand 0.10 trait reorganizations
+- Merge pull request #71 from lance0/dependabot/cargo/rust-dependencies-a6148eac20
+- Apply -w to UDP SO_SNDBUF / SO_RCVBUF on both ends (#70 follow-up)
+- Surface UDP setsockopt failures, fix CLI help wording
+- Attempt both UDP setsockopts even if one fails (#70 follow-up)
+- Doc/test polish on UDP -w propagation
+- Rename set_one_buffer test to match what it actually pins
+- Add fake-setter tests for the partial-failure contract
+- Merge pull request #75 from lance0/udp-window-propagation
+- Bump version to v0.9.12
+
 * Fri May 01 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.11-1
 - TUI: live UDP loss + sparkline severity tint + jitter relabel (#70, #72)
 - Address review on UDP TUI clarity (#70, #72)

@@ -1,3 +1,22 @@
+xfr (0.9.12-1) unstable; urgency=medium
+
+  * Add TUI render fuzzing to the testing roadmap
+  * Add pre-commit hooks for fmt/clippy/test
+  * Merge pull request #74 from lance0/pre-commit-hooks
+  * Bump the rust-dependencies group with 15 updates
+  * Adapt to hmac 0.13 / rand 0.10 trait reorganizations
+  * Merge pull request #71 from lance0/dependabot/cargo/rust-dependencies-a6148eac20
+  * Apply -w to UDP SO_SNDBUF / SO_RCVBUF on both ends (#70 follow-up)
+  * Surface UDP setsockopt failures, fix CLI help wording
+  * Attempt both UDP setsockopts even if one fails (#70 follow-up)
+  * Doc/test polish on UDP -w propagation
+  * Rename set_one_buffer test to match what it actually pins
+  * Add fake-setter tests for the partial-failure contract
+  * Merge pull request #75 from lance0/udp-window-propagation
+  * Bump version to v0.9.12
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Sun, 03 May 2026 08:18:17 +0000
+
 xfr (0.9.11-1) unstable; urgency=medium
 
   * TUI: live UDP loss + sparkline severity tint + jitter relabel (#70, #72)
