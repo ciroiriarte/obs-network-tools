@@ -1,3 +1,39 @@
+ttl (0.19.1-1) unstable; urgency=medium
+
+  * Bump actions/download-artifact from 7 to 8
+  * Update quinn-proto to fix RUSTSEC-2026-0037
+  * Fix FreeBSD CI: install ca_root_nss before fetching crates
+  * Bump socket2 from 0.6.2 to 0.6.3
+  * Bump tokio from 1.49.0 to 1.50.0
+  * Bump libc from 0.2.182 to 0.2.183
+  * Merge pull request #59 from lance0/dependabot/cargo/socket2-0.6.3
+  * Merge pull request #58 from lance0/dependabot/cargo/tokio-1.50.0
+  * Merge pull request #60 from lance0/dependabot/cargo/libc-0.2.183
+  * Merge pull request #55 from lance0/dependabot/github_actions/actions/download-artifact-8
+  * Bump actions/upload-artifact from 6 to 7
+  * Merge pull request #56 from lance0/dependabot/github_actions/actions/upload-artifact-7
+  * Update aws-lc-sys and rustls-webpki to fix security advisories
+  * Update rustls-webpki to fix RUSTSEC-2026-0098/0099
+  * Update rustls-webpki to fix RUSTSEC-2026-0104
+  * Fix clippy 1.95 lints: collapsible_match and unnecessary_sort_by
+  * Upgrade hickory-resolver to 0.26 to fix RUSTSEC-2026-0118/0119
+  * Restore Google DNS fallback when system resolver build fails
+  * Merge pull request #71 from lance0/hickory-0.26-upgrade
+  * Bump softprops/action-gh-release from 2 to 3
+  * Merge pull request #69 from lance0/dependabot/github_actions/softprops/action-gh-release-3
+  * Bump toml from 0.9 to 1.x
+  * Fix platform-specific clippy warnings
+  * Merge pull request #72 from SSakutaro/fix/macos-clippy-warnings
+  * Run clippy on macOS and FreeBSD CI jobs
+  * Add pre-commit hooks for fmt, clippy, and test
+  * Lead with cargo install for prek in CONTRIBUTING
+  * Gate DGRAM ICMP socket helpers off FreeBSD/NetBSD
+  * Merge pull request #73 from lance0/prek-setup
+  * Doc sweep before v0.19.1 ship
+  * Bump version to v0.19.1
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Sun, 03 May 2026 08:15:16 +0000
+
 ttl (0.19.0-1) unstable; urgency=medium
 
   * Initial release
