@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.12
+Version:        0.9.14
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,34 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Mon May 04 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.14-1
+- Bump the rust-dependencies group with 2 updates
+- Set TCP_NODELAY on the control connection (#70 follow-up)
+- Merge pull request #77 from lance0/udp-live-progress-fix
+- Merge pull request #76 from lance0/dependabot/cargo/rust-dependencies-d3cbfb49c5
+- Add CI regression test for #70 control-channel bunching
+- Merge pull request #78 from lance0/control-channel-skew-ci
+- Address Copilot review on test-control-channel-skew.sh
+- Merge pull request #79 from lance0/copilot-pr78-followups
+- Bump version to v0.9.13
+- Apply MissedTickBehavior::Skip to server interval timers
+- Add UdpFeedbackPacket type with length-first framing
+- Negotiate udp_feedback_v1 capability in client and server hello
+- Server: emit UDP receiver feedback at 2 Hz when capability negotiated
+- Client: receive UDP feedback, aggregate across streams, surface as live loss
+- Add Docker repro harness for issue #70 saturation pattern
+- Bump version to 0.9.14
+- Surface udp_feedback_v1 freshness through non-TUI output
+- File udp-feedback-v1 follow-ups into ROADMAP and KNOWN_ISSUES
+- UdpProgressFilter: atomic CAS gate via fetch_update
+- Gate UDP feedback to upload-only and exclude from bytes_received
+- Feedback consumer: break on cancel-sender-dropped
+- ROADMAP: correct HMAC-feedback follow-up wording
+- Address follow-up review findings: omit baseline + ROADMAP wording
+- Documentation sweep for v0.9.14 (udp_feedback_v1)
+- Doc tightening: scope claims to what's actually shipped
+- Merge pull request #80 from lance0/udp-feedback-v1
+
 * Sun May 03 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.12-1
 - Add TUI render fuzzing to the testing roadmap
 - Add pre-commit hooks for fmt/clippy/test
