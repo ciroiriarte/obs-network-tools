@@ -1,3 +1,30 @@
+ttl (0.20.0-1) unstable; urgency=medium
+
+  * Add Alpine Linux and NixOS install instructions to README
+  * Bump maxminddb from 0.27.3 to 0.28.1
+  * Bump clap_complete from 4.6.3 to 4.6.5
+  * Bump tokio from 1.52.1 to 1.52.3
+  * Bump serde_json from 1.0.149 to 1.0.150
+  * Bump getifs from 0.4.0 to 0.6.1
+  * Merge pull request #75 from lance0/dependabot/cargo/maxminddb-0.28.1
+  * Merge pull request #77 from lance0/dependabot/cargo/clap_complete-4.6.5
+  * Merge pull request #79 from lance0/dependabot/cargo/serde_json-1.0.150
+  * Merge pull request #80 from lance0/dependabot/cargo/getifs-0.6.1
+  * Merge pull request #78 from lance0/dependabot/cargo/tokio-1.52.3
+  * Add trace diffing (--diff) and streaming JSON output (--stream-json)
+  * Merge pull request #81 from lance0/diff-streaming
+  * Add daemon mode, Prometheus exporter, and official Dockerfile
+  * Merge pull request #82 from lance0/daemon-prometheus
+  * Publish multi-arch container images to GHCR on release
+  * Merge pull request #83 from lance0/ghcr-publish
+  * Add interactive target selection
+  * Merge pull request #84 from lance0/interactive-targets
+  * Use a radix trie for IX prefix lookup
+  * Merge pull request #85 from lance0/ix-radix-trie
+  * Bump version to v0.20.0
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Thu, 11 Jun 2026 10:57:23 +0000
+
 ttl (0.19.1-1) unstable; urgency=medium
 
   * Bump actions/download-artifact from 7 to 8
