@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.14
+Version:        0.9.16
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,19 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Thu Jun 11 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.16-1
+- ROADMAP: link -R UDP throughput follow-up to #81
+- Add zero-copy TCP sends via sendfile (-Z/--zerocopy, issue #33)
+- Document --zerocopy: README, FEATURES, man page, ROADMAP, CHANGELOG
+- Merge pull request #87 from lance0/zerocopy-sendfile
+- Bump the rust-dependencies group across 1 directory with 10 updates
+- Fix -R UDP reporting sender-side rate as throughput (#81)
+- Merge pull request #88 from lance0/fix-81-reverse-udp-accounting
+- Merge pull request #86 from lance0/dependabot/cargo/rust-dependencies-97a9360ef7
+- Bump version to v0.9.15
+- zerocopy: use raw memfd_create syscall instead of glibc wrapper
+- Bump version to v0.9.16
+
 * Mon May 04 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.14-1
 - Bump the rust-dependencies group with 2 updates
 - Set TCP_NODELAY on the control connection (#70 follow-up)
