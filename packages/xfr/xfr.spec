@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.16
+Version:        0.9.18
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,38 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Fri Jun 12 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.18-1
+- CI: cross-build aarch64-gnu on PRs to catch old-glibc link failures
+- Release: publish multi-arch container image to GHCR
+- Enable zero-copy TCP sends by default
+- Relax MPTCP 10-stream CI threshold to 17 Mbps
+- Merge pull request #90 from lance0/mptcp-ci-threshold
+- Merge pull request #89 from lance0/zerocopy-default-on
+- Fix bidir UDP download-half inflation in split reporting
+- Merge pull request #92 from lance0/fix-udp-bidir-accounting
+- Add path-MTU probe mode: --probe-mtu (#64)
+- Merge pull request #94 from lance0/feature-64-mtu-probe
+- Decouple TUI sparkline cadence from control-channel Interval arrival
+- Add changelog entry for the sparkline stall fix (#93)
+- Merge pull request #95 from lance0/fix-93-sparkline-cadence
+- Bump version to v0.9.17
+- Roadmap: sync with v0.9.16/v0.9.17, add untracked gaps from surface audit
+- Add single-port UDP data plane behind single_port_udp_v1 (#63)
+- Add integration coverage for single-port UDP (#63)
+- Add changelog entry for single-port UDP (#63)
+- Make the single-port UDP self-test match the production topology
+- Merge pull request #96 from lance0/feature-63-single-port-udp
+- Add per-direction split columns to CSV interval output (#56 family)
+- Add --connect-timeout, QUIC ignored-flag warnings, client hello logging
+- Merge pull request #97 from lance0/quic-warnings-and-hello-logging
+- Merge pull request #98 from lance0/csv-bidir-columns
+- Propagate --tcp-nodelay to the server via TestStart
+- Merge pull request #99 from lance0/tcp-nodelay-propagation
+- Roadmap: check off the polish batch (PRs #97-#99)
+- Recalibrate the control-channel skew test to target collapse, not rhythm
+- Docs: catch user-facing docs up to single-port UDP and recent flags
+- Bump version to v0.9.18
+
 * Thu Jun 11 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.16-1
 - ROADMAP: link -R UDP throughput follow-up to #81
 - Add zero-copy TCP sends via sendfile (-Z/--zerocopy, issue #33)
