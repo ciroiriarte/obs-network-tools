@@ -1,3 +1,11 @@
+xfr (0.9.19-1) unstable; urgency=medium
+
+  * Add safe TUI restart controls
+  * Merge pull request #108 from lance0/feature-100-tui-restart-clean
+  * Bump version to v0.9.19
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Mon, 15 Jun 2026 12:47:16 +0000
+
 xfr (0.9.18-1) unstable; urgency=medium
 
   * CI: cross-build aarch64-gnu on PRs to catch old-glibc link failures

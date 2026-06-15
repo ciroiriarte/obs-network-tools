@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.18
+Version:        0.9.19
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,11 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Mon Jun 15 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.19-1
+- Add safe TUI restart controls
+- Merge pull request #108 from lance0/feature-100-tui-restart-clean
+- Bump version to v0.9.19
+
 * Fri Jun 12 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.18-1
 - CI: cross-build aarch64-gnu on PRs to catch old-glibc link failures
 - Release: publish multi-arch container image to GHCR
