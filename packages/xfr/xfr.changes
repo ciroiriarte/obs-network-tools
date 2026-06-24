@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed Jun 24 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.20-1
+
+- Bump docker/setup-buildx-action from 3 to 4 (#103)
+- Bump docker/login-action from 3 to 4 (#104)
+- Bump docker/setup-qemu-action from 3 to 4 (#105)
+- Bump docker/build-push-action from 6 to 7 (#106)
+- Bump docker/metadata-action from 5 to 6 (#107)
+- Bump version to v0.9.20
+
+-------------------------------------------------------------------
 Mon Jun 15 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.19-1
 
 - Add safe TUI restart controls

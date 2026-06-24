@@ -1,3 +1,14 @@
+xfr (0.9.20-1) unstable; urgency=medium
+
+  * Bump docker/setup-buildx-action from 3 to 4 (#103)
+  * Bump docker/login-action from 3 to 4 (#104)
+  * Bump docker/setup-qemu-action from 3 to 4 (#105)
+  * Bump docker/build-push-action from 6 to 7 (#106)
+  * Bump docker/metadata-action from 5 to 6 (#107)
+  * Bump version to v0.9.20
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Wed, 24 Jun 2026 09:54:49 +0000
+
 xfr (0.9.19-1) unstable; urgency=medium
 
   * Add safe TUI restart controls

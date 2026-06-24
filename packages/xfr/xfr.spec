@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.19
+Version:        0.9.20
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,14 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Wed Jun 24 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.20-1
+- Bump docker/setup-buildx-action from 3 to 4 (#103)
+- Bump docker/login-action from 3 to 4 (#104)
+- Bump docker/setup-qemu-action from 3 to 4 (#105)
+- Bump docker/build-push-action from 6 to 7 (#106)
+- Bump docker/metadata-action from 5 to 6 (#107)
+- Bump version to v0.9.20
+
 * Mon Jun 15 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.19-1
 - Add safe TUI restart controls
 - Merge pull request #108 from lance0/feature-100-tui-restart-clean
