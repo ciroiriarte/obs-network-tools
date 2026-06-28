@@ -1,5 +1,5 @@
 Name:           ttl
-Version:        0.20.0
+Version:        0.20.1
 Release:        1%{?dist}
 Summary:        Network diagnostic tool — traceroute/mtr-style TUI with hop stats
 License:        MIT OR Apache-2.0
@@ -81,6 +81,15 @@ fi
 %endif
 
 %changelog
+* Sun Jun 28 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.20.1-1
+- Lead Homebrew install with core formula (brew install ttl)
+- Bump quinn-proto to 0.11.15 to clear RUSTSEC-2026-0185
+- Fix macOS single-hop traces: per-probe send sockets for ICMP/UDP/TCP (#12)
+- Roadmap: track TTL send-path correctness follow-ups before next release
+- Unify IPv4 send path on IP_HDRINCL (TTL in the IP header) (#12)
+- IPv6: per-probe sockets on FreeBSD/NetBSD; remove inter-probe delay (#12)
+- Bump version to v0.20.1
+
 * Thu Jun 11 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.20.0-1
 - Add Alpine Linux and NixOS install instructions to README
 - Bump maxminddb from 0.27.3 to 0.28.1

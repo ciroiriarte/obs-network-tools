@@ -1,3 +1,15 @@
+ttl (0.20.1-1) unstable; urgency=medium
+
+  * Lead Homebrew install with core formula (brew install ttl)
+  * Bump quinn-proto to 0.11.15 to clear RUSTSEC-2026-0185
+  * Fix macOS single-hop traces: per-probe send sockets for ICMP/UDP/TCP (#12)
+  * Roadmap: track TTL send-path correctness follow-ups before next release
+  * Unify IPv4 send path on IP_HDRINCL (TTL in the IP header) (#12)
+  * IPv6: per-probe sockets on FreeBSD/NetBSD; remove inter-probe delay (#12)
+  * Bump version to v0.20.1
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Sun, 28 Jun 2026 09:30:29 +0000
+
 ttl (0.20.0-1) unstable; urgency=medium
 
   * Add Alpine Linux and NixOS install instructions to README
