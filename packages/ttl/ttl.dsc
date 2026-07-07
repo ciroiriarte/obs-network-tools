@@ -1,9 +1,9 @@
 Format: 3.0 (native)
 Source: ttl
-Version: 0.20.1
+Version: 0.20.2
 Binary: ttl
 Architecture: any
 Maintainer: Ciro Iriarte <ciro.iriarte+software@gmail.com>
 Build-Depends: debhelper-compat (= 13), cargo, rustc (>= 1.88)
 Files:
- 00000000000000000000000000000000 1 ttl_0.20.1.orig.tar.gz
+ 00000000000000000000000000000000 1 ttl_0.20.2.orig.tar.gz

@@ -1,4 +1,34 @@
 -------------------------------------------------------------------
+Tue Jul 07 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.20.2-1
+
+- Bump docker/setup-buildx-action from 3 to 4 (#86)
+- Bump docker/metadata-action from 5 to 6 (#87)
+- Bump docker/setup-qemu-action from 3 to 4 (#88)
+- Bump docker/login-action from 3 to 4 (#89)
+- Bump docker/build-push-action from 6 to 7 (#90)
+- fix: PMTUD correlation, lock ordering, and enrichment dedup (#104)
+- fix: harden unsafe socket code against alignment UB and bad cmsg (#102)
+- fix: harden CLI validation against panics and port overflow (#99)
+- fix: file security and output hygiene (#103)
+- fix: prevent TUI panics on multi-byte input and edge cases (#100)
+- fix: prevent arithmetic panics on clock jumps and oversized packets (#101)
+- docs: add SAFETY comment to set_ip_hdrincl unsafe block (#111)
+- Bump actions/checkout from 6 to 7 (#105)
+- Bump actions/cache from 5 to 6 (#106)
+- Bump anyhow from 1.0.102 to 1.0.103 (#107)
+- Bump clap_complete from 4.6.5 to 4.6.7 (#108)
+- Bump maxminddb from 0.28.1 to 0.29.0 (#109)
+- test: cover multibyte settings cursor editing (#112)
+- fix: propagate IPv6 scope_id through recv/bind paths (LAN-143) (#113)
+- fix: parse IPv6 extension headers in quoted error payloads (LAN-144) (#114)
+- fix: bound enrichment caches to prevent unbounded memory growth (LAN-145) (#115)
+- fix: TUI async polling, replay validation, assert→Result (LAN-150, LAN-181) (#116)
+- fix: populate response TTL on macOS/BSD IPv4 (1-byte IP_RECVTTL cmsg) (#117)
+- refactor: use PMTUD_MARKER const for the payload marker write (#118)
+- fix: cap export filename length to stay within NAME_MAX (#119)
+- Bump version to v0.20.2
+
+-------------------------------------------------------------------
 Sun Jun 28 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.20.1-1
 
 - Lead Homebrew install with core formula (brew install ttl)
