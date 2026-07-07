@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.20
+Version:        0.9.21
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,63 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Tue Jul 07 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.21-1
+- Bump actions/checkout from 6 to 7
+- Bump actions/cache from 5 to 6
+- Bump the rust-dependencies group across 1 directory with 6 updates
+- fix(tcp): resume partial regular writes and zero-copy sends from correct offset
+- refactor(zerocopy): make send_chunk one-shot and caller-owned offset
+- Merge pull request #113 from lance0/fix/tcp-integrity-and-server-leak
+- fix(server): always clean up active_tests entry and metrics on test error/cancel
+- Revert "fix(server): always clean up active_tests entry and metrics on test error/cancel"
+- fix(server): always clean up active_tests entry and metrics on test error/cancel
+- Merge pull request #114 from lance0/fix/cleanup-active-tests-on-abort-v2
+- fix(server,stats,diff): aggregate final TCP info, round RTT averages, flag zero-baseline regressions
+- Merge pull request #115 from lance0/fix/result-stats-correctness
+- fix(output,ci,install): harden output and release paths
+- Merge pull request #116 from lance0/fix/harden-output-and-release
+- fix(auth,serve,cli): LAN-158 and LAN-171 security hardening
+- Merge pull request #117 from lance0/fix/security-hardening-batch
+- fix(protocol,probe,net): LAN-167 + LAN-168 protocol/probe validation
+- Merge pull request #118 from lance0/fix/protocol-probe-validation
+- fix(tui,config,main): LAN-163 + LAN-173 TUI/preset polish
+- Merge pull request #119 from lance0/fix/tui-preset-polish
+- fix(misc): LAN-172 low-risk cleanups batch
+- Merge pull request #120 from lance0/fix/misc-low-risk-cleanups
+- fix(protocol,tcp): harden version and receive teardown
+- test(integration): clean up stale rate-limit timeout comment
+- Merge pull request #121 from lance0/fix/tcp-version-compat
+- Merge pull request #122 from lance0/fix/misc-low-risk-cleanups
+- Merge pull request #109 from lance0/dependabot/github_actions/actions/checkout-7
+- Merge pull request #111 from lance0/dependabot/github_actions/actions/cache-6
+- Merge pull request #112 from lance0/dependabot/cargo/rust-dependencies-0543a7c382
+- chore: ignore local review marker
+- docs: align roadmap and changelog with current work
+- ci: skip markdown-only changes
+- fix: address post-release review regressions (#123)
+- fix: LAN-161 pause channel closure busy-loop and unawaited QUIC tasks (#124)
+- feat: PSK sessions require AEAD-protected control channels (LAN-159)
+- fix(control-crypto): write plaintext control frames in a single write
+- Merge pull request #126 from lance0/lan-159-protected-control
+- Fix cancel/pause latency and UDP burst after resume (LAN-160 v2)
+- test(udp): fix macos paced resume test
+- Merge pull request #129 from lance0/lan-160-v2
+- Fix dual-stack V6ONLY inconsistency and DSCP dual-stack (LAN-169)
+- fix: control-stream desync via dedicated reader task (LAN-229)
+- ci: make MPTCP skip explicit and visible on standard runners (LAN-174)
+- fix(net): surface unexpected dual-stack DSCP errors
+- fix(net): tolerate unsupported IPv4 TOS on macOS IPv6 sockets
+- Merge pull request #130 from lance0/lan-169
+- Merge pull request #134 from lance0/lan-174
+- Merge pull request #132 from lance0/lan-229
+- fix: pause-aware duration clock in senders and server stats (LAN-230)
+- fix(pause): exclude paused time from control clocks
+- Merge pull request #133 from lance0/lan-230
+- fix: cancel-sender-drop busy-loops and MPTCP validation (LAN-170)
+- fix(quic): reschedule tee after divert-only receive batches
+- Merge pull request #131 from lance0/lan-170
+- Bump version to v0.9.21
+
 * Wed Jun 24 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.20-1
 - Bump docker/setup-buildx-action from 3 to 4 (#103)
 - Bump docker/login-action from 3 to 4 (#104)
