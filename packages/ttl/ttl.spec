@@ -1,5 +1,5 @@
 Name:           ttl
-Version:        0.20.2
+Version:        0.21.0
 Release:        1%{?dist}
 Summary:        Network diagnostic tool — traceroute/mtr-style TUI with hop stats
 License:        MIT OR Apache-2.0
@@ -81,6 +81,16 @@ fi
 %endif
 
 %changelog
+* Wed Jul 08 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.21.0-1
+- ci: harden workflow coverage and automation (#120)
+- ci: stop dependabot from bumping the MSRV rust-toolchain pin
+- docs: document the modest-MSRV policy in CONTRIBUTING
+- chore: bump crossbeam-epoch to 0.9.20 for RUSTSEC-2026-0204
+- feat(update): allow disabling the update check (#110) (#122)
+- chore: ignore .last_review_sha (code-review state)
+- docs: replace static screenshot with a live TUI demo GIF
+- Bump version to v0.21.0
+
 * Tue Jul 07 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.20.2-1
 - Bump docker/setup-buildx-action from 3 to 4 (#86)
 - Bump docker/metadata-action from 5 to 6 (#87)
