@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.21
+Version:        0.9.22
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,41 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Sat Jul 25 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.22-1
+- ci(release): verify GHCR image after publish, document docker decoupling
+- ci: harden the PR pipeline
+- Merge pull request #135 from lance0/ci/hardening
+- ci(release): build release binaries with --locked
+- ci: migrate cross builds to cargo-zigbuild (fix aarch64 glibc failures)
+- ci: verify cross-built binary ABI and fail loudly on missing binary
+- ci: pin zig / cargo-zigbuild / cross to known-good versions
+- Merge pull request #136 from lance0/ci/zigbuild
+- docs: fix stale ROADMAP CI note and Cyrillic homoglyph in verify script [skip ci]
+- deps: bump crossbeam-epoch 0.9.18 -> 0.9.20 (RUSTSEC-2026-0204)
+- feat(update): allow disabling the update check (LAN-235)
+- fix(update): let config.toml override a stale prefs toggle
+- docs(update): document the opt-out and fix the example config
+- Merge pull request #137 from lance0/lancey3/lan-235-feature-allow-disabling-update-check
+- docs: animated TUI demo GIF as the README preview
+- Merge pull request #138 from lance0/docs/demo-gif
+- build: exclude the demo GIF and tape from the published crate
+- feat(config): add client transport defaults
+- fix(tui): satisfy stable clippy
+- Merge pull request #139 from lance0/feat/client-config-parity
+- ci: compile Windows paths
+- Merge pull request #140 from lance0/ci/windows-cargo-check
+- ci: add typo checks
+- ci: trim typos allowlist
+- Merge pull request #141 from lance0/ci/typos-check
+- deps: bump spin 0.9.8 -> 0.9.9 (0.9.8 yanked)
+- fix(udp): live jitter in download mode reads the client's receiver stats
+- Merge pull request #146 from lance0/fix/143-udp-reverse-live-jitter
+- ci: add cargo-deny job (LAN-231)
+- Merge pull request #147 from lance0/ci/lan-231-batch2
+- deps: take all semver-compatible updates (dependabot #144, minus crypto pair)
+- Merge pull request #148 from lance0/deps/compatible-updates
+- Bump version to v0.9.22
+
 * Tue Jul 07 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.21-1
 - Bump actions/checkout from 6 to 7
 - Bump actions/cache from 5 to 6
