@@ -1,3 +1,31 @@
+xfr (0.9.23-1) unstable; urgency=medium
+
+  * fix(tui): rate-limit sparkline bars against control-channel backlog flushes
+  * test: wait out the bar-flush guard in the live-loss e2e path
+  * Merge pull request #150 from lance0/fix/93-sparkline-flush-burst
+  * deps: unify control-channel crypto on one RustCrypto generation
+  * Merge pull request #151 from lance0/fix/lan-582-crypto-ecosystem
+  * feat: transfer a fixed number of bytes with -n/--bytes
+  * fix(-n): cap sendfile at the claimed length, and show byte progress in the TUI
+  * Merge pull request #152 from lance0/feat/n-bytes-test-by-amount
+  * fix(tui): drive -u -R progress from a local clock, not server Intervals
+  * fix(tui): stop the -u -R local metronome once the timed test ends
+  * Merge pull request #153 from lance0/fix/93-download-local-metronome
+  * feat(cli): group --help output into sections
+  * chore: remove dead code and harden auth-path error handling
+  * fix(output): surface live loss in scripted output when interval reports stall
+  * docs: changelog entry for grouped --help
+  * fix(client): suppress UDP/QUIC send-error noise on graceful teardown
+  * docs: changelog entry for teardown send-error suppression
+  * Merge pull request #154 from lance0/fix/upload-scripted-stall-rows
+  * Merge pull request #157 from lance0/fix/teardown-error-noise
+  * Merge pull request #155 from lance0/feat/grouped-help
+  * Merge pull request #156 from lance0/chore/dead-code-unwrap-audit
+  * docs: tick shipped roadmap items (PRs #154-#157)
+  * Bump version to v0.9.23
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Thu, 30 Jul 2026 09:10:13 +0000
+
 xfr (0.9.22-1) unstable; urgency=medium
 
   * ci(release): verify GHCR image after publish, document docker decoupling
