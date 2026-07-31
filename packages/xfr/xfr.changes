@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Fri Jul 31 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.24-1
+
+- fix(tui): make the monochrome theme survive sunlight, encode loss without hue
+- Merge pull request #160 from lance0/feat/158-monochrome-glare
+- fix(tui): bound quit on a dead control channel and show the wait
+- docs: changelog entry for bounded dead-link quit
+- Merge pull request #161 from lance0/fix/159-quit-dead-link
+- Bump version to v0.9.24
+
+-------------------------------------------------------------------
 Thu Jul 30 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.23-1
 
 - fix(tui): rate-limit sparkline bars against control-channel backlog flushes

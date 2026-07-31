@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.23
+Version:        0.9.24
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,14 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Fri Jul 31 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.24-1
+- fix(tui): make the monochrome theme survive sunlight, encode loss without hue
+- Merge pull request #160 from lance0/feat/158-monochrome-glare
+- fix(tui): bound quit on a dead control channel and show the wait
+- docs: changelog entry for bounded dead-link quit
+- Merge pull request #161 from lance0/fix/159-quit-dead-link
+- Bump version to v0.9.24
+
 * Thu Jul 30 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.23-1
 - fix(tui): rate-limit sparkline bars against control-channel backlog flushes
 - test: wait out the bar-flush guard in the live-loss e2e path

@@ -1,3 +1,14 @@
+xfr (0.9.24-1) unstable; urgency=medium
+
+  * fix(tui): make the monochrome theme survive sunlight, encode loss without hue
+  * Merge pull request #160 from lance0/feat/158-monochrome-glare
+  * fix(tui): bound quit on a dead control channel and show the wait
+  * docs: changelog entry for bounded dead-link quit
+  * Merge pull request #161 from lance0/fix/159-quit-dead-link
+  * Bump version to v0.9.24
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Fri, 31 Jul 2026 09:21:54 +0000
+
 xfr (0.9.23-1) unstable; urgency=medium
 
   * fix(tui): rate-limit sparkline bars against control-channel backlog flushes
