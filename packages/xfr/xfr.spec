@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.24
+Version:        0.9.25
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,12 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Sat Aug 01 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.25-1
+- fix(tui): stop reverse-video loss marking from inverting the sparkline
+- docs: before/after recordings of the sparkline loss-marking fix
+- Merge pull request #162 from lance0/fix/93-sparkline-reversed-artifact
+- Bump version to v0.9.25
+
 * Fri Jul 31 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.24-1
 - fix(tui): make the monochrome theme survive sunlight, encode loss without hue
 - Merge pull request #160 from lance0/feat/158-monochrome-glare

@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Sat Aug 01 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.25-1
+
+- fix(tui): stop reverse-video loss marking from inverting the sparkline
+- docs: before/after recordings of the sparkline loss-marking fix
+- Merge pull request #162 from lance0/fix/93-sparkline-reversed-artifact
+- Bump version to v0.9.25
+
+-------------------------------------------------------------------
 Fri Jul 31 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.24-1
 
 - fix(tui): make the monochrome theme survive sunlight, encode loss without hue
