@@ -1,10 +1,9 @@
 <services>
   <service name="tar_scm">
     <param name="scm">git</param>
-    <param name="url">https://github.com/ciroiriarte/obs-network-tools</param>
-    <param name="subdir">packages/create-network-tshoot-livecd/src</param>
-    <param name="version">1.0.0</param>
-    <param name="revision">main</param>
+    <param name="url">https://github.com/ciroiriarte/network-tshoot-livecd</param>
+    <param name="version">1.1.0</param>
+    <param name="revision">v1.1.0</param>
     <param name="filename">create-network-tshoot-livecd</param>
   </service>
   <service name="set_version">

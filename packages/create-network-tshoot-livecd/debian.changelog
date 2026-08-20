@@ -1,3 +1,20 @@
+create-network-tshoot-livecd (1.1.0-1) unstable; urgency=medium
+
+  * Bootloader serial console: the GRUB (UEFI) and isolinux (BIOS) boot menus
+    are now mirrored to the serial console, not just VGA. Previously only the
+    kernel and getty reached serial; the boot menu was VGA-only.
+  * Add --serial-unit N (default 0) selecting the ttyS<N> unit used by BOTH the
+    kernel console and the bootloader menu (the bootloader cannot auto-discover
+    the port). The kernel cmdline now uses the selected unit instead of a fixed
+    ttyS0+ttyS1 pair; runtime login auto-discovery on other UARTs is unchanged.
+  * Honor http_proxy/https_proxy for build hosts without direct Internet: curl
+    (OBS key) and debootstrap read them from the environment, and the in-chroot
+    apt is forwarded the value via --apt-http-proxy. Run under `sudo -E` so the
+    proxy reaches root's environment. Unrelated to --proxy, which configures the
+    booted diagnostic system's runtime network.
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Wed, 19 Aug 2026 21:38:03 -0500
+
 create-network-tshoot-livecd (1.0.0-1) unstable; urgency=medium
 
   * Initial release. Distro-independent, boot-only cabling-diagnostics LiveCD

@@ -24,7 +24,7 @@ Autonomous [OBS](https://build.opensuse.org/project/show/home:ciriarte:network-t
 | **switch-xray** | Switch port diagnostics and documentation via SNMP | [ciroiriarte/switch-xray](https://github.com/ciroiriarte/switch-xray) |
 | **ttl** | Traceroute/mtr-style TUI (requires Rust >= 1.88) | [lance0/ttl](https://github.com/lance0/ttl) |
 | **xfr** | Network bandwidth testing TUI (requires Rust >= 1.88) | [lance0/xfr](https://github.com/lance0/xfr) |
-| **create-network-tshoot-livecd** | Boot-only cabling-diagnostics LiveCD builder (live-build wrapper) — Debian/Ubuntu only | (this repo) |
+| **create-network-tshoot-livecd** | Boot-only cabling-diagnostics LiveCD builder (live-build wrapper) — Debian/Ubuntu only | [ciroiriarte/network-tshoot-livecd](https://github.com/ciroiriarte/network-tshoot-livecd) |
 | **live-build** | Current live-build, co-packaged for Ubuntu whose stock 3.0~a57 is broken — Debian/Ubuntu only | [Debian live-team](https://salsa.debian.org/live-team/live-build) |
 
 ## Supported Distributions

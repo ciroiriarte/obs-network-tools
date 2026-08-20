@@ -37,11 +37,11 @@
 * xfr
   Network benchmarking tool available at https://github.com/lance0/xfr (its own github repo)
 * create-network-tshoot-livecd
-  - Boot-only cabling-diagnostics LiveCD builder (a live-build wrapper). Source
-    lives in this repo under packages/create-network-tshoot-livecd/src/ (no
-    separate upstream repo). Debian/Ubuntu targets ONLY — live-build is a
-    Debian-family tool and cannot build a Debian/Ubuntu live image from an
-    openSUSE/Rocky host, so this package is not built for rpm distributions.
+  - Boot-only cabling-diagnostics LiveCD builder (a live-build wrapper). Upstream
+    source at https://github.com/ciroiriarte/network-tshoot-livecd (packaged here
+    via _service/tar_scm like nic-xray/switch-xray). Debian/Ubuntu targets ONLY —
+    live-build is a Debian-family tool and cannot build a Debian/Ubuntu live image
+    from an openSUSE/Rocky host, so this package is not built for rpm distributions.
 * live-build
   - Co-packaged dependency: an exact rebuild of Debian's current live-build
     (https://salsa.debian.org/live-team/live-build) for the Debian/Ubuntu
