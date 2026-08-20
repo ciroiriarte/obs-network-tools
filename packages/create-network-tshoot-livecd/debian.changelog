@@ -1,3 +1,17 @@
+create-network-tshoot-livecd (1.1.2-1) unstable; urgency=medium
+
+  * Fix Ubuntu builds end-to-end (two more Debian-live-build-on-Ubuntu quirks):
+    - Kernel meta-package: set --linux-flavours per base (generic for Ubuntu,
+      amd64 for Debian); Debian's live-build kept linux-image-amd64 in ubuntu
+      mode, failing with "no installation candidate".
+    - apt Signed-By conflict: wire the OBS repo via live-build's archives
+      mechanism for both stages (.chroot + .binary) with one consistent
+      no-signed-by trust config, instead of a second includes.chroot source with
+      signed-by (which Ubuntu's apt rejects). The source now persists into the
+      image on every base.
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Thu, 20 Aug 2026 00:19:46 -0500
+
 create-network-tshoot-livecd (1.1.1-1) unstable; urgency=medium
 
   * Fix Ubuntu builds: pass the apt mirror explicitly. Debian's live-build
