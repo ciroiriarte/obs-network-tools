@@ -1,3 +1,13 @@
+create-network-tshoot-livecd (1.1.1-1) unstable; urgency=medium
+
+  * Fix Ubuntu builds: pass the apt mirror explicitly. Debian's live-build
+    leaves every mirror variable empty for --mode ubuntu, producing a malformed
+    sources.list ("deb  jammy main universe" with no URL) that aborts the chroot
+    stage. Set --mirror-* and --parent-mirror-* (archive + security) for every
+    base; add --mirror URL to override with an internal mirror when air-gapped.
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Wed, 19 Aug 2026 23:41:50 -0500
+
 create-network-tshoot-livecd (1.1.0-1) unstable; urgency=medium
 
   * Bootloader serial console: the GRUB (UEFI) and isolinux (BIOS) boot menus
