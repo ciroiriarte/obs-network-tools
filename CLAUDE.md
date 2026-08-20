@@ -36,6 +36,20 @@
   Network diagnostic tool available at https://github.com/lance0/ttl (its own github repo)
 * xfr
   Network benchmarking tool available at https://github.com/lance0/xfr (its own github repo)
+* create-network-tshoot-livecd
+  - Boot-only cabling-diagnostics LiveCD builder (a live-build wrapper). Source
+    lives in this repo under packages/create-network-tshoot-livecd/src/ (no
+    separate upstream repo). Debian/Ubuntu targets ONLY — live-build is a
+    Debian-family tool and cannot build a Debian/Ubuntu live image from an
+    openSUSE/Rocky host, so this package is not built for rpm distributions.
+* live-build
+  - Co-packaged dependency: an exact rebuild of Debian's current live-build
+    (https://salsa.debian.org/live-team/live-build) for the Debian/Ubuntu
+    targets. Ubuntu 22.04/24.04 ship a broken 3.0~a57 fork that cannot build a
+    current image; create-network-tshoot-livecd Depends on this one. Per the
+    repo policy that dependencies missing from a distribution are packaged here.
+    Debian/Ubuntu targets ONLY (noarch deb). The epoch (1:) keeps it ahead of
+    Ubuntu's stock 3.0~a57.
   
 # The repositories
 * Must be built with OBS

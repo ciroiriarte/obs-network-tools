@@ -24,6 +24,8 @@ Autonomous [OBS](https://build.opensuse.org/project/show/home:ciriarte:network-t
 | **switch-xray** | Switch port diagnostics and documentation via SNMP | [ciroiriarte/switch-xray](https://github.com/ciroiriarte/switch-xray) |
 | **ttl** | Traceroute/mtr-style TUI (requires Rust >= 1.88) | [lance0/ttl](https://github.com/lance0/ttl) |
 | **xfr** | Network bandwidth testing TUI (requires Rust >= 1.88) | [lance0/xfr](https://github.com/lance0/xfr) |
+| **create-network-tshoot-livecd** | Boot-only cabling-diagnostics LiveCD builder (live-build wrapper) — Debian/Ubuntu only | (this repo) |
+| **live-build** | Current live-build, co-packaged for Ubuntu whose stock 3.0~a57 is broken — Debian/Ubuntu only | [Debian live-team](https://salsa.debian.org/live-team/live-build) |
 
 ## Supported Distributions
 
@@ -40,6 +42,24 @@ Autonomous [OBS](https://build.opensuse.org/project/show/home:ciriarte:network-t
 | Ubuntu 24.04 LTS | `Ubuntu_24.04` | x86_64, aarch64 | ✓ | ✓ | — | — |
 
 > **Note:** `ttl` and `xfr` require Rust >= 1.88, which is not yet available in Leap 15.6, Debian 13 or Ubuntu repos. Builds will automatically succeed once a compatible Rust version ships.
+>
+> **Build tooling (Debian/Ubuntu only):** `create-network-tshoot-livecd` and `live-build` are published for **Debian 13, Ubuntu 22.04 and Ubuntu 24.04** only — not for openSUSE/Rocky. `create-network-tshoot-livecd` is a live-build wrapper, and live-build is a Debian-family tool that cannot build a Debian/Ubuntu live image from an openSUSE/Rocky host. `live-build` is co-packaged because Ubuntu 22.04/24.04 ship a broken `3.0~a57` fork; the epoch (`1:`) keeps our build ahead of it. On Debian 13 the distribution's own live-build already works.
+
+### create-network-tshoot-livecd
+
+Builds a standalone, boot-only cabling-diagnostics live ISO. It boots a target
+host into a RAM-resident environment, identifies it from a CSV persona
+inventory (DMI serial → hostname, optional bonded-VLAN management IP), brings up
+every physical NIC, runs `nic-xray --all --output csv` plus `lldpd`, and prints
+a per-NIC cabling report to the VGA console **and** an auto-discovered serial
+console, then drops to a root shell. It writes nothing to local disks.
+
+```bash
+# On a Debian 13 / Ubuntu 22.04 / Ubuntu 24.04 build host (needs root for lb build):
+sudo apt install create-network-tshoot-livecd     # pulls live-build from this repo
+sudo create-network-tshoot-livecd -c hosts.csv -o /var/tmp/iso/
+# CSV columns: serial,hostname,bond_members(:-separated),ip
+```
 
 ## Installation
 

@@ -1,0 +1,17 @@
+<services>
+  <service name="tar_scm">
+    <param name="scm">git</param>
+    <param name="url">https://github.com/ciroiriarte/obs-network-tools</param>
+    <param name="subdir">packages/create-network-tshoot-livecd/src</param>
+    <param name="version">1.0.0</param>
+    <param name="revision">main</param>
+    <param name="filename">create-network-tshoot-livecd</param>
+  </service>
+  <service name="set_version">
+    <param name="basename">create-network-tshoot-livecd</param>
+  </service>
+  <service name="recompress">
+    <param name="file">*.tar</param>
+    <param name="compression">gz</param>
+  </service>
+</services>

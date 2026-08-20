@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+override_dh_auto_build:
+	# nothing to build (single bash script)
+
+override_dh_auto_install:
+	install -D -m 0755 create-network-tshoot-livecd \
+		debian/create-network-tshoot-livecd/usr/bin/create-network-tshoot-livecd
+	install -D -m 0644 create-network-tshoot-livecd.8 \
+		debian/create-network-tshoot-livecd/usr/share/man/man8/create-network-tshoot-livecd.8

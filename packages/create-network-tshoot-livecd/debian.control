@@ -1,0 +1,22 @@
+Source: create-network-tshoot-livecd
+Section: net
+Priority: optional
+Maintainer: Ciro Iriarte <ciro.iriarte+software@gmail.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Homepage: https://github.com/ciroiriarte/obs-network-tools
+
+Package: create-network-tshoot-livecd
+Architecture: all
+Depends: ${misc:Depends}, live-build, debootstrap, xorriso, curl, gpg, ca-certificates
+Description: Build a boot-only network cabling-diagnostics LiveCD
+ Builds a distro-independent live ISO (via live-build) that boots a target
+ host into a RAM-resident diagnostic environment. On boot it identifies the
+ host from a CSV persona inventory, brings up every physical NIC, runs
+ nic-xray and lldpd, and prints a per-NIC cabling / LLDP-neighbour report to
+ the VGA console and an auto-discovered serial console, then drops to a root
+ shell. It writes nothing to local disks.
+ .
+ Requires a Debian or Ubuntu build host with live-build. On Ubuntu, install
+ the live-build package from this same repository, as the distribution's
+ stock live-build is too old to build a current image.

@@ -1,0 +1,13 @@
+create-network-tshoot-livecd (1.0.0-1) unstable; urgency=medium
+
+  * Initial release. Distro-independent, boot-only cabling-diagnostics LiveCD
+    builder (a live-build wrapper). Boots a target host into a RAM-resident
+    environment, identifies it from a CSV persona inventory (DMI serial ->
+    hostname, optional bonded-VLAN management IP), brings up every physical
+    NIC, runs nic-xray + lldpd, and prints a per-NIC cabling report to VGA and
+    an auto-discovered serial console, then drops to a root shell. Writes
+    nothing to local disks.
+  * Relocated from the pve-tools repository (was pve-create-tshoot-livecd);
+    dropped the Proxmox naming and the sibling ReaR restore tool.
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Wed, 19 Aug 2026 19:51:07 -0500
