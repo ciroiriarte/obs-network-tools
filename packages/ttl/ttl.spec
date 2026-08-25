@@ -1,5 +1,5 @@
 Name:           ttl
-Version:        0.21.0
+Version:        0.22.0
 Release:        1%{?dist}
 Summary:        Network diagnostic tool — traceroute/mtr-style TUI with hop stats
 License:        MIT OR Apache-2.0
@@ -81,6 +81,17 @@ fi
 %endif
 
 %changelog
+* Tue Aug 25 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.22.0-1
+- chore: exclude demo assets (gif/tape) from published crate
+- chore(deps): bump the cargo-dependencies group across 1 directory with 12 updates (#125)
+- chore(deps): bump rkyv 0.8.16 -> 0.8.18 (RUSTSEC-2026-0233/0234/0235)
+- chore(deps): bump the cargo-dependencies group across 1 directory with 3 updates (#127)
+- chore: clippy 1.98 nits on master (#130)
+- chore(deps): bump lru 0.18.0 -> 0.18.2 (#128)
+- perf(tui): skip snapshot+draw when idle (LAN-1222 experiment) (#129)
+- chore(tui): make the render fingerprint exhaustive over its inputs (#131)
+- Bump version to v0.22.0
+
 * Wed Jul 08 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.21.0-1
 - ci: harden workflow coverage and automation (#120)
 - ci: stop dependabot from bumping the MSRV rust-toolchain pin
