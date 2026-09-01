@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.9.25
+Version:        0.10.0
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,54 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Tue Sep 01 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.10.0-1
+- docs: true up the roadmap and comparisons against the mid-2026 landscape
+- build(deps): bump the rust-dependencies group with 4 updates (#164)
+- build(deps): bump taiki-e/install-action from 2 to 2.85.5 (#163)
+- perf(tui): skip redraws when the render fingerprint is unchanged
+- fix(tui): harden render fingerprint caching
+- test(tcp): satisfy the Rust 1.98 chunks lint
+- perf(tui): skip unchanged server dashboard frames
+- fix(quic): admit all 128 data streams
+- perf(udp): smooth high-rate pacing batches
+- fix(config): reject unusable existing files
+- fix(udp): reject stale feedback snapshots
+- perf(udp): remove per-packet receive timers
+- fix(config): protect embedded PSKs
+- fix(auth): validate library PSKs before I/O
+- fix(rate-limit): serialize cleanup with admission
+- fix(tcp): report Linux cwnd in bytes
+- fix(auth): bind PSK permissions to opened file
+- Merge pull request #172 from lance0/perf/lan-1226-tui-dirty-skip
+- Merge pull request #178 from lance0/perf/server-tui-dirty-skip
+- Merge pull request #183 from lance0/fix/quic-128-stream-capacity
+- Merge pull request #179 from lance0/perf/udp-pacing-schedule
+- Merge pull request #175 from lance0/fix/config-load-fail-closed
+- Merge pull request #177 from lance0/fix/udp-feedback-freshness
+- Merge pull request #182 from lance0/perf/udp-receive-timer
+- Merge pull request #180 from lance0/fix/config-psk-permissions
+- Merge pull request #181 from lance0/fix/psk-validation-boundaries
+- Merge pull request #176 from lance0/fix/rate-limit-cleanup-race
+- Merge pull request #185 from lance0/fix/linux-cwnd-bytes
+- Merge pull request #186 from lance0/fix/psk-file-path-race
+- build(deps): bump taiki-e/install-action from 2.85.5 to 2.87.0 (#173)
+- build(deps): bump crate-ci/typos from 1.48.0 to 1.49.1 (#174)
+- build(deps): bump the rust-dependencies group across 1 directory with 7 updates (#171)
+- chore(dev): streamline maintainer workflow
+- Merge pull request #187 from lance0/chore/maintainer-qol
+- test(net): tolerate UDP packet loss in dual-stack check
+- Merge pull request #190 from lance0/fix/dualstack-udp-test-flake
+- build(deps): update typos and preserve MSRV check
+- Merge pull request #191 from lance0/chore/dependabot-msrv-guard
+- docs: correct security ACL and metrics contracts
+- build(deps): bump uuid in the rust-dependencies group across 1 directory
+- Merge pull request #192 from lance0/docs/correct-maintainer-contracts
+- Merge branch 'master' into dependabot/cargo/rust-dependencies-8d2c85db1c
+- Merge pull request #188 from lance0/dependabot/cargo/rust-dependencies-8d2c85db1c
+- fix(quic): bind PSK auth to TLS session
+- Merge pull request #193 from lance0/fix/quic-psk-channel-binding
+- Bump version to v0.10.0
+
 * Sat Aug 01 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.9.25-1
 - fix(tui): stop reverse-video loss marking from inverting the sparkline
 - docs: before/after recordings of the sparkline loss-marking fix
