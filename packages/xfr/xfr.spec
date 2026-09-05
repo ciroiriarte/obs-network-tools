@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.10.0
+Version:        0.10.1
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,38 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Sat Sep 05 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.10.1-1
+- fix(discover): clamp mDNS hostname to 63-byte DNS labels
+- test(discover): ignore live mDNS multicast unless opted in
+- fix(discover): keep hostname sanitizer clippy-clean without discovery
+- build(deps): refresh lockfile (quinn-proto 0.11.17)
+- docs(changelog): drop wording that trips crate-ci/typos
+- fix(discover): only warn when the hostname is really too long
+- test(discover): straddle a char boundary in the truncation test
+- chore: ignore WATCHDOG.yml
+- Merge pull request #195 from lance0/fix/194-mdns-hostname-label
+- fix: server, tui, and transport reliability improvements post-#195
+- Merge pull request #196 from lance0/fix/audit-improvements-post-195
+- fix(main): arm the terminal guard before the alternate screen
+- fix(serve): skip the immediate first stats tick
+- fix(tui): average throughput by bytes over elapsed
+- fix(tui): render the sparkline into its allotted chunk
+- fix(tui): only claim a connection once a peer answers
+- docs(changelog): record the TUI sweep fixes
+- feat(quic): implement bitrate pacing for QUIC transport (LAN-1497)
+- fix(serve): point the interval-timer comment at the right function
+- fix(tui): mark heavy loss without inverting the bar
+- Merge pull request #197 from lance0/fix/tui-polish-and-review-nits
+- Merge pull request #200 from lance0/fix/mono-heavy-loss-marker
+- Merge pull request #198 from lance0/fix/lan-1497-quic-bitrate-pacing
+- fix(tui): quiet the title, block-glyph progress bar, 80-column footer
+- fix(tui): separate the throughput graph from the transfer bar
+- docs(assets): re-record the TUI polish captures at 1216x768
+- Merge pull request #201 from lance0/fix/tui-taste-polish
+- docs: correct claims invalidated by the QUIC pacing and TUI work
+- Merge pull request #202 from lance0/docs/pre-release-audit
+- Bump version to v0.10.1
+
 * Tue Sep 01 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.10.0-1
 - docs: true up the roadmap and comparisons against the mid-2026 landscape
 - build(deps): bump the rust-dependencies group with 4 updates (#164)
