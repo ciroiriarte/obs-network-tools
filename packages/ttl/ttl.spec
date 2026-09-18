@@ -1,5 +1,5 @@
 Name:           ttl
-Version:        0.22.0
+Version:        0.23.0
 Release:        1%{?dist}
 Summary:        Network diagnostic tool — traceroute/mtr-style TUI with hop stats
 License:        MIT OR Apache-2.0
@@ -81,6 +81,13 @@ fi
 %endif
 
 %changelog
+* Fri Sep 18 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.23.0-1
+- chore(deps): rustls 0.23.45 (RUSTSEC-2026-0285), unyank chacha20, supersede #133 (#135)
+- feat: implement RFC 5837 ICMP interface and next-hop identification (#137)
+- chore: add scripts/fakertr, a fake RFC 5837 router for end-to-end smoke tests
+- chore(deps): bump the cargo-dependencies group across 1 directory with 2 updates (#136)
+- Bump version to v0.23.0
+
 * Tue Aug 25 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.22.0-1
 - chore: exclude demo assets (gif/tape) from published crate
 - chore(deps): bump the cargo-dependencies group across 1 directory with 12 updates (#125)

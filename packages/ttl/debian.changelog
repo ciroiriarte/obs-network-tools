@@ -1,3 +1,13 @@
+ttl (0.23.0-1) unstable; urgency=medium
+
+  * chore(deps): rustls 0.23.45 (RUSTSEC-2026-0285), unyank chacha20, supersede #133 (#135)
+  * feat: implement RFC 5837 ICMP interface and next-hop identification (#137)
+  * chore: add scripts/fakertr, a fake RFC 5837 router for end-to-end smoke tests
+  * chore(deps): bump the cargo-dependencies group across 1 directory with 2 updates (#136)
+  * Bump version to v0.23.0
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Fri, 18 Sep 2026 11:08:58 +0000
+
 ttl (0.22.0-1) unstable; urgency=medium
 
   * chore: exclude demo assets (gif/tape) from published crate
