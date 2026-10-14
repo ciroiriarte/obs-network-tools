@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.10.1
+Version:        0.11.0
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,163 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Wed Oct 14 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.11.0-1
+- test(quic): cover multi-stream bitrate pacing
+- test(quic): make the 2-stream pacing assertion able to fail
+- Merge pull request #203 from lance0/test/quic-multi-stream-bitrate-pacing
+- build(deps): bump taiki-e/install-action in the github-actions group
+- build(deps): update rustls to 0.23.45 (RUSTSEC-2026-0285)
+- Merge pull request #206 from lance0/build/rustls-0.23.45
+- Merge pull request #205 from lance0/dependabot/github_actions/github-actions-0329a3091d
+- build(deps): bump the rust-dependencies group across 1 directory with 4 updates
+- docs(changelog): record the dependency refresh and mdns-sd discovery fix
+- Merge pull request #207 from lance0/dependabot/cargo/rust-dependencies-9bfc63ae26
+- build(deps): bump the github-actions group with 2 updates
+- build(deps): bump the rust-dependencies group across 1 directory with 10 updates
+- fix: support configurable UDP payload sizes for lower-MTU paths
+- ci: quote the UDP regression job name
+- fix: pass latest Rust checks and read MTU results from JSON files
+- fix: keep JSON summary and stream output parseable
+- fix: validate report intervals before starting a test
+- fix: validate diff thresholds before comparing results
+- fix: preserve loss markers when throughput bars disappear
+- Bound QUIC cancellation control writes
+- fix: validate and honor server rate-limit windows
+- Cancel blocked QUIC download stream opens
+- fix: apply timestamp choices to TUI history
+- fix: honor explicit server ports equal to the default
+- Cancel legacy UDP peer discovery promptly
+- fix: scope TUI transport options to the selected protocol
+- fix: validate effective address-family settings
+- fix: keep settings controls visible in compact terminals
+- fix: honor and validate client stream and buffer defaults
+- fix: resolve and save theme preferences consistently
+- test: place theme regressions alongside CLI and display checks
+- Bound QUIC control-stream setup by the handshake timeout
+- fix: identify invalid client settings accurately
+- Keep diff threshold parsing beside command helpers
+- Group protocol restart regressions with TUI key tests
+- refactor: group server port tests with source port validation
+- refactor: group address family helpers and tests with bind parsing
+- fix: fingerprint only visible history timestamps
+- Refresh documented network limits and completed TUI behavior
+- fix: reject client durations that wrap protocol seconds
+- Refresh pinned port assignment after TUI settings edits
+- Merge pull request #209 from lance0/dependabot/github_actions/github-actions-9c739112dd
+- docs(changelog): record the zero-throughput loss marker fix
+- docs(tui): update stall-bar rationale now that zero bars keep their loss underline
+- refactor(tui): hash log entries whole in the render fingerprint
+- fix(cli): let --json-stream and --csv override a config JSON default
+- docs(scripting): describe the one-line --json-stream summary after the interval rows
+- docs(changelog): record the parseable JSON output fix
+- docs(changelog): record the TUI history timestamp format fix
+- test: drop address-family alias matrix duplicated from net.rs
+- docs(changelog): record address-family flag and config validation
+- docs(changelog): record the TUI transport option scoping fix
+- docs(changelog): record bounded QUIC cancellation writes
+- fix(cli): name the offending [client] key in config validation errors
+- docs(readme): simplify the --interval option row
+- docs(changelog): record the report interval validation fix
+- docs(changelog): record cancellable QUIC download stream opens
+- test: trim redundant stream-count and duration coverage
+- docs(changelog): record client default precedence and validation fixes
+- docs(features): fix the diff --threshold example
+- docs(changelog): record the diff threshold validation fix
+- test(tui): drop the compact focus-style test and spell out the arrow width check
+- docs(changelog): record the compact settings modal fix
+- docs(changelog): record cancellable legacy UDP peer discovery
+- docs(changelog): record theme override and persistence fixes
+- docs: close the shipped download-mode live-loss item and point -l users at --probe-mtu
+- fix: reject active zero rate-limit windows before binding
+- test(serve): fail the XFR_PORT child check when it runs no test
+- docs(man): describe the serve --port fallback order
+- docs(changelog): record the server port precedence fix
+- test(serve): run the QUIC control-stream timeout regression on paused time
+- docs(changelog): record the bounded QUIC control-stream wait
+- fix(client): ignore -l for TCP and QUIC runs instead of failing them
+- test: keep the RawControl struct and impl together
+- fix(rate-limit): keep the cleanup ticker period non-zero
+- docs(man): describe --rate-limit-window units and config fallback
+- docs(changelog): record the rate-limit window fix
+- docs: record -l/--length in the changelog, features and known issues
+- fix(client): keep cancellation responsive and clean up dropped runs
+- Merge pull request #214 from lance0/fix/213-udp-payload-size
+- Merge pull request #215 from lance0/fix/json-summary-stdout
+- Merge pull request #216 from lance0/fix/report-interval-validation
+- Merge pull request #217 from lance0/fix/diff-threshold-validation
+- Merge pull request #218 from lance0/fix/tui-zero-throughput-loss-marker
+- Merge pull request #219 from lance0/fix/quic-cancel-write-timeout
+- Merge pull request #220 from lance0/fix/rate-limit-window-validation
+- Merge pull request #221 from lance0/fix/quic-download-open-cancel
+- Merge pull request #222 from lance0/fix/tui-history-timestamps
+- Merge pull request #223 from lance0/fix/server-port-precedence
+- Merge pull request #224 from lance0/fix/legacy-udp-discovery-cancel
+- Merge pull request #225 from lance0/fix/tui-protocol-options
+- Merge pull request #226 from lance0/fix/address-family-validation
+- Merge pull request #227 from lance0/fix/tui-compact-settings
+- Merge pull request #228 from lance0/fix/client-run-drop-cleanup
+- Merge pull request #229 from lance0/fix/parallel-stream-precedence
+- Merge pull request #230 from lance0/fix/explicit-default-theme
+- Merge pull request #231 from lance0/fix/quic-control-stream-timeout
+- Clarify report sampling and negotiated protocol extensions
+- Merge pull request #232 from lance0/docs/current-network-limitations
+- docs(changelog): drop the -l clause from the TUI transport-options entry
+- Merge branch 'master' into dependabot/cargo/rust-dependencies-ccd8dedc82
+- Merge pull request #212 from lance0/dependabot/cargo/rust-dependencies-ccd8dedc82
+- fix(tui): resolve zero-copy per run after a settings protocol switch
+- docs(changelog): record the October dependency refresh
+- feat(tui): report test status to the terminal via OSC 7501
+- fix(tui): keep OSC 7501 docs and test fixtures lint-clean
+- Merge pull request #233 from lance0/fix/tui-protocol-switch-state
+- refactor(tui): remove the unused ProgressBar widget
+- Merge pull request #234 from lance0/feat/osc-7501-program-status
+- Merge pull request #235 from lance0/chore/remove-unused-progress-bar
+- fix(udp): report UDP send errors to the client
+- fix(udp): warn once per stream on repeated send failures
+- fix(serve): report single-port UDP setup failures once
+- test(client): wait for the progress queue to fill instead of a fixed sleep
+- Merge pull request #237 from lance0/fix/udp-reverse-send-errors
+- fix(net): honor IPv6 zone IDs for link-local hosts
+- Merge pull request #240 from lance0/test/full-progress-queue-wait
+- Merge pull request #239 from lance0/fix/ipv6-zone-ids
+- fix(server): keep stalled control writes from blocking test lifecycle
+- test(control): use a spelling-safe Unicode frame fixture
+- fix(server): keep timed tests at their usual interval count
+- refactor(server): name the post-completion report flush deadline
+- refactor(server): let Reporting report its own active duration
+- test(server): pin the post-pause deadline to its sub-tick instant
+- fix(server): wait for the QUIC Result to be acknowledged before closing
+- Merge pull request #236 from lance0/fix/server-control-backpressure
+- feat(udp): report bidirectional receiver quality and stream splits
+- refactor(tui): drop per-stream byte splits the stream panel never reads
+- test(client): reattach the bidir overlay doc comment to its test
+- fix(output): keep bidir UDP plain rows fixed-width and within 80 columns
+- docs: drop stale bidir loss note from ROADMAP, flag CSV column count change
+- docs(scripting): list lost_percent in the streaming udp_send/udp_recv objects
+- test(protocol): size-check 128-stream results with bidir splits populated
+- docs(changelog): note that measured zero UDP jitter is now reported
+- fix(tui): keep per-stream UDP jitter when the final result arrives
+- Merge pull request #238 from lance0/feat/udp-bidir-directional-stats
+- fix(serve): send UDP from the address the client targeted
+- Merge pull request #242 from lance0/fix/udp-reply-source-address
+- fix(udp): repair reordered packet loss and deduplicate arrivals
+- test(udp): add a netns regression for reordering reported as loss
+- test(udp): differential-check the packet tracker over long reordered streams
+- Merge pull request #241 from lance0/fix/udp-reordered-packet-loss
+- refactor(stats): keep UDP progress counters behind the per-stream lock
+- fix(udp): hold far-future sequence jumps until a second packet confirms them
+- Merge pull request #243 from lance0/fix/udp-tracker-hardening
+- fix(output): wrap bidir per-stream summary split to fit 80 columns
+- fix(output): print bidir CSV interval jitter at the jitter_ms column's precision
+- test: give the QUIC one-off server 5 s to exit
+- docs(changelog): add a Library API section and correct unreleased entries
+- docs(known-issues): document QUIC collapse under reordering and update UDP refusal output
+- docs(man): mention OSC 7501 terminal status reporting
+- docs(architecture): add missing modules to the source tree
+- docs(readme): document serve --preset and the [[presets]] config table
+- Merge pull request #244 from lance0/chore/release-prep-0.11.0
+- Bump version to v0.11.0
+
 * Sat Sep 05 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.10.1-1
 - fix(discover): clamp mDNS hostname to 63-byte DNS labels
 - test(discover): ignore live mDNS multicast unless opted in
