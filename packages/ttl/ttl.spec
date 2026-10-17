@@ -1,5 +1,5 @@
 Name:           ttl
-Version:        0.23.0
+Version:        0.24.0
 Release:        1%{?dist}
 Summary:        Network diagnostic tool — traceroute/mtr-style TUI with hop stats
 License:        MIT OR Apache-2.0
@@ -81,6 +81,32 @@ fi
 %endif
 
 %changelog
+* Sat Oct 17 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.24.0-1
+- chore(deps): rustls 0.23.46 + quinn-proto 0.11.19 advisories, supersede #142 (#143)
+- Native Windows build: compile and test the crate on Windows (#141)
+- Run platform CI for stacked pull requests (#154)
+- Reject conflicting output modes and ignored replay options (#148)
+- Avoid retaining unused replay events in headless runs (#155)
+- Save files atomically and allow larger trusted replay recordings (#157)
+- Fix MPLS parsing when ICMP lengths omit quote padding (#144)
+- Validate ICMP extension checksums before parsing metadata (#158)
+- Keep the add-target input cursor visible for long names (#149)
+- Prevent enrichment starvation and cancel stalled lookup batches (#156)
+- Handle fragmented HTTP requests on the metrics endpoint (#150)
+- Require destination confirmation before reporting a path MTU (#159)
+- Show extension indicators and keep hop details readable (#145)
+- Include ICMP interface and MPLS details in text reports (#146)
+- Correlate ICMPv6 Parameter Problem replies (#160)
+- Keep TUI layouts readable and selections visible in small terminals (#151)
+- Keep queued TUI input responsive and make Ctrl-C global (#152)
+- Improve TUI selection contrast and calm healthy probe history (#153)
+- CHANGELOG for the October fix batch (#161)
+- Fix correlation, rate-limit, ASN prefix and replay bugs (#163)
+- Polish the TUI: one visual language across views (#164)
+- Reorganize docs around a short README front door (#162)
+- Demo tape: show only the TUI (#165)
+- Bump version to v0.24.0
+
 * Fri Sep 18 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.23.0-1
 - chore(deps): rustls 0.23.45 (RUSTSEC-2026-0285), unyank chacha20, supersede #133 (#135)
 - feat: implement RFC 5837 ICMP interface and next-hop identification (#137)
