@@ -1,4 +1,116 @@
 -------------------------------------------------------------------
+Sun Oct 18 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.12.0-1
+
+- chore(deps): bump rustls to 0.23.46 (RUSTSEC-2026-0346..0349)
+- Fix Ctrl-C handling across client and server TUIs
+- Save preferences and JSON results with atomic replacement
+- Improve terminal foreground and dark-theme text readability
+- Lock update-check settings controlled by higher-priority overrides
+- Keep throughput and help accessible in small terminals
+- Bound metrics headers and connection lifetimes
+- Make the README a concise entry point to task-oriented docs
+- Apply destination permissions when creating temporary saves
+- Start the README demo on a populated throughput view
+- Preserve errors and final averages in compact client views
+- Run native Windows tests and all-target Clippy in CI
+- Check destination write access before replacing saved files
+- Keep platform guidance accurate across CI improvements
+- Resolve hostnames asynchronously inside the connect deadline
+- Reject ignored client options and write CSV for --csv -o
+- Extract TUI interrupt routing into testable helpers
+- Close client Settings when Ctrl-C starts a cancel
+- Let the server table shrink before the header and help footer
+- Hint help scrolling in the border and restore styled key column
+- Theme stream bar dim color and pin default theme to ANSI palette
+- Lead client hints with help and keep compact paused rate visible
+- Run typos on Markdown-only changes
+- Restore dropped CLI details and examples in FEATURES.md
+- Correct iperf3 claims in COMPARISON.md
+- Re-record the README demo in colour at real-time speed
+- Credit iperf3 --json-stream in COMPARISON.md
+- Wait for handshake before cancel in cancel-latency test; skip QUIC pacing tests on Windows
+- Run Windows Clippy before tests in CI
+- Write through existing non-regular save destinations
+- Name the destination in save access errors
+- Keep the metrics server alive across accept errors
+- Drop the post-write chmod in atomic_write
+- Sync the parent directory after replacing a save
+- Expose atomic_write as a public bytes API
+- Make the save_json test detect in-place writes
+- Merge pull request #245 from lance0/fix/lan-2268-global-tui-interrupt
+- Merge pull request #247 from lance0/fix/lan-2270-theme-readability
+- Merge pull request #249 from lance0/fix/lan-2272-small-terminal-layouts
+- Merge pull request #248 from lance0/fix/lan-2271-update-check-lock
+- Merge pull request #246 from lance0/fix/lan-2269-atomic-saves
+- Merge pull request #250 from lance0/fix/lan-2273-metrics-deadlines
+- Merge pull request #254 from lance0/fix/lan-2295-dns-connect-timeout
+- Merge pull request #255 from lance0/fix/lan-2294-ignored-output-options
+- Merge pull request #253 from lance0/ci/lan-2276-native-windows-tests
+- Merge pull request #251 from lance0/docs/lan-2274-readme-entry-points
+- Merge pull request #252 from lance0/docs/lan-2275-populated-tui-demo
+- Save CSV results atomically
+- Stop setting SO_REUSEADDR on ephemeral UDP data sockets
+- Merge pull request #256 from lance0/fix/udp-ephemeral-port-reuse
+- Fold the UDP port-reuse entry into the Unreleased Fixed list
+- Re-record the README demo with the help-first footer
+- Skip custom-payload UDP tests on Windows pending LAN-2299
+- Make the native Windows CI job informational
+- Bring the man page in line with the current CLI
+- Complete the Unreleased changelog for the merged batch
+- Document the new CLI and TUI behavior in FEATURES and SCRIPTING
+- Add Windows QUIC pacing and atomic save limits to known issues
+- Refresh stale CI and feature notes in ROADMAP and CONTRIBUTING
+- Correct the --bitrate and --connect-timeout help text
+- Fix the TUI force-exit description and man page option macros
+- Merge pull request #257 from lance0/ci/windows-informational
+- Note that the Windows CI job is informational
+- Merge pull request #258 from lance0/docs/true-up-after-ttl-parity
+- Reduce allocation in TUI reporting
+- Format Push Gateway metrics directly into the payload
+- Merge pull request #259 from lance0/perf/tui-reporting-allocations
+- Merge pull request #260 from lance0/perf/pushgateway-formatting
+- Aggregate interval gauges without temporary vectors
+- Write plain and CSV reports directly into output buffers
+- Merge pull request #261 from lance0/perf/interval-aggregation
+- Merge pull request #262 from lance0/perf/output-formatting-batch
+- Require tempfile 3.10 for Builder::permissions
+- Drop the typos CI check
+- Document additive library API and UDP socket reuse change for 0.12.0
+- Exclude repo-only files from the published crate
+- Clarify man page interrupt exit status and escape option hyphens
+- Mark bidir direction splits as shipped in v0.11.0 in the roadmap
+- Note that atomic saves do not keep owner, ACLs, xattrs or hard links
+- Restore the 0.9.18 changelog heading dropped by the 0.9.19 bump
+- Overwrite writable files in read-only directories and clarify save errors
+- Check the -o destination before starting a client test
+- Use a fixed mid grey for default and monochrome secondary text
+- Suggest the fix when a client option precedes a subcommand
+- Align help descriptions and draw them in body text colour
+- Fall back to plain output when stdout or stdin is not a terminal
+- Drop change arrows from a locked update-check row in Settings
+- Warn about --random with QUIC only when it was given explicitly
+- Keep the help hint and a whole rate on tiny client terminals
+- Fit the server dashboard header, table and footer to small terminals
+- Log the actual new UDP loss per interval in TUI History
+- Document that top-level options go before the subcommand
+- Merge pull request #263 from lance0/chore/pre-release-fixes-0.12.0
+- Merge pull request #264 from lance0/fix/cli-pre-release-0.12.0
+- Merge pull request #265 from lance0/fix/tui-pre-release-0.12.0
+- Deduplicate the Unreleased changelog after the pre-release merges
+- Retire per-test Prometheus series after 16 finished tests
+- Close QUIC connections explicitly at test end and on server shutdown
+- Warn when a TCP stream carries no data
+- Make the TCP send loop yield to the tokio scheduler
+- Document the TestResult library API changes in the changelog
+- List Server::run_until under the additive library API changes
+- Skip the many-streams TCP integration test on Windows
+- Merge pull request #266 from lance0/fix/quic-one-off-teardown
+- Merge pull request #267 from lance0/fix/lan-2321-tcp-stream-starvation
+- Merge pull request #268 from lance0/fix/lan-2322-prometheus-series
+- Merge the Unreleased additive library API lines
+- Bump version to v0.12.0
+
+-------------------------------------------------------------------
 Wed Oct 14 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.11.0-1
 
 - test(quic): cover multi-stream bitrate pacing
