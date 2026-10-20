@@ -9,8 +9,13 @@ Homepage: https://github.com/ciroiriarte/nic-xray
 Package: nic-xray
 Architecture: all
 Depends: ${misc:Depends}, ethtool, lldpd, iproute2
-Recommends: graphviz
+Recommends: graphviz, pciutils, mstflint
 Description: Ethernet physical connectivity diagnostic tool
  Displays detailed information about physical network interfaces including
  PCI slot, firmware versions, MAC, MTU, link status, speed/duplex,
  bond/LAG membership, and LLDP peer information.
+ .
+ Includes the nic-health companion: read-only NIC hardware and data-path
+ health checks (PCIe link/AER, temperature, devlink health reporters, link
+ flaps, NVIDIA ConnectX counters, optional mstlink/mlxlink deep mode) with a
+ Nagios-compatible verdict.

@@ -20,11 +20,20 @@ Requires:       iproute2
 %endif
 # Optional: graph generation feature
 Recommends:     graphviz
+# Optional: NIC vendor/model names (nic-xray --physical, nic-health)
+Recommends:     pciutils
+# Optional: nic-health -l deep on NVIDIA ConnectX (open-source mstlink)
+Recommends:     mstflint
 
 %description
 Displays detailed information about physical network interfaces including
 PCI slot, firmware versions, MAC, MTU, link status, speed/duplex,
 bond/LAG membership, and LLDP peer information.
+
+Includes the nic-health companion: read-only NIC hardware and data-path
+health checks (PCIe link/AER, temperature, devlink health reporters, link
+flaps, NVIDIA ConnectX counters, optional mstlink/mlxlink deep mode) with a
+Nagios-compatible verdict.
 
 %prep
 %autosetup
@@ -36,6 +45,9 @@ bond/LAG membership, and LLDP peer information.
 install -Dm0755 nic-xray.sh %{buildroot}%{_bindir}/nic-xray
 install -Dm0644 man/man8/nic-xray.8 %{buildroot}%{_mandir}/man8/nic-xray.8
 install -Dm0644 completions/nic-xray.bash %{buildroot}%{_datadir}/bash-completion/completions/nic-xray
+install -Dm0755 nic-health.sh %{buildroot}%{_bindir}/nic-health
+install -Dm0644 man/man8/nic-health.8 %{buildroot}%{_mandir}/man8/nic-health.8
+install -Dm0644 completions/nic-health.bash %{buildroot}%{_datadir}/bash-completion/completions/nic-health
 
 %files
 %license LICENSE
@@ -43,8 +55,20 @@ install -Dm0644 completions/nic-xray.bash %{buildroot}%{_datadir}/bash-completio
 %{_bindir}/nic-xray
 %{_mandir}/man8/nic-xray.8%{ext_man}
 %{_datadir}/bash-completion/completions/nic-xray
+%{_bindir}/nic-health
+%{_mandir}/man8/nic-health.8%{ext_man}
+%{_datadir}/bash-completion/completions/nic-health
 
 %changelog
+* Tue Oct 20 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.11.0-1
+- Add nic-health companion (/usr/bin/nic-health): read-only NIC hardware and data-path health checks with Nagios exit codes
+- nic-health: PCIe link/AER, temperature, devlink health, link flaps, NVIDIA ConnectX (mlx5) counters, optional mstlink/mlxlink deep mode
+- Add --virtual flag (VLAN/bridge/tap/VXLAN/... with MTU hierarchy) and bond MTU consistency check
+- Add --cluster bond|nic for DOT diagrams; NIC vendor column; onboard NIC detection
+- Fix SFF-8636 Rx power parsing on QSFP28, JSON control-character escaping, LACP check under mawk
+- Fix bash completion for optional-value flags and for the packaged command name
+- Recommends pciutils and mstflint
+
 * Sat Apr 11 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.10.2-1
 - Add physical topology flag (--physical/-p): NUMA, PCI slot, NIC vendor/model
 - Add LLDP port description column

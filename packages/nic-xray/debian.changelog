@@ -1,3 +1,15 @@
+nic-xray (2.11.0-1) unstable; urgency=medium
+
+  * Add nic-health companion (/usr/bin/nic-health): read-only NIC hardware and data-path health checks with Nagios exit codes
+  * nic-health: PCIe link/AER, temperature, devlink health, link flaps, NVIDIA ConnectX (mlx5) counters, optional mstlink/mlxlink deep mode
+  * Add --virtual flag (VLAN/bridge/tap/VXLAN/... with MTU hierarchy) and bond MTU consistency check
+  * Add --cluster bond|nic for DOT diagrams; NIC vendor column; onboard NIC detection
+  * Fix SFF-8636 Rx power parsing on QSFP28, JSON control-character escaping, LACP check under mawk
+  * Fix bash completion for optional-value flags and for the packaged command name
+  * Recommends pciutils and mstflint
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Tue, 20 Oct 2026 00:00:00 +0000
+
 nic-xray (2.10.2-1) unstable; urgency=medium
 
   * Add physical topology flag (--physical/-p): NUMA, PCI slot, NIC vendor/model
