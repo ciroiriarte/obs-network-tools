@@ -1,3 +1,11 @@
+nic-xray (2.11.1-1) unstable; urgency=medium
+
+  * Fix nic-xray man page DROP indicator glyph (rendered empty)
+  * Ship nic-xray.sh with the executable bit set in the source tree
+  * Fix offline ISO builds on openSUSE Leap (tar missing before checkout)
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Tue, 20 Oct 2026 00:00:00 +0000
+
 nic-xray (2.11.0-1) unstable; urgency=medium
 
   * Add nic-health companion (/usr/bin/nic-health): read-only NIC hardware and data-path health checks with Nagios exit codes

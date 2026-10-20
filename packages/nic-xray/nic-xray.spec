@@ -60,6 +60,11 @@ install -Dm0644 completions/nic-health.bash %{buildroot}%{_datadir}/bash-complet
 %{_datadir}/bash-completion/completions/nic-health
 
 %changelog
+* Tue Oct 20 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.11.1-1
+- Fix nic-xray man page DROP indicator glyph (rendered empty)
+- Ship nic-xray.sh with the executable bit set in the source tree
+- Fix offline ISO builds on openSUSE Leap (tar missing before checkout)
+
 * Tue Oct 20 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.11.0-1
 - Add nic-health companion (/usr/bin/nic-health): read-only NIC hardware and data-path health checks with Nagios exit codes
 - nic-health: PCIe link/AER, temperature, devlink health, link flaps, NVIDIA ConnectX (mlx5) counters, optional mstlink/mlxlink deep mode
