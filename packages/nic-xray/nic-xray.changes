@@ -1,4 +1,24 @@
 -------------------------------------------------------------------
+Wed Oct 21 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.12.1-1
+
+- feat: add nic-health link-down look-back from the kernel journal
+- test: validate nic-health deep mode with NVIDIA MFT mlxlink
+- feat: add nic-health generic.link.state; quiet deep checks without link
+- fix: compare PCIe link with the slot's maxima, not only the card's
+- fix: let shellcheck parse both scripts; add make lint
+- ci: run make lint on pushes and pull requests
+- ci: run make test alongside make lint
+- ci: run the test suite on Bash 4.4 in a SLES 15 container
+- fix: list only the BER counters the deep tool printed
+- fix: judge lane skew only on the lanes the link uses
+- chore: bump version to 2.12.0
+- ci: tell gh which repository to attach release ISOs to
+- fix: write offline ISO checksums with the bare file name
+- fix: keep bursty PHY/frame errors from reading as OK
+- ci: allow attaching offline ISOs to an existing release by hand
+- chore: bump version to 2.12.1
+
+-------------------------------------------------------------------
 Tue Oct 20 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.11.1-1
 
 - Fix nic-xray man page DROP indicator glyph (rendered empty)
