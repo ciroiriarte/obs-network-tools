@@ -1,5 +1,5 @@
 Name:           ttl
-Version:        0.24.0
+Version:        0.24.1
 Release:        1%{?dist}
 Summary:        Network diagnostic tool — traceroute/mtr-style TUI with hop stats
 License:        MIT OR Apache-2.0
@@ -81,6 +81,10 @@ fi
 %endif
 
 %changelog
+* Thu Oct 22 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.24.1-1
+- Bump version to v0.25.0
+- Release as v0.24.1 instead of v0.25.0
+
 * Sat Oct 17 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.24.0-1
 - chore(deps): rustls 0.23.46 + quinn-proto 0.11.19 advisories, supersede #142 (#143)
 - Native Windows build: compile and test the crate on Windows (#141)

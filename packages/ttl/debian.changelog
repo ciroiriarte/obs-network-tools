@@ -1,3 +1,10 @@
+ttl (0.24.1-1) unstable; urgency=medium
+
+  * Bump version to v0.25.0
+  * Release as v0.24.1 instead of v0.25.0
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Thu, 22 Oct 2026 11:45:00 +0000
+
 ttl (0.24.0-1) unstable; urgency=medium
 
   * chore(deps): rustls 0.23.46 + quinn-proto 0.11.19 advisories, supersede #142 (#143)

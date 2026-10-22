@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 22 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.24.1-1
+
+- Bump version to v0.25.0
+- Release as v0.24.1 instead of v0.25.0
+
+-------------------------------------------------------------------
 Sat Oct 17 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.24.0-1
 
 - chore(deps): rustls 0.23.46 + quinn-proto 0.11.19 advisories, supersede #142 (#143)
