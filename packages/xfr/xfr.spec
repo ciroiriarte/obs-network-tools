@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.12.0
+Version:        0.12.1
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,10 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Thu Oct 22 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.12.1-1
+- Update webpki-roots and rustls-webpki for the emSign distrust
+- Bump version to v0.12.1
+
 * Sun Oct 18 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.12.0-1
 - chore(deps): bump rustls to 0.23.46 (RUSTSEC-2026-0346..0349)
 - Fix Ctrl-C handling across client and server TUIs
