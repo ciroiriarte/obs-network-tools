@@ -6,6 +6,12 @@ on:
     - cron: '0 6 * * *'
   workflow_dispatch:
     # Allow manual trigger
+    inputs:
+      sync:
+        description: Send every packaging file to OBS even when the version is unchanged (after a spec/debian change)
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   check-and-update:
@@ -43,12 +49,18 @@ jobs:
 
           echo "upstream_version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
           echo "current_version=${CURRENT_VERSION}" >> "$GITHUB_OUTPUT"
+          # OBS gets the package on a new version, or on request (packaging-only changes)
+          if [[ "${NEW_VERSION}" != "${CURRENT_VERSION}" || "${{ inputs.sync || false }}" == "true" ]]; then
+            echo "obs_push=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "obs_push=false" >> "$GITHUB_OUTPUT"
+          fi
           echo "Upstream: ${NEW_VERSION} | Packaged: ${CURRENT_VERSION}"
 
       - name: Skip if version unchanged
         if: steps.get_version.outputs.upstream_version == steps.get_version.outputs.current_version
         run: |
-          echo "Version is already ${{ steps.get_version.outputs.current_version }}. Nothing to do."
+          echo "Version is already ${{ steps.get_version.outputs.current_version }}. No version update (sync: ${{ inputs.sync || false }}).
 
       - name: Update _service version and revision
         if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
@@ -131,12 +143,13 @@ jobs:
           git push
 
       - name: Install osc
-        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        if: steps.get_version.outputs.obs_push == 'true'
         run: |
+          sudo apt-get update
           sudo apt-get install -y osc
 
       - name: Configure osc credentials
-        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        if: steps.get_version.outputs.obs_push == 'true'
         env:
           OBS_PASSWORD: ${{ secrets.OBS_PASSWORD }}
         run: |
@@ -151,15 +164,26 @@ jobs:
           } > ~/.config/osc/oscrc
           chmod 600 ~/.config/osc/oscrc
 
-      - name: Push updated changelogs to OBS
-        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+      - name: Push the package to OBS
+        if: steps.get_version.outputs.obs_push == 'true'
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
+          CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
         run: |
           osc co home:ciriarte:network-tools nic-xray
+          # Every packaging file: spec and debian changes (e.g. a new subpackage) reach OBS too
           cp packages/nic-xray/_service \
+             packages/nic-xray/nic-xray.spec \
              packages/nic-xray/nic-xray.changes \
+             packages/nic-xray/nic-xray.dsc \
+             packages/nic-xray/debian.control \
+             packages/nic-xray/debian.rules \
              packages/nic-xray/debian.changelog \
              home:ciriarte:network-tools/nic-xray/
           cd home:ciriarte:network-tools/nic-xray
-          osc commit -m "Update nic-xray to ${NEW_VERSION}"
+          osc addremove
+          if [[ "${NEW_VERSION}" == "${CURRENT_VERSION}" ]]; then
+            osc commit -m "Sync nic-xray packaging (${NEW_VERSION})"
+          else
+            osc commit -m "Update nic-xray to ${NEW_VERSION}"
+          fi

@@ -3,6 +3,7 @@
 #
 # Reads the latest release tag from github.com/ciroiriarte/nic-xray and
 # updates packages/nic-xray/_service, nic-xray.changes, and debian.changelog.
+# --push sends every packaging file (spec, dsc, debian.*) to OBS as well.
 #
 # The GitHub Actions workflow (.github/workflows/update-nic-xray.yml) runs
 # this logic daily. Use this script to trigger a manual update instead.
@@ -17,6 +18,8 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SERVICE_FILE="${REPO_ROOT}/packages/nic-xray/_service"
 OBS_PKG_DIR="/tmp/home:ciriarte:network-tools/nic-xray"
+# Files sent to OBS by --push (the whole package, not only the version and changelogs)
+PKG_FILES=(_service nic-xray.spec nic-xray.changes nic-xray.dsc debian.control debian.rules debian.changelog)
 
 echo "Fetching latest release from github.com/ciroiriarte/nic-xray..."
 LATEST_JSON=$(curl -fsSL \
@@ -86,17 +89,21 @@ if [[ "${1:-}" == "--push" ]]; then
         echo "OBS checkout not found at ${OBS_PKG_DIR}. Run: osc co home:ciriarte:network-tools" >&2
         exit 1
     fi
-    cp "${REPO_ROOT}/packages/nic-xray/_service" \
-       "${REPO_ROOT}/packages/nic-xray/nic-xray.changes" \
-       "${REPO_ROOT}/packages/nic-xray/debian.changelog" \
-       "${OBS_PKG_DIR}/"
+    # A long-lived checkout: refresh it first, then show what will be committed.
+    # Every packaging file: spec and debian changes (e.g. a new subpackage) reach OBS too
+    osc up "${OBS_PKG_DIR}"
+    for f in "${PKG_FILES[@]}"; do
+        cp "${REPO_ROOT}/packages/nic-xray/${f}" "${OBS_PKG_DIR}/"
+    done
     cd "${OBS_PKG_DIR}"
+    osc addremove
+    osc status
     osc commit -m "Update nic-xray to ${NEW_VERSION}"
     echo "Pushed to OBS."
 fi
 
 echo ""
 echo "Next steps (if not using --push):"
-echo "  cp packages/nic-xray/_service packages/nic-xray/*.changes packages/nic-xray/debian.changelog \\"
+echo "  cp packages/nic-xray/{$(IFS=,; echo "${PKG_FILES[*]}")} \\"
 echo "     ${OBS_PKG_DIR}/"
-echo "  cd ${OBS_PKG_DIR} && osc commit -m 'Update nic-xray to ${NEW_VERSION}'"
+echo "  cd ${OBS_PKG_DIR} && osc addremove && osc commit -m 'Update nic-xray to ${NEW_VERSION}'"

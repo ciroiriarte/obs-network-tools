@@ -72,6 +72,7 @@ jobs:
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
             | sh -s -- -y --default-toolchain stable
           echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          sudo apt-get update
           sudo apt-get install -y zstd
 
       - name: Clone upstream source and vendor dependencies
@@ -216,6 +217,7 @@ jobs:
       - name: Install osc
         if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
         run: |
+          sudo apt-get update
           sudo apt-get install -y osc
 
       - name: Configure osc credentials

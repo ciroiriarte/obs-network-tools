@@ -133,6 +133,7 @@ jobs:
       - name: Install osc
         if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
         run: |
+          sudo apt-get update
           sudo apt-get install -y osc
 
       - name: Configure osc credentials
