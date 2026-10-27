@@ -20,7 +20,8 @@ Autonomous [OBS](https://build.opensuse.org/project/show/home:ciriarte:network-t
 
 | Package | Description | Upstream |
 |---------|-------------|----------|
-| **nic-xray** | Ethernet physical connectivity diagnostic tool | [ciroiriarte/nic-xray](https://github.com/ciroiriarte/nic-xray) |
+| **nic-xray** | Ethernet physical connectivity diagnostic tool, with the `nic-health` NIC health checks | [ciroiriarte/nic-xray](https://github.com/ciroiriarte/nic-xray) |
+| **nic-xray-fleet** | Fleet sweep over SSH (`nic-sweep`) and multi-site reports (`nic-report`) for the operator host; built from the nic-xray source | [ciroiriarte/nic-xray](https://github.com/ciroiriarte/nic-xray) |
 | **switch-xray** | Switch port diagnostics and documentation via SNMP | [ciroiriarte/switch-xray](https://github.com/ciroiriarte/switch-xray) |
 | **ttl** | Traceroute/mtr-style TUI (requires Rust >= 1.88) | [lance0/ttl](https://github.com/lance0/ttl) |
 | **xfr** | Network bandwidth testing TUI (requires Rust >= 1.88) | [lance0/xfr](https://github.com/lance0/xfr) |
@@ -101,6 +102,22 @@ Replace `Rocky_9` with `Rocky_10` for Rocky Linux 10.
 > dnf install epel-release
 > ```
 
+### nic-xray-fleet (operator host)
+
+The fleet nodes need only `nic-xray` (it carries `nic-health`). On the operator or jump host that
+sweeps them, also install `nic-xray-fleet` with the same package manager:
+
+```bash
+zypper install nic-xray-fleet     # openSUSE
+sudo apt install nic-xray-fleet   # Debian / Ubuntu
+dnf install nic-xray-fleet        # Rocky Linux (EPEL enabled, for lldpd)
+```
+
+It installs `/usr/bin/nic-sweep`, `/usr/bin/nic-report`, their man pages and bash completions, and
+the starter rule catalog `/usr/share/nic-xray/nic-report-rules.json`. It requires `nic-xray` of the
+same version, `jq`, an SSH client and Python 3.9 or newer (on Leap 15.6, whose `python3` is 3.6, it
+uses `python311`). PDF reports need WeasyPrint (`python3-weasyprint`), which is only suggested.
+
 ## How Auto-Update Works
 
 All three packages are fully autonomous — when upstream pushes a new tag, the pipeline picks it up within 24 hours with no manual steps.
@@ -112,6 +129,12 @@ The GitHub Actions workflows ([nic-xray](.github/workflows/update-nic-xray.yml),
 1. Query the GitHub API for the latest release tag on the upstream repo.
 2. Compare with the current version in the package `.changes` file.
 3. If changed: update `_service`, changelogs, commit to this repo, and push to OBS.
+
+For nic-xray, the push to OBS sends every packaging file (`_service`, spec, `.changes`, `.dsc`,
+`debian.*`), so a spec or Debian change reaches OBS with the next version. To send a packaging-only
+change without a new version, run the workflow by hand with **sync** checked
+(`gh workflow run update-nic-xray.yml -f sync=true`). Sync only works when the tag pinned in
+`_service` already contains every file the spec installs: publish the upstream release first.
 
 OBS then runs its source services (`tar_scm` + `set_version` + `recompress`) to fetch, package, and build.
 
@@ -327,7 +350,7 @@ obs-network-tools/
 ├── CLAUDE.md                       # Project instructions for Claude Code
 ├── README.md                       # This file
 ├── .github/workflows/
-│   ├── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push to OBS
+│   ├── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push every packaging file to OBS (or on request: sync)
 │   ├── update-switch-xray.yml      # Daily: detect new tag, update changelogs, push to OBS
 │   ├── update-ttl.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
 │   └── update-xfr.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
@@ -336,10 +359,10 @@ obs-network-tools/
 └── packages/
     ├── nic-xray/
     │   ├── _service           # tar_scm: fetch pinned tag from github.com/ciroiriarte/nic-xray
-    │   ├── nic-xray.spec      # RPM spec (openSUSE + Rocky Linux)
+    │   ├── nic-xray.spec      # RPM spec (openSUSE + Rocky Linux): nic-xray and nic-xray-fleet
     │   ├── nic-xray.changes   # openSUSE changelog
     │   ├── nic-xray.dsc       # Debian source package descriptor
-    │   ├── debian.control     # Debian/Ubuntu package metadata
+    │   ├── debian.control     # Debian/Ubuntu package metadata: nic-xray and nic-xray-fleet
     │   ├── debian.changelog   # Debian/Ubuntu changelog
     │   └── debian.rules       # Debian build rules
     ├── switch-xray/

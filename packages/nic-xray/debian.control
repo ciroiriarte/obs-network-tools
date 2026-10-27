@@ -19,3 +19,20 @@ Description: Ethernet physical connectivity diagnostic tool
  health checks (PCIe link/AER, temperature, devlink health reporters, link
  flaps, NVIDIA ConnectX counters, optional mstlink/mlxlink deep mode) with a
  Nagios-compatible verdict.
+ .
+ The fleet tools (nic-sweep, nic-report) for the operator host are in the
+ nic-xray-fleet package.
+
+Package: nic-xray-fleet
+Architecture: all
+Depends: ${misc:Depends}, nic-xray (= ${binary:Version}), jq, openssh-client | ssh-client, python3 (>= 3.9)
+Suggests: python3-weasyprint
+Description: Fleet sweep and multi-site report for nic-xray and nic-health
+ Operator-host tools for a fleet of nodes running nic-xray and nic-health.
+ .
+ nic-sweep runs nic-health (and nic-xray, when present) on many hosts over
+ SSH in parallel and stores the results per site and sweep. nic-report turns
+ one or more sweeps into a single- or multi-site report (Markdown, JSON, HTML,
+ PDF with WeasyPrint): baselines, outliers, patterns across sites, prioritised
+ recommendations from a rule catalog, sweep comparison, and an optional
+ checked AI-written summary.

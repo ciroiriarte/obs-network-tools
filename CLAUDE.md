@@ -30,6 +30,9 @@
 ## Software
 * nic-xray
   - NIC cabling documentation script available at https://github.com/ciriarte/nic-xray
+  - Two binary packages from one source: nic-xray (nic-xray, nic-health: for every node)
+    and nic-xray-fleet (nic-sweep, nic-report, rule catalog: for the operator host; needs
+    jq, an SSH client and Python 3.9+, python311 on Leap 15.6)
 * switch-xray
   - Switch cabling documentation script available at https://github.com/ciriarte/switch-xray
 * ttl

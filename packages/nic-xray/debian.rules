@@ -18,3 +18,19 @@ override_dh_auto_install:
 		debian/nic-xray/usr/share/man/man8/nic-health.8
 	install -D -m 0644 completions/nic-health.bash \
 		debian/nic-xray/usr/share/bash-completion/completions/nic-health
+	install -D -m 0755 nic-sweep.sh \
+		debian/nic-xray-fleet/usr/bin/nic-sweep
+	install -D -m 0644 man/man8/nic-sweep.8 \
+		debian/nic-xray-fleet/usr/share/man/man8/nic-sweep.8
+	install -D -m 0644 completions/nic-sweep.bash \
+		debian/nic-xray-fleet/usr/share/bash-completion/completions/nic-sweep
+	install -D -m 0755 nic-report.py \
+		debian/nic-xray-fleet/usr/bin/nic-report
+	sed -i '1s|^#!/usr/bin/env python3$$|#!/usr/bin/python3|' \
+		debian/nic-xray-fleet/usr/bin/nic-report
+	install -D -m 0644 man/man8/nic-report.8 \
+		debian/nic-xray-fleet/usr/share/man/man8/nic-report.8
+	install -D -m 0644 completions/nic-report.bash \
+		debian/nic-xray-fleet/usr/share/bash-completion/completions/nic-report
+	install -D -m 0644 nic-report-rules.json \
+		debian/nic-xray-fleet/usr/share/nic-xray/nic-report-rules.json

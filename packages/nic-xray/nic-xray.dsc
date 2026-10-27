@@ -1,7 +1,7 @@
 Format: 3.0 (native)
 Source: nic-xray
 Version: 0
-Binary: nic-xray
+Binary: nic-xray, nic-xray-fleet
 Architecture: all
 Maintainer: Ciro Iriarte <ciro.iriarte+software@gmail.com>
 Build-Depends: debhelper-compat (= 13)
