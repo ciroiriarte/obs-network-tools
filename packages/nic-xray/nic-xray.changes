@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Tue Oct 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.13.0-1
+
+- fix: stop reading empty mlx5 module cages as critical temperature
+- chore: bump version to 2.12.2
+- docs: add design for fleet sweep and multi-site report
+- docs: add diagnosis rules and site scope to the report design
+- docs: approve fleet sweep design and record the Python exception
+- chore: ignore the local operator workspace
+- docs: add report themes and attribution to the fleet design
+- feat: add host uptime and boot ID to nic-health JSON
+- docs: add nic-xray facts and rules to the report design
+- fix: write null, not -inf, for optics with no light in nic-xray JSON
+- fix: judge every lane of multi-lane modules in nic-health deep mode
+- chore: bump version to 2.13.0
+
+-------------------------------------------------------------------
 Wed Oct 21 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.12.1-1
 
 - feat: add nic-health link-down look-back from the kernel journal
