@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.16.0-1
+
+- feat: flag low Rx against the host's own ports in nic-health
+- feat: add BOND-MEMBER-DOWN rule to nic-report
+- chore: bump version to 2.16.0
+
+-------------------------------------------------------------------
 Tue Oct 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.15.0-1
 
 - fix: judge VLAN drift within roles and clarify report figures

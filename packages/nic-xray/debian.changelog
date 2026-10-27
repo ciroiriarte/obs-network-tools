@@ -1,3 +1,11 @@
+nic-xray (2.16.0-1) unstable; urgency=medium
+
+  * feat: flag low Rx against the host's own ports in nic-health
+  * feat: add BOND-MEMBER-DOWN rule to nic-report
+  * chore: bump version to 2.16.0
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Tue, 27 Oct 2026 20:32:36 +0000
+
 nic-xray (2.15.0-1) unstable; urgency=medium
 
   * fix: judge VLAN drift within roles and clarify report figures
