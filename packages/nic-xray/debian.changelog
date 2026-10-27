@@ -1,3 +1,11 @@
+nic-xray (2.15.0-1) unstable; urgency=medium
+
+  * fix: judge VLAN drift within roles and clarify report figures
+  * feat: add -L/--lookback to nic-sweep for nic-health look-back
+  * chore: bump version to 2.15.0
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Tue, 27 Oct 2026 18:45:53 +0000
+
 nic-xray (2.14.0-1) unstable; urgency=medium
 
   * chore: ignore oh-my-claudecode session state

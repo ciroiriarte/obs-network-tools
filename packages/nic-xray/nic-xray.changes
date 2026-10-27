@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.15.0-1
+
+- fix: judge VLAN drift within roles and clarify report figures
+- feat: add -L/--lookback to nic-sweep for nic-health look-back
+- chore: bump version to 2.15.0
+
+-------------------------------------------------------------------
 Tue Oct 27 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 2.14.0-1
 
 - chore: ignore oh-my-claudecode session state
