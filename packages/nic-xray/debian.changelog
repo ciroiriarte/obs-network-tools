@@ -1,3 +1,23 @@
+nic-xray (2.14.0-1) unstable; urgency=medium
+
+  * chore: ignore oh-my-claudecode session state
+  * feat: add nic-sweep.sh for fleet collection over SSH
+  * fix: count nic-sweep results without awk
+  * test: find stand-in processes without pgrep
+  * feat: add nic-report.py for single- and multi-site reports
+  * fix: reject CSV with NUL bytes in nic-report on every Python version
+  * feat: add baselines, outliers, patterns and HTML to nic-report
+  * feat: add PDF, suppression, per-site reports and themes to nic-report
+  * feat: add typed metrics and service-impact facts to nic-health
+  * feat: add diagnosis rules and recommendations to nic-report
+  * feat: add sweep comparison to nic-report
+  * feat: add AI brief and checked narrative merge to nic-report
+  * fix: ignore control-frame traffic and read compound durations
+  * chore: bump version to 2.14.0
+  * docs: document the nic-xray-fleet package and add fleet samples
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Tue, 27 Oct 2026 15:02:25 +0000
+
 nic-xray (2.13.0-1) unstable; urgency=medium
 
   * fix: stop reading empty mlx5 module cages as critical temperature
