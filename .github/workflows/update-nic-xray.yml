@@ -13,6 +13,10 @@ on:
         default: false
         type: boolean
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   check-and-update:
     runs-on: ubuntu-latest
@@ -27,6 +31,8 @@ jobs:
 
       - name: Fetch latest upstream release and extract version
         id: get_version
+        env:
+          OBS_PASSWORD: ${{ secrets.OBS_PASSWORD }}
         run: |
           LATEST_JSON=$(curl -fsSL \
             -H "Accept: application/vnd.github+json" \
@@ -47,20 +53,30 @@ jobs:
           CURRENT_VERSION=$(grep -E ' - [0-9]' packages/nic-xray/nic-xray.changes \
             | head -1 | sed 's/.*- \([0-9][^ ]*\)-[0-9]*/\1/')
 
+          # Version on OBS: it lags git when an upload failed after the git push
+          OBS_VERSION=$(curl -fsS --retry 3 --retry-all-errors -K - \
+            "https://api.opensuse.org/source/home:ciriarte:network-tools/nic-xray/nic-xray.changes" <<<"user = \"ciriarte:${OBS_PASSWORD}\"" \
+            | grep -E ' - [0-9]' | head -1 | sed 's/.*- \([0-9][^ ]*\)-[0-9]*/\1/')
+          if [[ -z "${OBS_VERSION}" ]]; then
+            echo "::warning::Could not read the nic-xray version on OBS; comparing against git instead"
+            OBS_VERSION="${CURRENT_VERSION}"
+          fi
+
           echo "upstream_version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
           echo "current_version=${CURRENT_VERSION}" >> "$GITHUB_OUTPUT"
-          # OBS gets the package on a new version, or on request (packaging-only changes)
-          if [[ "${NEW_VERSION}" != "${CURRENT_VERSION}" || "${{ inputs.sync || false }}" == "true" ]]; then
+          echo "obs_version=${OBS_VERSION}" >> "$GITHUB_OUTPUT"
+          # OBS gets the package when it is behind upstream, or on request (packaging-only changes)
+          if [[ "${NEW_VERSION}" != "${OBS_VERSION}" || "${{ inputs.sync || false }}" == "true" ]]; then
             echo "obs_push=true" >> "$GITHUB_OUTPUT"
           else
             echo "obs_push=false" >> "$GITHUB_OUTPUT"
           fi
-          echo "Upstream: ${NEW_VERSION} | Packaged: ${CURRENT_VERSION}"
+          echo "Upstream: ${NEW_VERSION} | Packaged: ${CURRENT_VERSION} | OBS: ${OBS_VERSION}"
 
-      - name: Skip if version unchanged
+      - name: Report git already at upstream version
         if: steps.get_version.outputs.upstream_version == steps.get_version.outputs.current_version
         run: |
-          echo "Version is already ${{ steps.get_version.outputs.current_version }}. No version update (sync: ${{ inputs.sync || false }}).
+          echo "Version is already ${{ steps.get_version.outputs.current_version }} in git (OBS: ${{ steps.get_version.outputs.obs_version }})."
 
       - name: Update _service version and revision
         if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
@@ -168,22 +184,27 @@ jobs:
         if: steps.get_version.outputs.obs_push == 'true'
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
-          CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
+          OBS_VERSION: ${{ steps.get_version.outputs.obs_version }}
         run: |
-          osc co home:ciriarte:network-tools nic-xray
-          # Every packaging file: spec and debian changes (e.g. a new subpackage) reach OBS too
-          cp packages/nic-xray/_service \
-             packages/nic-xray/nic-xray.spec \
-             packages/nic-xray/nic-xray.changes \
-             packages/nic-xray/nic-xray.dsc \
-             packages/nic-xray/debian.control \
-             packages/nic-xray/debian.rules \
-             packages/nic-xray/debian.changelog \
-             home:ciriarte:network-tools/nic-xray/
-          cd home:ciriarte:network-tools/nic-xray
-          osc addremove
-          if [[ "${NEW_VERSION}" == "${CURRENT_VERSION}" ]]; then
-            osc commit -m "Sync nic-xray packaging (${NEW_VERSION})"
+          if [[ "${NEW_VERSION}" == "${OBS_VERSION}" ]]; then
+            MSG="Sync nic-xray packaging (${NEW_VERSION})"
           else
-            osc commit -m "Update nic-xray to ${NEW_VERSION}"
+            MSG="Update nic-xray to ${NEW_VERSION}"
           fi
+          PKG_DIR=home:ciriarte:network-tools/nic-xray
+          # Mirror packages/nic-xray exactly: every packaging change reaches OBS, stale files go away.
+          # Each attempt starts from a fresh checkout, so a commit that landed despite an error is a no-op.
+          push() {
+            rm -rf "${PKG_DIR}" &&
+              osc co home:ciriarte:network-tools nic-xray &&
+              find "${PKG_DIR}" -maxdepth 1 -type f -delete &&
+              cp -a packages/nic-xray/. "${PKG_DIR}/" &&
+              (cd "${PKG_DIR}" && osc addremove && osc commit -m "${MSG}")
+          }
+          # OBS returns transient 5xx errors; try 3 times before failing the run
+          for i in 1 2 3; do
+            push && exit 0
+            echo "::warning::OBS push attempt $i failed"
+            [[ $i -lt 3 ]] && sleep 60
+          done
+          exit 1

@@ -6,6 +6,16 @@ on:
     - cron: '30 6 * * *'
   workflow_dispatch:
     # Allow manual trigger
+    inputs:
+      sync:
+        description: Send every packaging file to OBS even when the version is unchanged (after a spec/debian change)
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 
 jobs:
   check-and-update:
@@ -21,6 +31,8 @@ jobs:
 
       - name: Fetch latest upstream release and extract version
         id: get_version
+        env:
+          OBS_PASSWORD: ${{ secrets.OBS_PASSWORD }}
         run: |
           # Try releases API first; fall back to tags if no releases exist
           LATEST_JSON=$(curl -fsSL \
@@ -51,14 +63,30 @@ jobs:
           CURRENT_VERSION=$(grep -E ' - [0-9]' packages/xfr/xfr.changes \
             | head -1 | sed 's/.*- \([0-9][^ ]*\)-[0-9]*/\1/')
 
+          # Version on OBS: it lags git when an upload failed after the git push
+          OBS_VERSION=$(curl -fsS --retry 3 --retry-all-errors -K - \
+            "https://api.opensuse.org/source/home:ciriarte:network-tools/xfr/xfr.changes" <<<"user = \"ciriarte:${OBS_PASSWORD}\"" \
+            | grep -E ' - [0-9]' | head -1 | sed 's/.*- \([0-9][^ ]*\)-[0-9]*/\1/')
+          if [[ -z "${OBS_VERSION}" ]]; then
+            echo "::warning::Could not read the xfr version on OBS; comparing against git instead"
+            OBS_VERSION="${CURRENT_VERSION}"
+          fi
+
           echo "upstream_version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
           echo "current_version=${CURRENT_VERSION}" >> "$GITHUB_OUTPUT"
-          echo "Upstream: ${NEW_VERSION} | Packaged: ${CURRENT_VERSION}"
+          echo "obs_version=${OBS_VERSION}" >> "$GITHUB_OUTPUT"
+          # OBS gets the package when it is behind upstream, or on request (packaging-only changes)
+          if [[ "${NEW_VERSION}" != "${OBS_VERSION}" || "${{ inputs.sync || false }}" == "true" ]]; then
+            echo "obs_push=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "obs_push=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Upstream: ${NEW_VERSION} | Packaged: ${CURRENT_VERSION} | OBS: ${OBS_VERSION}"
 
-      - name: Skip if version unchanged
+      - name: Report git already at upstream version
         if: steps.get_version.outputs.upstream_version == steps.get_version.outputs.current_version
         run: |
-          echo "Version is already ${{ steps.get_version.outputs.current_version }}. Nothing to do."
+          echo "Version is already ${{ steps.get_version.outputs.current_version }} in git (OBS: ${{ steps.get_version.outputs.obs_version }})."
 
       - name: Install Rust toolchain and zstd
         if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
@@ -206,13 +234,13 @@ jobs:
           git push
 
       - name: Install osc
-        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        if: steps.get_version.outputs.obs_push == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y osc
 
       - name: Configure osc credentials
-        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+        if: steps.get_version.outputs.obs_push == 'true'
         env:
           OBS_PASSWORD: ${{ secrets.OBS_PASSWORD }}
         run: |
@@ -227,21 +255,31 @@ jobs:
           } > ~/.config/osc/oscrc
           chmod 600 ~/.config/osc/oscrc
 
-      - name: Push updated package to OBS
-        if: steps.get_version.outputs.upstream_version != steps.get_version.outputs.current_version
+      - name: Push the package to OBS
+        if: steps.get_version.outputs.obs_push == 'true'
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.upstream_version }}
-          CURRENT_VERSION: ${{ steps.get_version.outputs.current_version }}
+          OBS_VERSION: ${{ steps.get_version.outputs.obs_version }}
         run: |
-          osc co home:ciriarte:network-tools xfr
-          cp packages/xfr/xfr-${NEW_VERSION}.tar.gz \
-             packages/xfr/vendor.tar.zst \
-             packages/xfr/xfr.spec \
-             packages/xfr/xfr.dsc \
-             packages/xfr/xfr.changes \
-             packages/xfr/debian.changelog \
-             home:ciriarte:network-tools/xfr/
-          rm -f home:ciriarte:network-tools/xfr/xfr-${CURRENT_VERSION}.tar.gz
-          cd home:ciriarte:network-tools/xfr
-          osc addremove
-          osc commit -m "Update xfr to ${NEW_VERSION}"
+          if [[ "${NEW_VERSION}" == "${OBS_VERSION}" ]]; then
+            MSG="Sync xfr packaging (${NEW_VERSION})"
+          else
+            MSG="Update xfr to ${NEW_VERSION}"
+          fi
+          PKG_DIR=home:ciriarte:network-tools/xfr
+          # Mirror packages/xfr exactly: every packaging change reaches OBS, stale files go away.
+          # Each attempt starts from a fresh checkout, so a commit that landed despite an error is a no-op.
+          push() {
+            rm -rf "${PKG_DIR}" &&
+              osc co home:ciriarte:network-tools xfr &&
+              find "${PKG_DIR}" -maxdepth 1 -type f -delete &&
+              cp -a packages/xfr/. "${PKG_DIR}/" &&
+              (cd "${PKG_DIR}" && osc addremove && osc commit -m "${MSG}")
+          }
+          # OBS returns transient 5xx errors; try 3 times before failing the run
+          for i in 1 2 3; do
+            push && exit 0
+            echo "::warning::OBS push attempt $i failed"
+            [[ $i -lt 3 ]] && sleep 60
+          done
+          exit 1

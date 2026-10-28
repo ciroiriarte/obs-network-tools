@@ -127,14 +127,8 @@ All three packages are fully autonomous — when upstream pushes a new tag, the 
 The GitHub Actions workflows ([nic-xray](.github/workflows/update-nic-xray.yml), [switch-xray](.github/workflows/update-switch-xray.yml)) run daily and:
 
 1. Query the GitHub API for the latest release tag on the upstream repo.
-2. Compare with the current version in the package `.changes` file.
-3. If changed: update `_service`, changelogs, commit to this repo, and push to OBS.
-
-For nic-xray, the push to OBS sends every packaging file (`_service`, spec, `.changes`, `.dsc`,
-`debian.*`), so a spec or Debian change reaches OBS with the next version. To send a packaging-only
-change without a new version, run the workflow by hand with **sync** checked
-(`gh workflow run update-nic-xray.yml -f sync=true`). Sync only works when the tag pinned in
-`_service` already contains every file the spec installs: publish the upstream release first.
+2. Compare with the current version in git (the `.changes` file; `_service` for create-network-tshoot-livecd).
+3. If changed: update `_service`, changelogs, commit to this repo.
 
 OBS then runs its source services (`tar_scm` + `set_version` + `recompress`) to fetch, package, and build.
 
@@ -145,7 +139,25 @@ Rust packages require pre-committed source and vendor tarballs because OBS build
 1. Query the GitHub API for the latest tag on [lance0/ttl](https://github.com/lance0/ttl) or [lance0/xfr](https://github.com/lance0/xfr).
 2. If changed: install Rust, clone at the new tag, run `cargo vendor`.
 3. Build the source tarball and vendor archive (`vendor.tar.zst`).
-4. Update spec, changelogs, commit to this repo, and push to OBS.
+4. Update spec, changelogs, commit to this repo.
+
+### Pushing to OBS (all workflows)
+
+The git commit and the OBS upload are decided separately. Each run also reads the version
+currently on OBS (from the package's `.changes`, or `_service` for create-network-tshoot-livecd)
+and pushes whenever OBS is behind upstream. If an upload fails after the git commit (for example an
+OBS `503`), the next daily run sees OBS still behind and pushes again, so nothing is left stale.
+If OBS cannot be read at all, the run falls back to the git comparison and logs a warning.
+
+The push mirrors `packages/<name>/` exactly into the OBS package: every packaging file (spec,
+`.changes`, `.dsc`, `debian.*`, `_service`, tarballs) is sent, and files no longer in git (old
+tarballs) are removed. The checkout-to-commit sequence gets 3 attempts, one minute apart, each from a
+fresh checkout. The package must already exist on OBS: the workflows do not create it.
+
+To send a packaging-only change without a new version, run the workflow by hand with **sync**
+checked (`gh workflow run update-nic-xray.yml -f sync=true`; every workflow has the input). For the
+`tar_scm` packages, sync only works when the tag pinned in `_service` already contains every file
+the spec installs: publish the upstream release first.
 
 ## Maintainer Guide
 
@@ -350,10 +362,11 @@ obs-network-tools/
 ├── CLAUDE.md                       # Project instructions for Claude Code
 ├── README.md                       # This file
 ├── .github/workflows/
-│   ├── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push every packaging file to OBS (or on request: sync)
-│   ├── update-switch-xray.yml      # Daily: detect new tag, update changelogs, push to OBS
-│   ├── update-ttl.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
-│   └── update-xfr.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS
+│   ├── update-nic-xray.yml         # Daily: detect new tag, update changelogs, push to OBS when OBS is behind (or on request: sync)
+│   ├── update-switch-xray.yml      # Daily: same as nic-xray
+│   ├── update-create-network-tshoot-livecd.yml  # Daily: same as nic-xray (Debian/Ubuntu only)
+│   ├── update-ttl.yml              # Daily: detect new tag, vendor deps, rebuild tarballs, push to OBS when OBS is behind
+│   └── update-xfr.yml              # Daily: same as ttl
 ├── scripts/
 │   └── update-nic-xray-version.sh  # Manual alternative to the nic-xray workflow above
 └── packages/
