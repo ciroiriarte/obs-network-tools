@@ -1,4 +1,40 @@
 -------------------------------------------------------------------
+Sat Oct 31 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.14.0-1
+
+- docs: lead Homebrew installs with core formula
+- Merge pull request #272 from lance0/docs/homebrew-core
+- fix(deps): update ctutils to 0.4.6 (#275)
+- Bump taiki-e/install-action (#269)
+- Bump the rust-dependencies group across 1 directory with 7 updates (#274)
+- feat: push finalized client metrics with endpoint labels (#277)
+- feat: expose directional UDP push metrics (#278)
+- fix: accept restricted systemd credential ACLs (#279)
+- feat: add operator labels and stable client snapshots (#280)
+- test: preserve IPv6 UDP server failure diagnostics (#281)
+- fix: report progress for initial control read timeouts (#282)
+- test: assert systemd credential uses root-owned ACL layout (#284)
+- docs: prepare changelog and README for 0.13.0 (#285)
+- fix: push gateway polish before 0.13.0 (#286)
+- fix: name the port when the server's listen address is in use (#273) (#283)
+- Merge the Unreleased Fixed sections
+- fix: clearer wrong-PSK and port-in-use startup errors (#287)
+- fix: bound server metric pushes and tidy push gateway output (#288)
+- Bump version to v0.13.0
+- feat: client port from [client] port or a host:port target (#289)
+- fix: QUIC clients give up on a silent server within seconds (#290)
+- fix: one discover line per server, no wrong link-local zones (#292)
+- fix: PSK mismatch wording, -n durations, zoneless link-local, push retry noise (#293)
+- test: run the 64-stream TCP load test in its own binary (#294)
+- fix: let UDP receivers drain reordered stragglers before finalizing loss (#291)
+- feat: --config, XFR_CONFIG and /etc/xfr/config.toml (#295)
+- fix: review follow-ups for QUIC keep-alive, discover link-locals and -n TCP_INFO (#296)
+- docs: release prep for 0.14.0 (#297)
+- test: avoid occupied ports and bound the legacy UDP fixture (#298)
+- fix: preserve completed results after stdout closes (#299)
+- fix: raise the QUIC idle timeout to 10 s for high-latency lossy links (#300)
+- Bump version to v0.14.0
+
+-------------------------------------------------------------------
 Thu Oct 22 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.12.1-1
 
 - Update webpki-roots and rustls-webpki for the emSign distrust
