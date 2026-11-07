@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.14.0
+Version:        0.14.1
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,18 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Sat Nov 07 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.14.1-1
+- build(deps): bump taiki-e/install-action (#301)
+- ci: add armv7-unknown-linux-musleabihf release target (#303)
+- docs: install on OpenWrt with the static musl binaries (#304)
+- test: wait for the PSK handshake before cancelling the infinite PSK test (#305)
+- fix: give each server on a host its own mDNS instance name (#306)
+- fix: install.sh on ARMv7 and musl-only systems (OpenWrt, Alpine) (#307)
+- test: run spawned xfr binaries in an isolated environment (#309)
+- fix: clearer QUIC timeout, PSK mismatch and IPv6 connect messages (#310)
+- chore: replace chrono with jiff for ISO 8601 timestamps (#308)
+- Bump version to v0.14.1
+
 * Sat Oct 31 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.14.0-1
 - docs: lead Homebrew installs with core formula
 - Merge pull request #272 from lance0/docs/homebrew-core
