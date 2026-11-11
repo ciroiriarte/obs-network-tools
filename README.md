@@ -34,6 +34,7 @@ Autonomous [OBS](https://build.opensuse.org/project/show/home:ciriarte:network-t
 |---|---|---|:---:|:---:|:---:|:---:|
 | openSUSE Tumbleweed | `openSUSE_Tumbleweed` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
 | openSUSE Slowroll | `openSUSE_Slowroll` | x86_64 | ✓ | ✓ | ✓ | ✓ |
+| openSUSE Leap 16.1 | `openSUSE_Leap_16.1` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
 | openSUSE Leap 16.0 | `openSUSE_Leap_16.0` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
 | openSUSE Leap 15.6 | `openSUSE_Leap_15.6` | x86_64, aarch64 | ✓ | ✓ | — | — |
 | Rocky Linux 9 | `Rocky_9` | x86_64, aarch64 | ✓ | ✓ | ✓ | ✓ |
@@ -216,6 +217,13 @@ Use the following project metadata XML:
     <path project="openSUSE:Slowroll" repository="standard"/>
     <arch>x86_64</arch>
     <!-- aarch64 omitted: openSUSE:Slowroll has no aarch64 path in OBS -->
+  </repository>
+  <repository name="openSUSE_Leap_16.1">
+    <!-- devel:languages:rust provides Rust >= 1.88 for ttl and xfr -->
+    <path project="devel:languages:rust" repository="16.1"/>
+    <path project="openSUSE:Leap:16.1" repository="standard"/>
+    <arch>x86_64</arch>
+    <arch>aarch64</arch>
   </repository>
   <repository name="openSUSE_Leap_16.0">
     <!-- devel:languages:rust provides Rust >= 1.88 for ttl and xfr -->
