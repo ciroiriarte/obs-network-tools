@@ -1,5 +1,5 @@
 Name:           xfr
-Version:        0.14.1
+Version:        0.15.0
 Release:        1%{?dist}
 Summary:        Modern network bandwidth testing tool with TUI
 License:        MIT OR Apache-2.0
@@ -52,6 +52,18 @@ install -Dm0644 docs/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1%{ext_man}
 
 %changelog
+* Thu Nov 12 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.15.0-1
+- feat: optional tui feature and minimal router release binaries (#311)
+- build(deps): bump the rust-dependencies group with 2 updates (#313)
+- build(deps): bump taiki-e/install-action (#312)
+- fix: QUIC IPv4 bind, PSK MTU probe, mapped-IP ACL/rate-limit, and Prometheus TCP_INFO (#314)
+- fix: CLI log-file/max-duration/precedence, TUI settings/theme/elapsed, diff, and -o preflight (#315)
+- docs, ci: add aarch64-minimal cross-smoke, deduplicate changelog, and refresh docs (#316)
+- fix: honour Ctrl-C during connect and handshake (#318)
+- fix: handshake UTF-8 reads, probe-mtu config bitrate, and test coverage (#319)
+- fix: keep bidir send TCP_INFO when the receive half fails (#317)
+- Bump version to v0.15.0
+
 * Sat Nov 07 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.14.1-1
 - build(deps): bump taiki-e/install-action (#301)
 - ci: add armv7-unknown-linux-musleabihf release target (#303)
