@@ -1,3 +1,13 @@
+ttl (0.25.0-1) unstable; urgency=medium
+
+  * Drop internal issue references from comments and released notes (#172)
+  * chore(deps): bump the cargo-dependencies group across 1 directory with 4 updates (#170)
+  * Review batch: CLI validation, replay read-only, export safety, docs and CI (#171)
+  * Fix -c shutdown accounting across targets and the final IPv6 round (#173)
+  * Bump version to v0.25.0
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Fri, 13 Nov 2026 14:29:46 +0000
+
 ttl (0.24.1-1) unstable; urgency=medium
 
   * Bump version to v0.25.0

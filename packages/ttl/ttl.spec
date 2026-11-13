@@ -1,5 +1,5 @@
 Name:           ttl
-Version:        0.24.1
+Version:        0.25.0
 Release:        1%{?dist}
 Summary:        Network diagnostic tool — traceroute/mtr-style TUI with hop stats
 License:        MIT OR Apache-2.0
@@ -81,6 +81,13 @@ fi
 %endif
 
 %changelog
+* Fri Nov 13 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.25.0-1
+- Drop internal issue references from comments and released notes (#172)
+- chore(deps): bump the cargo-dependencies group across 1 directory with 4 updates (#170)
+- Review batch: CLI validation, replay read-only, export safety, docs and CI (#171)
+- Fix -c shutdown accounting across targets and the final IPv6 round (#173)
+- Bump version to v0.25.0
+
 * Thu Oct 22 2026 Ciro Iriarte <ciro.iriarte+software@gmail.com> - 0.24.1-1
 - Bump version to v0.25.0
 - Release as v0.24.1 instead of v0.25.0
