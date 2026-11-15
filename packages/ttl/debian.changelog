@@ -1,3 +1,20 @@
+ttl (0.26.0-1) unstable; urgency=medium
+
+  * Update quinn-udp to fix security audit failure (#183)
+  * Keep a valid RFC 5837 object when a malformed one claims its role first (#175)
+  * PMTUD DF cleanup, PMTUD tick lock, and UDP header-only ICMP quotes (#176)
+  * Require a sustained run before recording a route flap (#174)
+  * Bound per-hop responders, the live event log and PeeringDB reads (#178)
+  * Fix probe accounting across stats reset, added targets and replay events (#179)
+  * Mark the destination reached on a Port Unreachable from the target (#180)
+  * Add --pcap packet capture export (#181)
+  * Code hygiene: drop unused csv crate, document unsafe blocks, audit dead_code allows (#182)
+  * Bring docs in line with the post-0.25.0 changes (#184)
+  * Skip CI and audit on docs-only changes (#185)
+  * Bump version to v0.26.0
+
+ -- Ciro Iriarte <ciro.iriarte+software@gmail.com>  Sun, 15 Nov 2026 13:52:18 +0000
+
 ttl (0.25.0-1) unstable; urgency=medium
 
   * Drop internal issue references from comments and released notes (#172)
